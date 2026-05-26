@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Argue about a USAMO solution · 45 min — Alexander B. Chen</title>
+<meta name="description" content="Book a call: USAMO solution" />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.book-intro{padding:7rem var(--pad-x) 2.5rem}
+.back-link{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper-mute);
+  display:inline-flex;align-items:center;gap:.5rem;
+  margin-bottom:2rem;
+  transition:color .3s var(--ease), gap .3s var(--ease);
+}
+.back-link:hover{color:var(--gold);gap:.8rem}
+
+.book-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.4rem, 6vw, 4.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1rem;max-width:22ch;
+}
+.book-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.book-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.25rem);
+  color:var(--paper-dim);max-width:48ch;margin:0;line-height:1.55;
+}
+
+.book-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(2rem, 5vw, 4rem);
+  padding:1rem var(--pad-x) var(--pad-y);
+  align-items:start;
+}
+@media (max-width:980px){.book-grid{grid-template-columns:1fr}}
+
+.book-side{
+  position:sticky;top:7rem;
+}
+@media (max-width:980px){.book-side{position:static}}
+
+.book-summary{
+  border:1px solid var(--gold);
+  background:rgba(212,175,55,0.04);
+  padding:1.5rem;
+}
+.book-summary .tag{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.8rem;
+}
+.book-summary h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:1.4rem;line-height:1.2;margin:0 0 .8rem;
+}
+.book-summary h2 .italic{font-style:italic;color:var(--gold)}
+.book-summary p{
+  font-family:var(--serif);font-style:italic;font-size:.95rem;
+  color:var(--paper-dim);margin:0;line-height:1.55;
+}
+
+.book-steps{
+  margin-top:1.5rem;list-style:none;padding:0;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--paper-mute);
+}
+.book-steps li{
+  padding:.5rem 0;padding-left:2rem;position:relative;
+}
+.book-steps li::before{
+  content:attr(data-step);
+  position:absolute;left:0;top:.4em;
+  width:1.4em;height:1.4em;
+  border:1px solid var(--paper-mute);border-radius:50%;
+  font-size:.85em;display:flex;align-items:center;justify-content:center;
+}
+.book-steps li.active{color:var(--paper)}
+.book-steps li.active::before{
+  background:var(--gold);color:var(--ink-1);
+  border-color:var(--gold);
+}
+.book-steps li.done{color:var(--paper-dim)}
+.book-steps li.done::before{
+  background:rgba(212,175,55,0.3);
+  border-color:var(--gold);
+  content:"\2713";
+}
+
+/* ============================================================
+   CALENDAR
+============================================================ */
+.book-main{display:flex;flex-direction:column;gap:2rem}
+.cal-block .step-label{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.8rem;
+}
+.cal-block h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:1.5rem;margin:0 0 1.2rem;
+  letter-spacing:-.01em;
+}
+
+.cal-month{
+  border:1px solid var(--rule);
+  background:rgba(255,255,255,0.01);
+}
+.cal-head{
+  display:grid;grid-template-columns:repeat(7, 1fr);
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);
+  border-bottom:1px solid var(--rule);
+}
+.cal-head > div{
+  padding:.7rem .3rem;text-align:center;
+  border-right:1px solid var(--rule);
+}
+.cal-head > div:last-child{border-right:none}
+.cal-week{
+  display:grid;grid-template-columns:repeat(7, 1fr);
+  border-bottom:1px solid var(--rule);
+}
+.cal-week:last-child{border-bottom:none}
+.cal-day{
+  border:none;border-right:1px solid var(--rule);
+  background:transparent;
+  padding:1rem .4rem;
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:64px;
+  font-family:var(--mono);
+  color:var(--paper);
+  transition:background .25s var(--ease), color .25s var(--ease);
+  position:relative;
+}
+.cal-day:last-child{border-right:none}
+.cal-day:hover:not(:disabled){background:rgba(212,175,55,0.06);color:var(--gold)}
+.cal-day.selected{
+  background:var(--gold);color:var(--ink-1);
+}
+.cal-day:disabled{
+  color:var(--paper-mute);opacity:.4;cursor:not-allowed;
+}
+.cal-num{font-size:1.2rem;font-family:var(--serif);font-style:italic;line-height:1}
+.cal-mo{font-size:9px;letter-spacing:.15em;text-transform:uppercase;margin-top:.3rem;opacity:.6}
+
+/* TIME SLOTS */
+.times-block{display:none}
+.times-block.shown{display:block}
+.times-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(110px, 1fr));
+  gap:.5rem;
+  margin-top:1rem;
+}
+.time-btn{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.12em;
+  padding:.75rem .5rem;
+  border:1px solid var(--rule);
+  background:transparent;color:var(--paper);
+  cursor:pointer;
+  transition:border-color .25s var(--ease), background .25s var(--ease), color .25s var(--ease);
+}
+.time-btn:hover{border-color:var(--gold);color:var(--gold)}
+.time-btn.selected{
+  background:var(--gold);color:var(--ink-1);border-color:var(--gold);
+}
+
+/* FORM */
+.form-block{display:none}
+.form-block.shown{display:block}
+.form-block label{
+  display:block;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);margin-bottom:.5rem;margin-top:1rem;
+}
+.form-block input,.form-block textarea{
+  width:100%;
+  background:transparent;
+  border:1px solid var(--rule);
+  padding:.9rem 1rem;
+  font-family:var(--mono);font-size:12.5px;
+  color:var(--paper);letter-spacing:.04em;
+  transition:border-color .25s var(--ease);
+}
+.form-block textarea{
+  font-family:var(--serif);font-style:italic;font-size:1rem;
+  letter-spacing:0;resize:vertical;min-height:90px;
+}
+.form-block input:focus,.form-block textarea:focus{
+  outline:none;border-color:var(--gold);
+}
+.form-block .submit{
+  margin-top:1.4rem;
+  padding:1.1rem 1.5rem;
+  background:var(--gold);color:var(--ink-1);
+  font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.25em;text-transform:uppercase;font-weight:500;
+  border:1px solid var(--gold);cursor:pointer;
+  width:100%;
+  transition:background .25s var(--ease), color .25s var(--ease);
+}
+.form-block .submit:hover{background:transparent;color:var(--gold)}
+.form-block .summary-line{
+  margin-top:1rem;padding:1rem;
+  border:1px solid var(--rule);
+  background:rgba(212,175,55,0.04);
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;
+  color:var(--paper-dim);line-height:1.7;
+}
+.form-block .summary-line strong{color:var(--gold);font-weight:500}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html" aria-current="page">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="book-intro">
+  <a class="back-link" href="reach.html" data-cursor="hover">← back to reach</a>
+  <p class="page-eyebrow">b · 45 min · proof argument</p>
+  <h1>Argue about a USAMO solution <span class="italic">·</span> 45 min</h1>
+  <p class="lead">Send your proof ahead of time. I'll send mine. On the call we go line-by-line, argue about which step matters and which is wasted, and read each other's writeups the way a grader would.</p>
+</section>
+
+<div class="book-grid">
+
+  <aside class="book-side">
+    <div class="book-summary">
+      <div class="tag">your booking</div>
+      <h2><span class="italic">USAMO solution</span> · 45 min</h2>
+      <p>Pick a problem, send your proof. I'll send mine. We dissect.</p>
+      <ul class="book-steps" id="bookSteps">
+        <li data-step="1" class="active">Pick a date</li>
+        <li data-step="2">Pick a time</li>
+        <li data-step="3">Send the details</li>
+      </ul>
+    </div>
+  </aside>
+
+  <div class="book-main">
+
+    <div class="cal-block">
+      <div class="step-label">step 1 · pick a date</div>
+      <h3>Available next four weeks.</h3>
+      <div class="cal-month">
+  <div class="cal-head">
+    <div>Mon</div>
+    <div>Tue</div>
+    <div>Wed</div>
+    <div>Thu</div>
+    <div>Fri</div>
+    <div>Sat</div>
+    <div>Sun</div>
+  </div>
+  <div class="cal-week">
+    <button type="button" class="cal-day" data-date="2026-06-01" >
+      <span class="cal-num">1</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-02" >
+      <span class="cal-num">2</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-03" >
+      <span class="cal-num">3</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-04" >
+      <span class="cal-num">4</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-05" >
+      <span class="cal-num">5</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-06" disabled>
+      <span class="cal-num">6</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-07" disabled>
+      <span class="cal-num">7</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+  </div>
+  <div class="cal-week">
+    <button type="button" class="cal-day" data-date="2026-06-08" >
+      <span class="cal-num">8</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-09" >
+      <span class="cal-num">9</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-10" >
+      <span class="cal-num">10</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-11" >
+      <span class="cal-num">11</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-12" >
+      <span class="cal-num">12</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-13" disabled>
+      <span class="cal-num">13</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-14" disabled>
+      <span class="cal-num">14</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+  </div>
+  <div class="cal-week">
+    <button type="button" class="cal-day" data-date="2026-06-15" >
+      <span class="cal-num">15</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-16" >
+      <span class="cal-num">16</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-17" >
+      <span class="cal-num">17</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-18" >
+      <span class="cal-num">18</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-19" >
+      <span class="cal-num">19</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-20" disabled>
+      <span class="cal-num">20</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-21" disabled>
+      <span class="cal-num">21</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+  </div>
+  <div class="cal-week">
+    <button type="button" class="cal-day" data-date="2026-06-22" >
+      <span class="cal-num">22</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-23" >
+      <span class="cal-num">23</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-24" >
+      <span class="cal-num">24</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-25" >
+      <span class="cal-num">25</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day" data-date="2026-06-26" >
+      <span class="cal-num">26</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-27" disabled>
+      <span class="cal-num">27</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+    <button type="button" class="cal-day disabled" data-date="2026-06-28" disabled>
+      <span class="cal-num">28</span>
+      <span class="cal-mo">Jun</span>
+    </button>
+  </div>
+</div>
+
+      <p style="font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--paper-mute);margin-top:.8rem;text-transform:uppercase">weekdays only · all times eastern · evenings preferred</p>
+    </div>
+
+    <div class="times-block" id="timesBlock">
+      <div class="step-label">step 2 · pick a time</div>
+      <h3>Evening slots, <span style="color:var(--paper-dim);font-style:italic;font-weight:300">Eastern Time</span>.</h3>
+      <div class="times-grid" id="timesGrid">
+        <button type="button" class="time-btn" data-time="4:30 PM">4:30 PM</button>
+        <button type="button" class="time-btn" data-time="5:00 PM">5:00 PM</button>
+        <button type="button" class="time-btn" data-time="6:00 PM">6:00 PM</button>
+        <button type="button" class="time-btn" data-time="7:00 PM">7:00 PM</button>
+        <button type="button" class="time-btn" data-time="7:30 PM">7:30 PM</button>
+        <button type="button" class="time-btn" data-time="8:00 PM">8:00 PM</button>
+      </div>
+    </div>
+
+    <div class="form-block" id="formBlock">
+      <div class="step-label">step 3 · send the details</div>
+      <h3>Last bit. I write back within a day or two.</h3>
+
+      <form id="bookForm" action="mailto:alexbchen999@gmail.com" method="post" enctype="text/plain">
+        <input type="hidden" name="topic" value="USAMO solution" />
+        <input type="hidden" name="duration" value="45 min" />
+        <input type="hidden" name="date" id="hidDate" value="" />
+        <input type="hidden" name="time" id="hidTime" value="" />
+
+        <label for="bookName">Your name</label>
+        <input type="text" name="name" id="bookName" placeholder="alex chen" required />
+
+        <label for="bookEmail">Your email</label>
+        <input type="email" name="email" id="bookEmail" placeholder="you@example.com" required />
+
+        <label for="bookNote">The problem & your proof</label>
+        <textarea name="note" id="bookNote" rows="4" placeholder="Which problem? (Year, day, P#.) And paste your proof, or a link to a PDF."></textarea>
+
+        <div class="summary-line">
+          <strong>booking summary:</strong><br/>
+          <span id="sumDate">— · pick a date</span><br/>
+          <span id="sumTime">— · pick a time</span><br/>
+          topic: <strong>USAMO solution</strong> · duration: <strong>45 min</strong>
+        </div>
+
+        <button type="submit" class="submit">Send the request →</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div><a href="mailto:alexbchen999@gmail.com" data-cursor="hover">alexbchen999@gmail.com</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+<script>
+(function(){
+  'use strict';
+  const days = document.querySelectorAll('.cal-day');
+  const timesBlock = document.getElementById('timesBlock');
+  const timesGrid = document.getElementById('timesGrid');
+  const formBlock = document.getElementById('formBlock');
+  const hidDate = document.getElementById('hidDate');
+  const hidTime = document.getElementById('hidTime');
+  const sumDate = document.getElementById('sumDate');
+  const sumTime = document.getElementById('sumTime');
+  const steps = document.querySelectorAll('#bookSteps li');
+  const form = document.getElementById('bookForm');
+
+  let chosenDate = null, chosenTime = null;
+
+  function fmt(iso){
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+  }
+
+  function updateSteps(){
+    steps.forEach(s=>s.classList.remove('active','done'));
+    if (chosenDate && chosenTime){
+      steps[0].classList.add('done');
+      steps[1].classList.add('done');
+      steps[2].classList.add('active');
+    } else if (chosenDate){
+      steps[0].classList.add('done');
+      steps[1].classList.add('active');
+    } else {
+      steps[0].classList.add('active');
+    }
+  }
+
+  days.forEach(d=>{
+    d.addEventListener('click', ()=>{
+      if (d.disabled) return;
+      days.forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      chosenDate = d.dataset.date;
+      hidDate.value = chosenDate;
+      sumDate.innerHTML = '<strong>date:</strong> ' + fmt(chosenDate);
+      timesBlock.classList.add('shown');
+      timesBlock.scrollIntoView({behavior:'smooth', block:'start'});
+      updateSteps();
+    });
+  });
+
+  document.querySelectorAll('.time-btn').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('.time-btn').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+      chosenTime = b.dataset.time;
+      hidTime.value = chosenTime;
+      sumTime.innerHTML = '<strong>time:</strong> ' + chosenTime + ' ET';
+      formBlock.classList.add('shown');
+      formBlock.scrollIntoView({behavior:'smooth', block:'start'});
+      updateSteps();
+    });
+  });
+
+  // Customize the mailto subject on form submit
+  form.addEventListener('submit', (e)=>{
+    if (!chosenDate || !chosenTime){
+      e.preventDefault();
+      alert('Pick a date and time first.');
+      return;
+    }
+    const subject = encodeURIComponent('Call request · usamo · ' + fmt(chosenDate) + ' @ ' + chosenTime + ' ET');
+    form.action = 'mailto:alexbchen999@gmail.com?subject=' + subject;
+  });
+})();
+</script>
+</body>
+</html>

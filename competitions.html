@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Competitions — Alexander B. Chen</title>
+<meta name="description" content="MathLeague Nationals, USAMO, USAMTS, AIME, AMC, swimming States, DECA, piano competitions." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.comps-intro{padding:7rem var(--pad-x) 3rem}
+.comps-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;max-width:20ch;
+}
+.comps-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.comps-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:46ch;margin:0;
+}
+
+/* ============================================================
+   REEL — horizontal pinned scroll (desktop), vertical (mobile)
+   We use position:sticky + transform driven by scroll progress
+   on the wrapper. The wrapper is taller than viewport; the
+   inner track translates left as we scroll down.
+============================================================ */
+.reel-wrap{
+  position:relative;
+  height:600vh; /* total scroll length */
+  border-top:1px solid var(--rule);
+}
+.reel-pin{
+  position:sticky;top:0;
+  height:100vh;width:100%;
+  overflow:hidden;
+}
+.reel-track{
+  display:flex;height:100%;align-items:stretch;
+  will-change:transform;
+}
+.reel-card{
+  flex:0 0 auto;
+  width:min(80vw, 620px);height:100%;
+  padding:clamp(2rem, 5vw, 4rem);
+  display:flex;flex-direction:column;justify-content:space-between;
+  border-right:1px solid var(--rule);
+  position:relative;
+}
+.reel-card:first-child{padding-left:var(--pad-x)}
+.reel-card.intro-card{
+  width:min(60vw, 480px);
+  background:var(--ink-2);
+  justify-content:center;
+}
+.reel-num{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);
+}
+.reel-stat{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(3.5rem, 10vw, 8rem);
+  line-height:.9;letter-spacing:-.04em;
+  margin:1rem 0;
+}
+.reel-stat .italic{font-style:italic;color:var(--gold);font-weight:500}
+.reel-stat sup{font-size:.45em;vertical-align:.5em;letter-spacing:0;color:var(--gold)}
+.reel-headline{
+  font-family:var(--serif);font-size:clamp(1.05rem, 1.6vw, 1.4rem);
+  font-weight:400;line-height:1.25;margin:0;max-width:22ch;
+}
+.reel-foot{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.reel-intro-h{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2rem, 4vw, 3.4rem);
+  line-height:1.05;margin:1.5rem 0;
+  letter-spacing:-.02em;
+}
+.reel-intro-h .italic{font-style:italic;color:var(--gold)}
+.reel-intro-p{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);max-width:30ch;
+}
+.reel-progress{
+  position:absolute;bottom:2rem;left:var(--pad-x);right:var(--pad-x);
+  height:1px;background:var(--rule);
+  z-index:3;
+}
+.reel-progress .fill{
+  height:100%;background:var(--gold);width:0%;
+  transition:width .1s linear;
+}
+.reel-counter{
+  position:absolute;bottom:3rem;right:var(--pad-x);
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.25em;color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.reel-counter .cur{color:var(--gold);font-size:1.4em}
+
+/* Mobile fallback */
+@media (max-width:880px){
+  .reel-wrap{height:auto}
+  .reel-pin{position:relative;height:auto;overflow:visible}
+  .reel-track{flex-direction:column;height:auto}
+  .reel-card,.reel-card.intro-card{
+    width:100%;height:auto;min-height:50vh;
+    border-right:none;border-bottom:1px solid var(--rule);
+    padding-left:var(--pad-x);padding-right:var(--pad-x);
+  }
+  .reel-progress,.reel-counter{display:none}
+}
+
+/* ============================================================
+   FULL TABLE BELOW
+============================================================ */
+.comps-table-wrap{padding:var(--pad-y) var(--pad-x);border-top:1px solid var(--rule)}
+.comps-table-wrap h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2rem, 4vw, 3rem);
+  line-height:1.05;margin:0 0 3rem;max-width:20ch;
+}
+.comps-table-wrap h2 .italic{font-style:italic;color:var(--gold)}
+.comps-table{width:100%;max-width:980px;font-family:var(--serif)}
+.comp-row{
+  display:grid;
+  grid-template-columns:9ch 1fr auto;
+  gap:1.5rem;align-items:baseline;
+  padding:1.1rem 0;border-bottom:1px solid var(--rule);
+  transition:padding-left .3s var(--ease);
+}
+.comp-row:hover{padding-left:.5rem}
+.comp-year{
+  font-family:var(--mono);font-size:12px;
+  letter-spacing:.18em;color:var(--gold);
+}
+.comp-name{font-size:1.15rem;font-weight:400}
+.comp-name .em{font-style:italic;color:var(--paper-dim);margin-left:.4em}
+.comp-result{
+  font-family:var(--mono);font-size:11.5px;
+  letter-spacing:.1em;color:var(--paper-dim);
+  text-align:right;white-space:nowrap;
+}
+.comp-result strong{color:var(--paper);font-weight:500}
+@media (max-width:720px){
+  .comp-row{grid-template-columns:1fr;gap:.3rem}
+  .comp-result{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html" aria-current="page">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="comps-intro">
+  <p class="page-eyebrow">§ 04 · Competitions</p>
+  <h1>The <span class="italic">reel</span>.</h1>
+  <p class="lead">Scroll down. The biggest results first, then everything else. The full table follows below.</p>
+</section>
+
+<section class="reel-wrap" id="reelWrap">
+  <div class="reel-pin">
+    <div class="reel-track" id="reelTrack">
+      <article class="reel-card intro-card">
+        <div class="reel-num">§ start</div>
+        <h2 class="reel-intro-h">A <span class="italic">selected</span> reel.</h2>
+        <p class="reel-intro-p">Most-to-least important. The year is the smallest part of each card — every one has a longer story behind it.</p>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">01 · 2026</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">5</span><span style="opacity:.4;font-size:.5em;letter-spacing:0;margin-left:.1em;color:var(--paper-mute)">/42</span></h3>
+          <p class="reel-headline">USAMO qualifier. Scored 5, one point under median — first qualifier in school history.</p>
+        </div>
+        <div class="reel-foot">USAMO · top ~250 in US</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">02 · 2026</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">1<sup>st</sup></span></h3>
+          <p class="reel-headline">MathLeague Nationals — National Champion. Countdown Round semifinalist.</p>
+        </div>
+        <div class="reel-foot">MathLeague · national</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">03 · 2025</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">2<sup>nd</sup></span></h3>
+          <p class="reel-headline">MathLeague Internationals. Took 2nd at the international round in Indonesia.</p>
+        </div>
+        <div class="reel-foot">MathLeague · international</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">04 · 2026</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">12</span></h3>
+          <p class="reel-headline">AIME I. School record. Largest single-year jump I've ever made.</p>
+        </div>
+        <div class="reel-foot">AIME · top ~6000</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">05 · 2025</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">74</span></h3>
+          <p class="reel-headline">USAMTS Gold. 25 / 24 / 25 across three rounds.</p>
+        </div>
+        <div class="reel-foot">USA Mathematical Talent Search</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">06 · 2026</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">∫</span></h3>
+          <p class="reel-headline">Pitt Integration Bee — Champion. Improved on 2nd place from 2025.</p>
+        </div>
+        <div class="reel-foot">University of Pittsburgh</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">07 · summer 2026</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">Ross</span></h3>
+          <p class="reel-headline">Ross Mathematics Program — incoming. Six weeks of number theory. Also accepted to SUMaC and PROMYS.</p>
+        </div>
+        <div class="reel-foot">Otterbein · summer '26</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">08 · 2025</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">M</span></h3>
+          <p class="reel-headline">HiMCM Meritorious (2025) and Honorable Mention (2024). High school math modeling.</p>
+        </div>
+        <div class="reel-foot">HiMCM · modeling</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">09 · 2025</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">22.2</span></h3>
+          <p class="reel-headline">WPIAL (200 free, 100 back) States qualifier in swimming (200/400 free relay). Closed a relay split with a 1.8-second drop on the 50 free, 50.5 100 free leadoff.</p>
+        </div>
+        <div class="reel-foot">PIAA AAA · swimming</div>
+      </article>
+
+      <article class="reel-card" data-cursor="hover">
+        <div class="reel-num">10 · piano</div>
+        <div>
+          <h3 class="reel-stat"><span class="italic">GP</span></h3>
+          <p class="reel-headline">Carmel Klavier Grand Prize ('19), 2nd ('21). Pittsburgh International — 1st &amp; multiple Grand Prix. Steinway Society of W. PA audition winner.</p>
+        </div>
+        <div class="reel-foot">solo piano · multiple</div>
+      </article>
+    </div>
+    <div class="reel-progress" aria-hidden="true"><div class="fill" id="reelFill"></div></div>
+    <div class="reel-counter"><span class="cur" id="reelCur">01</span> / <span id="reelMax">10</span></div>
+  </div>
+</section>
+
+<section class="comps-table-wrap">
+  <h2>The <span class="italic">whole table</span>.</h2>
+  <div class="comps-table">
+    <div class="comp-row">
+      <div class="comp-year">2026</div>
+      <div class="comp-name">USAMO <span class="em">qualifier · school first</span></div>
+      <div class="comp-result"><strong>5</strong> · median 6</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2026</div>
+      <div class="comp-name">MathLeague Nationals <span class="em">National Champion</span></div>
+      <div class="comp-result"><strong>1st</strong> · countdown semifinalist</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2025</div>
+      <div class="comp-name">MathLeague Internationals</div>
+      <div class="comp-result"><strong>2nd</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2025</div>
+      <div class="comp-name">USAMTS <span class="em">gold</span></div>
+      <div class="comp-result">25 / 24 / 25 · <strong>74</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">AIME</div>
+      <div class="comp-name">2026 I <span class="em">school record</span> · 2025 I · 2024 I</div>
+      <div class="comp-result"><strong>12</strong> · 8 · 5</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2026</div>
+      <div class="comp-name">Pitt Integration Bee</div>
+      <div class="comp-result"><strong>Champion</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2025</div>
+      <div class="comp-name">Pitt Integration Bee</div>
+      <div class="comp-result"><strong>2nd</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">summer '26</div>
+      <div class="comp-name">Ross Mathematics Program <span class="em">also SUMaC, PROMYS</span></div>
+      <div class="comp-result"><strong>incoming</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">AMC 12</div>
+      <div class="comp-name">2025 12B <span class="em">top 5%</span> · 2025 12A · 2024 12B</div>
+      <div class="comp-result"><strong>127.5</strong> · 117 · 94.5</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">AMC 10</div>
+      <div class="comp-name">2024 10A · 2023 10A <span class="em">top 5%</span> · 2023 10B</div>
+      <div class="comp-result">112.5 · <strong>115.5</strong> · 111</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2025</div>
+      <div class="comp-name">MathLeague <span class="em">Nationals</span></div>
+      <div class="comp-result"><strong>10th</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">HiMCM</div>
+      <div class="comp-name">2025 · 2024 <span class="em">high school math modeling</span></div>
+      <div class="comp-result"><strong>Meritorious</strong> · Honorable Mention</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">Swim</div>
+      <div class="comp-name">WPIAL States <span class="em">qualifier · 50/100 free</span></div>
+      <div class="comp-result"><strong>22.2</strong> · 50 free split</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">Piano</div>
+      <div class="comp-name">Pittsburgh International &amp; Steinway Society W. PA</div>
+      <div class="comp-result">1st · multiple GP · audition winner</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">Piano</div>
+      <div class="comp-name">Carmel Klavier <span class="em">Grand Prize '19, 2nd '21</span></div>
+      <div class="comp-result">GP / 2nd</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">DECA</div>
+      <div class="comp-name">ICDC qualifier <span class="em">×2</span></div>
+      <div class="comp-result">international</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">Design</div>
+      <div class="comp-name">Biomimicry Youth Design Challenge</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+<script>
+/* ============================================================
+   HORIZONTAL SCROLL REEL
+   We pin .reel-pin via sticky, and translate .reel-track
+   based on scroll progress through the parent .reel-wrap.
+============================================================ */
+(function(){
+  'use strict';
+  if (window.matchMedia('(max-width:880px)').matches) return;
+  const wrap = document.getElementById('reelWrap');
+  const track = document.getElementById('reelTrack');
+  const fill = document.getElementById('reelFill');
+  const curEl = document.getElementById('reelCur');
+  if (!wrap || !track) return;
+  const cards = track.querySelectorAll('.reel-card');
+  if (curEl){
+    document.getElementById('reelMax').textContent =
+      String(cards.length - 1).padStart(2,'0');
+  }
+  function update(){
+    const rect = wrap.getBoundingClientRect();
+    const total = wrap.offsetHeight - window.innerHeight;
+    const sc = Math.max(0, Math.min(total, -rect.top));
+    const p = total > 0 ? sc / total : 0;
+    const distance = track.scrollWidth - window.innerWidth;
+    if (distance > 0){
+      track.style.transform = `translate3d(${-p * distance}px, 0, 0)`;
+    }
+    if (fill) fill.style.width = (p*100) + '%';
+    if (curEl){
+      const idx = Math.min(cards.length - 1, Math.floor(p * cards.length));
+      const display = Math.max(1, idx); // skip intro
+      curEl.textContent = String(display).padStart(2,'0');
+    }
+  }
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+/* ============================================================
+   ALEXANDER B. CHEN — shared stylesheet
+   Used by all pages. Navy/gold, Fraunces + Inter + JetBrains Mono.
+============================================================ */
+
+:root{
+  --ink-1:#0a1733;
+  --ink-2:#0d1b3a;
+  --ink-3:#142547;
+  --ink-4:#1c2f5a;
+  --paper:#f5f1e8;
+  --paper-dim:#cfc8b6;
+  --paper-mute:#8a8472;
+  --gold:#d4af37;
+  --gold-soft:#b89530;
+  --rule:rgba(245,241,232,0.12);
+  --rule-strong:rgba(245,241,232,0.28);
+
+  --serif:'Fraunces', 'Cormorant Garamond', Georgia, serif;
+  --sans:'Inter', system-ui, -apple-system, sans-serif;
+  --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+
+  --pad-x:clamp(1.5rem, 5vw, 5rem);
+  --pad-y:clamp(4rem, 10vh, 8rem);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{
+  background:var(--ink-1);
+  color:var(--paper);
+  font-family:var(--sans);
+  font-weight:300;
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  scroll-behavior:smooth;
+}
+body{
+  background:
+    radial-gradient(1400px 900px at 80% -10%, rgba(212,175,55,0.06), transparent 60%),
+    radial-gradient(900px 700px at -10% 30%, rgba(212,175,55,0.04), transparent 60%),
+    var(--ink-1);
+  overflow-x:hidden;
+  min-height:100vh;
+  position:relative;
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+::selection{background:var(--gold);color:var(--ink-1)}
+
+/* Paper grain */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:1;
+  opacity:.05;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ============================================================
+   BACKGROUND DRIFTING SYMBOLS — math glyphs slowly drifting
+   diagonally across every page. Pure CSS animation, no JS.
+============================================================ */
+.bg-symbols{
+  position:fixed;inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.bg-symbols span{
+  position:absolute;
+  font-family:var(--serif);
+  font-style:italic;
+  color:rgba(212,175,55,0.06);
+  font-weight:300;
+  user-select:none;
+  white-space:nowrap;
+  will-change:transform;
+  animation:drift linear infinite;
+}
+@keyframes drift{
+  0%{transform:translate3d(0,0,0) rotate(-8deg)}
+  100%{transform:translate3d(-120vw,30vh,0) rotate(-8deg)}
+}
+@keyframes drift-rev{
+  0%{transform:translate3d(0,0,0) rotate(8deg)}
+  100%{transform:translate3d(120vw,-30vh,0) rotate(8deg)}
+}
+.bg-symbols span.rev{animation-name:drift-rev}
+
+/* Gold margin trace — scroll progress as a line down the left */
+.margin-trace{
+  position:fixed;
+  top:0;left:max(1.25rem, 2vw);
+  width:1px;height:100vh;
+  background:linear-gradient(to bottom, transparent 0, rgba(212,175,55,0.18) 8%, rgba(212,175,55,0.18) 92%, transparent 100%);
+  z-index:5;
+  pointer-events:none;
+}
+.margin-trace .fill{
+  position:absolute;
+  top:0;left:-1px;
+  width:3px;
+  background:var(--gold);
+  box-shadow:0 0 12px rgba(212,175,55,0.6);
+  height:0;
+  transition:height .1s linear;
+}
+@media (max-width:780px){.margin-trace{display:none}}
+
+/* ============================================================
+   CUSTOM CURSOR
+============================================================ */
+.cursor-dot,.cursor-ring{
+  position:fixed;top:0;left:0;
+  pointer-events:none;
+  z-index:9999;
+  mix-blend-mode:difference;
+  will-change:transform;
+}
+.cursor-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+  transform:translate3d(-100px,-100px,0);
+  transition:width .2s var(--ease), height .2s var(--ease);
+}
+.cursor-ring{
+  width:34px;height:34px;border-radius:50%;
+  border:1px solid rgba(212,175,55,0.6);
+  transform:translate3d(-100px,-100px,0);
+  transition:width .3s var(--ease), height .3s var(--ease), border-color .3s var(--ease);
+}
+body.cursor-hover .cursor-dot{width:0;height:0}
+body.cursor-hover .cursor-ring{width:60px;height:60px;border-color:var(--gold)}
+@media (hover:none),(pointer:coarse){
+  .cursor-dot,.cursor-ring{display:none!important}
+}
+
+/* ============================================================
+   HEADER / NAV (shared across pages)
+============================================================ */
+.site-header{
+  position:fixed;top:0;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem var(--pad-x);
+  z-index:50;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--paper-dim);
+  background:rgba(10,23,51,0.65);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.brand{display:flex;align-items:center;gap:.6rem;color:var(--paper)}
+.brand-mark{
+  width:18px;height:18px;
+  border:1px solid var(--gold);
+  position:relative;
+  transform:rotate(45deg);
+}
+.brand-mark::after{
+  content:"";position:absolute;inset:3px;background:var(--gold);
+}
+.nav-list{display:flex;gap:1.6rem;list-style:none;margin:0;padding:0}
+.nav-list a{position:relative;padding:.25rem 0;color:var(--paper-dim);transition:color .3s var(--ease)}
+.nav-list a:hover,.nav-list a[aria-current="page"]{color:var(--paper)}
+.nav-list a::after{
+  content:"";position:absolute;left:0;bottom:-3px;
+  width:0;height:1px;background:var(--gold);
+  transition:width .35s var(--ease);
+}
+.nav-list a:hover::after,.nav-list a[aria-current="page"]::after{width:100%}
+@media (max-width:880px){
+  .nav-list{gap:.9rem;font-size:9.5px;letter-spacing:.16em}
+  .nav-list li:nth-child(n+5){display:none}
+}
+@media (max-width:540px){
+  .nav-list li:nth-child(n+4){display:none}
+  .site-header{padding:1rem 1.25rem}
+}
+
+/* ============================================================
+   PAGE FRAME
+============================================================ */
+main{position:relative;z-index:2;padding-top:5rem}
+.page{padding:var(--pad-y) var(--pad-x);min-height:80vh}
+.page-eyebrow{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.3em;
+  text-transform:uppercase;
+  color:var(--gold);
+  display:flex;align-items:center;gap:1rem;
+  margin:0 0 2rem;
+}
+.page-eyebrow::before{
+  content:"";display:inline-block;
+  width:40px;height:1px;background:var(--gold);
+}
+.page-title{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 6rem);
+  line-height:1.02;
+  letter-spacing:-.03em;
+  margin:0 0 3rem;
+  max-width:18ch;
+}
+.page-title .italic{font-style:italic;color:var(--gold);font-weight:500}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{
+  position:relative;z-index:2;
+  padding:3rem var(--pad-x) 2rem;
+  border-top:1px solid var(--rule);
+  font-family:var(--mono);
+  font-size:10.5px;letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--paper-mute);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;
+}
+footer .colophon{
+  max-width:42ch;
+  text-transform:none;
+  letter-spacing:.02em;
+  font-family:var(--serif);
+  font-style:italic;
+  color:var(--paper-dim);
+  font-size:.95rem;
+}
+
+/* ============================================================
+   REUSABLE — buttons, links, etc
+============================================================ */
+.gold-link{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper);
+  padding:.6rem 0;
+  border-bottom:1px solid var(--gold);
+  transition:gap .3s var(--ease), color .3s var(--ease);
+}
+.gold-link:hover{gap:1rem;color:var(--gold)}
+.gold-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--ink-1);
+  background:var(--gold);
+  padding:1rem 1.6rem;
+  border:1px solid var(--gold);
+  transition:background .3s var(--ease), color .3s var(--ease);
+}
+.gold-btn:hover{background:transparent;color:var(--gold)}
+.ghost-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper);
+  background:transparent;
+  padding:1rem 1.6rem;
+  border:1px solid var(--paper-dim);
+  transition:border-color .3s var(--ease), color .3s var(--ease);
+}
+.ghost-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ============================================================
+   REVEAL ON SCROLL (CSS-only fallback + JS enhanced)
+   Elements with data-reveal start invisible, gain .in when
+   IntersectionObserver fires.
+============================================================ */
+[data-reveal]{
+  opacity:0;transform:translateY(28px);
+  transition:opacity .9s var(--ease), transform .9s var(--ease);
+}
+[data-reveal].in{opacity:1;transform:none}
+[data-reveal][data-delay="1"]{transition-delay:.08s}
+[data-reveal][data-delay="2"]{transition-delay:.16s}
+[data-reveal][data-delay="3"]{transition-delay:.24s}
+[data-reveal][data-delay="4"]{transition-delay:.32s}
+[data-reveal][data-delay="5"]{transition-delay:.40s}
+
+/* Reduced motion override */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+  [data-reveal]{opacity:1;transform:none}
+  .bg-symbols{display:none}
+}
+
+/* ============================================================
+   PROSE / EDITORIAL
+============================================================ */
+.prose{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(1.1rem, 1.5vw, 1.3rem);
+  line-height:1.65;
+  color:var(--paper);
+  max-width:36em;
+}
+.prose p{margin:0 0 1.5em}
+.prose em{color:var(--gold);font-style:italic}
+.prose strong{color:var(--paper);font-weight:500}
+
+.pullquote{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:300;
+  font-size:clamp(2rem, 5vw, 4rem);
+  line-height:1.08;
+  letter-spacing:-.02em;
+  color:var(--paper);
+  margin:3rem 0 3rem -2rem;
+  max-width:18ch;
+  position:relative;
+}
+.pullquote::before{
+  content:"\201C";
+  position:absolute;
+  top:-.4em;left:-.55em;
+  font-size:2em;
+  color:var(--gold);
+  opacity:.7;
+}
+.pullquote .em{color:var(--gold);font-style:normal}
+@media (max-width:720px){.pullquote{margin-left:0}.pullquote::before{left:-.3em}}
+
+/* ============================================================
+   NAMED PEOPLE — Ryan Gong (math VP, co-author)
+============================================================ */
+.name-ryan{
+  color:var(--gold);
+  font-weight:500;
+  font-style:normal;
+  white-space:nowrap;
+}

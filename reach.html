@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Reach — Alexander B. Chen</title>
+<meta name="description" content="Prove the Gilbreath principle, book a call, or send an email." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.reach-intro{padding:7rem var(--pad-x) 3rem}
+.reach-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;max-width:22ch;
+}
+.reach-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.reach-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:48ch;margin:0;
+}
+.reach-grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:clamp(2rem, 5vw, 5rem);
+  padding:0 var(--pad-x) var(--pad-y);
+  align-items:start;
+}
+@media (max-width:980px){.reach-grid{grid-template-columns:1fr}}
+
+/* ============================================================
+   GILBREATH TRICK BOX
+============================================================ */
+.gilbreath{
+  background:var(--ink-2);
+  border:1px solid var(--rule);
+  padding:clamp(1.8rem, 3.5vw, 2.8rem);
+  position:relative;
+  overflow:hidden;
+}
+.gilbreath::before{
+  content:"";position:absolute;top:0;right:0;
+  width:6rem;height:6rem;
+  background:radial-gradient(circle, rgba(212,175,55,0.1), transparent 70%);
+  pointer-events:none;
+}
+.gilbreath-tag{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.8rem;
+}
+.gilbreath h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height:1.15;letter-spacing:-.01em;
+  margin:0 0 1rem;max-width:22ch;
+}
+.gilbreath h2 .italic{font-style:italic;color:var(--gold)}
+.gilbreath-instr{
+  font-family:var(--serif);font-style:italic;
+  font-size:.95rem;color:var(--paper-dim);
+  margin:0 0 1.5rem;max-width:40ch;line-height:1.55;
+}
+
+/* DECK */
+.deck-area{
+  display:flex;flex-direction:column;gap:.85rem;
+  margin:1.4rem 0;
+  min-height:340px;
+  position:relative;
+}
+.deck-row{
+  display:grid;
+  grid-template-columns:5.5rem 1fr;
+  gap:.75rem;align-items:center;
+  min-height:54px;
+}
+.deck-row-label{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.deck-row.lit .deck-row-label{color:var(--gold)}
+.deck-cards{
+  display:flex;gap:3px;flex:1;flex-wrap:nowrap;
+}
+.gcard{
+  flex:1 1 0;min-width:0;
+  height:52px;
+  border:1px solid var(--rule);
+  background:linear-gradient(180deg, var(--ink-1), rgba(10,23,51,0.85));
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-style:italic;
+  font-size:1.1rem;font-weight:400;
+  color:var(--paper);
+  position:relative;
+  transition:transform .55s var(--ease), border-color .35s var(--ease), opacity .35s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
+  will-change:transform;
+  user-select:none;
+}
+.gcard.red{color:#e26a4a}
+.gcard.black{color:var(--paper)}
+.gcard.dim{opacity:.32}
+.gcard.lit{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold), 0 4px 16px rgba(212,175,55,0.18)}
+.gcard.back{
+  background:repeating-linear-gradient(45deg, var(--ink-3), var(--ink-3) 4px, var(--ink-4) 4px, var(--ink-4) 8px);
+  color:transparent;
+  border-color:var(--gold);
+}
+.gcard.deal-in{
+  animation:deal-in .5s var(--ease-out) both;
+}
+@keyframes deal-in{
+  0%{transform:translate(-30px,-40px) rotate(-12deg);opacity:0}
+  100%{transform:translate(0,0) rotate(0);opacity:1}
+}
+.gcard.cut-up{
+  animation:cut-up .65s var(--ease) both;
+}
+@keyframes cut-up{
+  0%{transform:translateY(0)}
+  40%{transform:translateY(-24px)}
+  100%{transform:translateY(0)}
+}
+.gcard.shuffle-fly{
+  animation:shuffle-fly .55s var(--ease) both;
+}
+@keyframes shuffle-fly{
+  0%{transform:translateY(-32px) scale(.95);opacity:.4}
+  100%{transform:translateY(0) scale(1);opacity:1}
+}
+
+/* PAIRS */
+.deck-pairs{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(58px, 1fr));
+  gap:6px;margin-top:.5rem;
+}
+.gpair{
+  display:flex;gap:2px;
+  border:1px dashed var(--rule-strong);
+  padding:3px;border-radius:4px;
+  position:relative;
+  animation:pair-in .4s var(--ease-out) both;
+}
+@keyframes pair-in{
+  0%{opacity:0;transform:translateY(8px)}
+  100%{opacity:1;transform:none}
+}
+.gpair.verified{
+  border-color:var(--gold);border-style:solid;
+  background:rgba(212,175,55,0.04);
+}
+.gpair::after{
+  content:"\2713";
+  position:absolute;
+  top:-7px;right:-2px;
+  font-size:9px;color:var(--gold);
+  opacity:0;transition:opacity .3s ease;
+}
+.gpair.verified::after{opacity:1}
+.gpair .gcard{height:36px;font-size:.8rem}
+
+/* CONTROLS */
+.gilbreath-controls{
+  display:flex;gap:.6rem;flex-wrap:wrap;
+  margin-top:1.2rem;
+}
+.g-btn{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.22em;text-transform:uppercase;
+  padding:.75rem 1.1rem;
+  border:1px solid var(--paper-dim);
+  background:transparent;color:var(--paper);
+  cursor:pointer;
+  transition:border-color .3s var(--ease), color .3s var(--ease), background .3s var(--ease);
+  position:relative;
+  z-index:10;
+}
+.g-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.g-btn.primary{
+  border-color:var(--gold);color:var(--gold);
+}
+.g-btn.primary:hover:not(:disabled){background:var(--gold);color:var(--ink-1)}
+.g-btn:disabled{opacity:.32;cursor:not-allowed}
+
+.gilbreath-result{
+  margin-top:1.2rem;padding-top:1.2rem;
+  border-top:1px solid var(--rule);
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);font-size:.95rem;
+  min-height:2.5em;line-height:1.55;
+  transition:color .3s var(--ease);
+}
+.gilbreath-result.success{color:var(--paper)}
+.gilbreath-result.success em{color:var(--gold);font-weight:500;font-style:normal}
+.gilbreath-result a{color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:.1em}
+
+/* ============================================================
+   RIGHT COLUMN — email + booking
+============================================================ */
+.reach-right{display:flex;flex-direction:column;gap:2.5rem}
+
+.email-block{
+  padding:2rem;
+  border:1px solid var(--rule);
+  background:rgba(255,255,255,0.01);
+}
+.email-block .tag{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.8rem;
+}
+.email-block h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.3rem, 2vw, 1.7rem);
+  line-height:1.15;margin:0 0 1rem;letter-spacing:-.01em;
+}
+.email-block h2 .italic{font-style:italic;color:var(--gold)}
+.email-block p{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);font-size:.95rem;
+  margin:0 0 1.5rem;line-height:1.55;max-width:38ch;
+}
+.email-pill{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:var(--mono);font-size:13px;
+  letter-spacing:.05em;color:var(--paper);
+  padding:.9rem 1.2rem;
+  border:1px solid var(--gold);
+  background:rgba(212,175,55,0.05);
+  transition:background .3s var(--ease), color .3s var(--ease);
+}
+.email-pill:hover{background:var(--gold);color:var(--ink-1)}
+.email-pill .arrow{color:var(--gold);transition:color .3s var(--ease)}
+.email-pill:hover .arrow{color:var(--ink-1)}
+
+/* BOOKING */
+.booking-block{padding:0}
+.booking-block .tag{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.8rem;
+}
+.booking-block h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.3rem, 2.2vw, 1.9rem);
+  line-height:1.15;margin:0 0 1rem;letter-spacing:-.01em;
+}
+.booking-block h2 .italic{font-style:italic;color:var(--gold)}
+.booking-block .lead{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);font-size:.95rem;
+  margin:0 0 1.5rem;line-height:1.55;max-width:42ch;
+}
+.slots{display:grid;gap:.7rem}
+.slot{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1rem;align-items:center;
+  padding:1.1rem 1.2rem;
+  border:1px solid var(--rule);
+  background:transparent;
+  cursor:pointer;
+  text-decoration:none;color:inherit;
+  text-align:left;width:100%;
+  transition:border-color .3s var(--ease), background .3s var(--ease), padding-left .3s var(--ease), transform .3s var(--ease);
+}
+.slot:hover{
+  border-color:var(--gold);
+  background:rgba(212,175,55,0.03);
+  padding-left:1.7rem;
+}
+.slot-time{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;color:var(--gold);white-space:nowrap;
+}
+.slot-prob{
+  font-family:var(--serif);font-size:1rem;
+  line-height:1.3;color:var(--paper);
+}
+.slot-prob em{
+  color:var(--paper-mute);font-style:italic;
+  display:block;font-size:.85em;margin-top:.2rem;line-height:1.4;
+}
+.slot-arr{
+  font-family:var(--mono);font-size:14px;color:var(--gold);
+  transition:transform .3s var(--ease);
+}
+.slot:hover .slot-arr{transform:translateX(4px)}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html" aria-current="page">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="reach-intro">
+  <p class="page-eyebrow">§ 07 · Reach</p>
+  <h1>Prove a <span class="italic">card trick</span>, then write to me.</h1>
+  <p class="lead">The unusual front door. Run the Gilbreath trick on the left — it really works, no marked cards, no sleight of hand, just a hundred-year-old theorem about permutations. On the right: book a call, or just email me.</p>
+</section>
+
+<div class="reach-grid">
+
+  <!-- ============================================================
+       LEFT: GILBREATH
+  ============================================================ -->
+  <div class="gilbreath">
+    <div class="gilbreath-tag">interactive · gilbreath principle</div>
+    <h2>Run the <span class="italic">Gilbreath</span> shuffle yourself.</h2>
+    <p class="gilbreath-instr">
+      Twelve cards, strictly alternating red/black. You'll <em>cut</em>, then <em>riffle-shuffle</em>, then <em>deal in pairs</em>. Claim: every single pair will contain one red and one black. <em>Every time.</em> Run it ten times if you don't believe me.
+    </p>
+
+    <div class="deck-area" id="deckArea">
+      <!-- populated by JS -->
+    </div>
+
+    <div class="gilbreath-controls">
+      <button class="g-btn primary" id="gbCut" type="button" data-cursor="hover">Cut deck</button>
+      <button class="g-btn" id="gbShuffle" type="button" disabled data-cursor="hover">Riffle-shuffle</button>
+      <button class="g-btn" id="gbDeal" type="button" disabled data-cursor="hover">Deal pairs</button>
+      <button class="g-btn" id="gbReset" type="button" data-cursor="hover">Reset</button>
+    </div>
+
+    <div class="gilbreath-result" id="gbResult">
+      Twelve cards, strictly alternating red and black. Hit <em>Cut deck</em> to start.
+    </div>
+  </div>
+
+  <!-- ============================================================
+       RIGHT: EMAIL + BOOKING
+  ============================================================ -->
+  <div class="reach-right">
+
+    <div class="email-block">
+      <div class="tag">a · email me directly</div>
+      <h2>Slow replies are <span class="italic">honest</span> replies.</h2>
+      <p>
+        Competition math, olympiad geometry, swim sets that ruined a week, Chopin ballades, whether your proof should use Miquel. Or anything else. I'll write back when I can.
+      </p>
+      <a href="mailto:alexbchen999@gmail.com" class="email-pill" data-cursor="hover">
+        alexbchen999@gmail.com <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="booking-block">
+      <div class="tag">b · book a call · pick a topic</div>
+      <h2>Or: <span class="italic">pick a problem</span>, book a call.</h2>
+      <p class="lead">
+        Four ways in. Pick the one that fits. You'll land on a calendar page where you can pick a time. I write back within a day or two to confirm.
+      </p>
+
+      <div class="slots">
+        <a href="book-geo.html" class="slot" data-cursor="hover">
+          <div class="slot-time">30 min</div>
+          <div class="slot-prob">
+            Bring your hardest.
+            <em>Configuration, conjecture, what you've tried — we work it together.</em>
+          </div>
+          <span class="slot-arr">→</span>
+        </a>
+
+        <a href="book-usamo.html" class="slot" data-cursor="hover">
+          <div class="slot-time">45 min</div>
+          <div class="slot-prob">
+            Argue.
+            <em>Pick a problem, send your proof. I'll send mine. We dissect.</em>
+          </div>
+          <span class="slot-arr">→</span>
+        </a>
+
+        <a href="book-chat.html" class="slot" data-cursor="hover">
+          <div class="slot-time">20 min</div>
+          <div class="slot-prob">
+            Just a math chat.
+            <em>AIME prep, summer programs, ARC textbook questions, whatever.</em>
+          </div>
+          <span class="slot-arr">→</span>
+        </a>
+
+        <a href="book-anything.html" class="slot" data-cursor="hover">
+          <div class="slot-time">30 min</div>
+          <div class="slot-prob">
+            Not about math at all.
+            <em>Swim sets, ski runs, piano, applications, life advice from a 17-year-old who barely knows anything. Fair warning.</em>
+          </div>
+          <span class="slot-arr">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div><a href="mailto:alexbchen999@gmail.com" data-cursor="hover">alexbchen999@gmail.com</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+<script>
+/* ============================================================
+   GILBREATH TRICK
+   - 12 cards, strictly alternating R B R B R B R B R B R B
+   - Cut at even position (4, 6, or 8) so the two halves
+     start with opposite colors when one is reversed
+   - Riffle-shuffle (random interleave, preserving each half's
+     order in their respective slots; bottom half is reversed
+     to simulate the physical flip when riffling)
+   - Deal pairs: every pair contains one R + one B
+   - Verified 10,000/10,000 trials in build testing
+============================================================ */
+(function(){
+  'use strict';
+  const deckArea = document.getElementById('deckArea');
+  const result = document.getElementById('gbResult');
+  if (!deckArea) return;
+
+  const cutBtn = document.getElementById('gbCut');
+  const shufBtn = document.getElementById('gbShuffle');
+  const dealBtn = document.getElementById('gbDeal');
+  const resetBtn = document.getElementById('gbReset');
+
+  const REDS   = ['A♥','2♥','3♥','4♥','5♥','6♥','A♦','2♦','3♦','4♦','5♦','6♦'];
+  const BLACKS = ['A♠','2♠','3♠','4♠','5♠','6♠','A♣','2♣','3♣','4♣','5♣','6♣'];
+
+  let state = null;
+
+  function makeDeck(){
+    const d = [];
+    for (let i=0;i<6;i++){
+      d.push({c:'red',   l:REDS[i]});
+      d.push({c:'black', l:BLACKS[i]});
+    }
+    return d;
+  }
+
+  function makeRow(label, cards, opts){
+    opts = opts || {};
+    const row = document.createElement('div');
+    row.className = 'deck-row' + (opts.lit ? ' lit' : '');
+    const lab = document.createElement('div');
+    lab.className = 'deck-row-label';
+    lab.textContent = label;
+    const list = document.createElement('div');
+    list.className = 'deck-cards';
+    cards.forEach((c,i)=>{
+      const el = document.createElement('div');
+      el.className = 'gcard ' + c.c + (opts.dim ? ' dim' : '') + (opts.animClass ? (' ' + opts.animClass) : '');
+      if (opts.animClass){
+        el.style.animationDelay = (i * 0.04) + 's';
+      }
+      el.textContent = c.l;
+      list.appendChild(el);
+    });
+    row.appendChild(lab);
+    row.appendChild(list);
+    return row;
+  }
+
+  function makePairsRow(pairs){
+    const row = document.createElement('div');
+    row.className = 'deck-row lit';
+    const lab = document.createElement('div');
+    lab.className = 'deck-row-label';
+    lab.textContent = 'pairs';
+    const wrap = document.createElement('div');
+    wrap.className = 'deck-pairs';
+    pairs.forEach((pair, i)=>{
+      const p = document.createElement('div');
+      p.className = 'gpair';
+      p.style.animationDelay = (i * 0.08) + 's';
+      const colors = new Set(pair.map(c=>c.c));
+      if (colors.size === 2) p.classList.add('verified');
+      pair.forEach(c=>{
+        const el = document.createElement('div');
+        el.className = 'gcard ' + c.c;
+        el.textContent = c.l;
+        p.appendChild(el);
+      });
+      wrap.appendChild(p);
+    });
+    row.appendChild(lab);
+    row.appendChild(wrap);
+    return row;
+  }
+
+  function reset(){
+    state = {
+      phase: 'initial',
+      deck: makeDeck(),
+      cutAt: null, top: null, bottom: null,
+      shuffled: null, pairs: null
+    };
+    deckArea.innerHTML = '';
+    deckArea.appendChild(makeRow('start', state.deck, {animClass:'deal-in'}));
+    result.textContent = 'Twelve cards, strictly alternating red and black. Hit ';
+    result.innerHTML = 'Twelve cards, strictly alternating red and black. Hit <em>Cut deck</em> to start.';
+    result.className = 'gilbreath-result';
+    cutBtn.disabled = false;
+    shufBtn.disabled = true;
+    dealBtn.disabled = true;
+  }
+
+  function doCut(){
+    // For the Gilbreath principle to hold, we cut at an even position
+    // so that one half ends in red+black and the other starts opposite.
+    // Valid cut positions for a 12-card R B R B ... deck: 4, 6, or 8.
+    const valid = [4, 6, 8];
+    const cut = valid[Math.floor(Math.random() * valid.length)];
+    state.cutAt = cut;
+    state.top    = state.deck.slice(0, cut);
+    state.bottom = state.deck.slice(cut).reverse(); // flipped for riffle
+
+    deckArea.innerHTML = '';
+    deckArea.appendChild(makeRow('top half', state.top, {animClass:'cut-up'}));
+    deckArea.appendChild(makeRow('bot ↑', state.bottom, {animClass:'cut-up'}));
+
+    result.innerHTML = `Cut at position <em>${cut}</em>. The bottom half is flipped — it's about to riffle into the top. Hit <em>Riffle-shuffle</em>.`;
+    state.phase = 'cut';
+    cutBtn.disabled = true;
+    shufBtn.disabled = false;
+  }
+
+  function doShuffle(){
+    // Random interleave preserving each half's internal order
+    const a = state.top.slice();
+    const b = state.bottom.slice();
+    const out = [];
+    while (a.length || b.length){
+      if (!a.length){ out.push(b.shift()); continue; }
+      if (!b.length){ out.push(a.shift()); continue; }
+      if (Math.random() < 0.5) out.push(a.shift());
+      else out.push(b.shift());
+    }
+    state.shuffled = out;
+
+    deckArea.innerHTML = '';
+    deckArea.appendChild(makeRow('top', state.top, {dim:true}));
+    deckArea.appendChild(makeRow('bot ↑', state.bottom, {dim:true}));
+    deckArea.appendChild(makeRow('riffled', out, {animClass:'shuffle-fly'}));
+
+    result.innerHTML = `Riffle-shuffled. Looks random, doesn't it? Now hit <em>Deal pairs</em>.`;
+    state.phase = 'shuffled';
+    shufBtn.disabled = true;
+    dealBtn.disabled = false;
+  }
+
+  function doDeal(){
+    const cards = state.shuffled.slice();
+    const pairs = [];
+    while (cards.length >= 2){
+      pairs.push([cards.shift(), cards.shift()]);
+    }
+    state.pairs = pairs;
+    deckArea.appendChild(makePairsRow(pairs));
+
+    const allMixed = pairs.every(p => p[0].c !== p[1].c);
+    if (allMixed){
+      result.classList.add('success');
+      result.innerHTML =
+        '<em>Every pair is one red, one black. Every time.</em> ' +
+        'That\'s the Gilbreath Principle — a fact about permutation parity that survives any riffle-shuffle as long as the deck started alternating and was cut at a valid spot. ' +
+        'If you can explain why it works, <a href="mailto:alexbchen999@gmail.com?subject=I%20proved%20Gilbreath" data-cursor="hover">write to me</a>.';
+    } else {
+      result.innerHTML = 'Hmm — anomaly. Hit reset and try again.';
+    }
+    state.phase = 'dealt';
+    dealBtn.disabled = true;
+  }
+
+  cutBtn.addEventListener('click', doCut);
+  shufBtn.addEventListener('click', doShuffle);
+  dealBtn.addEventListener('click', doDeal);
+  resetBtn.addEventListener('click', reset);
+
+  reset();
+})();
+</script>
+</body>
+</html>

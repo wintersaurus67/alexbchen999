@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>About — Alexander B. Chen</title>
+<meta name="description" content="From sprinter to architect: swimming, persistence, and the long-distance pursuit of why." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.about-hero{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(2rem, 6vw, 6rem);
+  align-items:center;
+  padding:clamp(3rem, 8vh, 6rem) var(--pad-x) 4rem;
+}
+@media (max-width:880px){.about-hero{grid-template-columns:1fr;gap:3rem}}
+.about-photo{
+  position:relative;
+  aspect-ratio:3/4;
+  background:var(--ink-2);
+  border:1px solid var(--rule);
+  overflow:hidden;
+}
+.about-photo img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:grayscale(.15) contrast(1.05) brightness(.95);
+  transition:filter .8s var(--ease);
+}
+.about-photo:hover img{filter:grayscale(0) contrast(1) brightness(1)}
+.about-photo .caption{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:1rem 1.2rem;
+  background:linear-gradient(to top, rgba(10,23,51,0.95), transparent);
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-dim);
+}
+.about-photo .caption em{color:var(--gold);font-style:normal}
+.about-photo .frame{
+  position:absolute;top:1rem;left:1rem;
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold);
+  background:rgba(10,23,51,0.7);
+  padding:.3rem .6rem;
+}
+
+.about-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;
+}
+.about-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.about-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:36ch;margin:0;line-height:1.55;
+}
+
+.about-body{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 2fr);
+  gap:clamp(2rem, 6vw, 6rem);
+  align-items:start;
+  padding:var(--pad-y) var(--pad-x);
+  border-top:1px solid var(--rule);
+}
+@media (max-width:880px){.about-body{grid-template-columns:1fr}}
+.about-aside{
+  position:sticky;top:8rem;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--paper-mute);
+}
+.about-aside .num{
+  font-family:var(--serif);font-style:italic;
+  font-size:6rem;line-height:1;color:var(--gold);
+  letter-spacing:-.04em;display:block;margin-bottom:1rem;font-weight:300;
+}
+@media (max-width:880px){
+  .about-aside{position:static}
+  .about-aside .num{font-size:4rem}
+}
+
+.about-prose{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.15rem, 1.6vw, 1.4rem);
+  line-height:1.6;color:var(--paper);
+  max-width:36em;
+}
+.about-prose p{margin:0 0 1.8em}
+.about-prose em{color:var(--gold);font-style:italic}
+.about-prose strong{color:var(--paper);font-weight:500}
+
+.pullquote-block{
+  margin:3rem 0;
+  padding-left:2rem;
+  border-left:2px solid var(--gold);
+}
+.pullquote-big{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(2rem, 5vw, 3.8rem);
+  line-height:1.05;letter-spacing:-.02em;
+  color:var(--paper);margin:0;
+}
+.pullquote-big .em{color:var(--gold);font-style:normal}
+
+.about-cta{
+  padding:var(--pad-y) var(--pad-x);
+  border-top:1px solid var(--rule);
+  text-align:center;
+}
+.about-cta h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.8rem, 4vw, 3rem);
+  line-height:1.1;margin:0 0 1rem;
+}
+.about-cta h2 .italic{font-style:italic;color:var(--gold)}
+.about-cta p{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);max-width:48ch;margin:0 auto 2.5rem;
+}
+.about-cta .row{
+  display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html" aria-current="page">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="about-hero">
+  <div class="about-photo" data-reveal>
+    <div class="frame">fig. 01 / mathleague nationals · 2026</div>
+    <img src="photo.jpg" alt="Alex working on a problem at the breakfast table after a mathleague qualifier, head down over a clipboard with grid paper, knife as a makeshift straight-edge." loading="lazy" />
+    <div class="caption">Pre-round, before <em>MathLeague Nationals 2026</em>. Knife as a straight-edge because we forgot the ruler.</div>
+  </div>
+  <div class="about-intro" data-reveal data-delay="1">
+    <p class="page-eyebrow" style="margin-bottom:1.5rem">§ 01 · About</p>
+    <h1>From sprinter to <span class="italic">architect</span>.</h1>
+    <p class="lead">Math, swimming, piano, and a long-running argument with myself about what counts as time well spent. The first three are clear. The argument is ongoing.</p>
+  </div>
+</section>
+
+<section class="about-body">
+  <aside class="about-aside">
+    <span class="num">01</span>
+    <div>The architect /<br/>sprinter.<br/>An essay.</div>
+  </aside>
+  <div class="about-prose">
+    <p data-reveal>
+      For most of middle school I treated math like a <em>sprint</em> — find the clever trick, get the answer, move on. If a problem didn't reveal itself in ten minutes, I felt the urge to abandon it. I was good enough at the sprint to keep getting away with it, which was the problem. Every shortcut I got away with was a shortcut I kept reaching for.
+    </p>
+    <p data-reveal>
+      Almost a decade of competitive swimming has taught me that quitting in the middle of a hard set guarantees you'll never improve. You don't get a personal best by staring at the scoreboard. You get it by obsessing over the timing of your flipturns and the entry angle of your arm — for two and a half hours at a time, before the sun is up, with no audience.
+    </p>
+
+    <div class="pullquote-block" data-reveal>
+      <p class="pullquote-big">The <span class="em">black line</span> at the bottom of a pool and a stubborn proof are the same object.</p>
+    </div>
+
+    <p data-reveal>
+      Eventually I realized that the black line and a difficult proof are the same thing. They both require you to exist in a state of <em>discomfort</em> for a long time without a guaranteed reward. Learning to negotiate with that exhaustion — learning to do something even when you're in pain, learning to be consistent and disciplined and not just motivated — is where I first learned to be a student.
+    </p>
+    <p data-reveal>
+      So I started sitting with problems longer. I let confusion be part of the process. Over time the sprinter turned into something else: an <strong>architect</strong> looking for structural integrity rather than a clever shortcut. I wrote a 360-page multivariable calculus textbook for my peers. I founded <em>SSAMO</em>, the first Shady Side Academy Mathematics Olympiad, to make olympiad math accessible to kids who never thought it was for them. I started research in mathematical physics with Prof. Wencai Liu at Texas A&amp;M.
+    </p>
+    <p data-reveal>
+      The thread isn't the math. It's the willingness to stay with something difficult past the point where the trick stops working. That's the same skill at 5:15 AM on a pool deck, at midnight inside a Chopin ballade, and on a black diamond at Whistler in March.
+    </p>
+
+    <div class="pullquote-block" data-reveal>
+      <p class="pullquote-big">When you stop focusing on yourself, you <span class="em">improve more</span> than if you lock yourself in a room and grind.</p>
+    </div>
+
+    <p data-reveal>
+      The deepest lesson of junior year wasn't a proof technique. It was that all of the work I'd assumed was a <em>distraction</em> from getting good — running Math Club, designing problems for other students, writing the textbook <span class="name-ryan">Ryan Gong</span> and I co-authored — turned out to be the thing that made me better. When you have to explain why something works to a kid who's never seen it before, you find out fast which parts of your understanding are real and which are just pattern-matching.
+    </p>
+    <p data-reveal>
+      I scored a 5 on the USAMO. The median was 6. For about a week I treated this like a verdict on six years of my life. Then I noticed I was happier when I stopped checking my email every twenty minutes for the cutoff release, and I went back to math, and the version of math I went back to was the version where other people were also in the room. That's the version that's stuck.
+    </p>
+    <p data-reveal>
+      I'm heading to the <em>Ross Mathematics Program</em> for summer 2026 — six weeks doing nothing but number theory, the subject I avoided for years and now want to face. After that, senior year. And after that, an applied-math PhD I haven't quite earned the right to dream about yet, but I'm working on it.
+    </p>
+  </div>
+</section>
+
+<section class="about-cta">
+  <h2>Want to <span class="italic">talk</span>?</h2>
+  <p>I'm easy to find. Email is below; if you want a real conversation, pick one of the four call options on the Reach page.</p>
+  <div class="row">
+    <a href="reach.html" class="gold-btn" data-cursor="hover">Reach me &rarr;</a>
+    <a href="math.html" class="ghost-btn" data-cursor="hover">Or read the proofs &rarr;</a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Built in Pittsburgh between sets. Set in Fraunces &amp; JetBrains Mono. The Gilbreath trick really works.</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Writing — Alexander B. Chen</title>
+<meta name="description" content="Long-form essays on competition math, USAMO prep, school, parents, and the year a 5 taught me more than a medal would have." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.writing-intro{padding:7rem var(--pad-x) 3rem}
+.writing-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;max-width:18ch;
+}
+.writing-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.writing-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:48ch;margin:0;
+}
+.writing-intro .home{
+  margin-top:1.5rem;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.writing-intro .home a{
+  color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:.15rem;
+}
+
+.posts-section{
+  padding:0 var(--pad-x) var(--pad-y);
+}
+.posts-list{list-style:none;margin:0;padding:0}
+.post-item{
+  display:grid;
+  grid-template-columns:12ch 1fr 10ch;
+  gap:2rem;align-items:baseline;
+  padding:2rem 0;
+  border-bottom:1px solid var(--rule);
+  transition:padding-left .3s var(--ease), background .3s var(--ease);
+}
+.post-item:hover{padding-left:.8rem;background:rgba(212,175,55,0.02)}
+.post-item:first-child{border-top:1px solid var(--rule)}
+.post-link{display:contents;color:inherit}
+.post-date{
+  font-family:var(--mono);
+  font-size:11px;letter-spacing:.18em;
+  color:var(--paper-mute);
+  text-transform:uppercase;
+}
+.post-body .post-title{
+  font-family:var(--serif);
+  font-size:clamp(1.3rem, 2.2vw, 1.9rem);
+  font-weight:400;
+  margin:0 0 .4rem;line-height:1.15;letter-spacing:-.01em;
+  transition:color .3s var(--ease);
+}
+.post-link:hover .post-title{color:var(--gold)}
+.post-desc{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);font-size:1rem;margin:0;
+  max-width:60ch;line-height:1.5;
+}
+.post-read{
+  font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.2em;color:var(--paper-mute);
+  text-align:right;text-transform:uppercase;
+}
+.post-read .arrow{display:block;color:var(--gold);font-size:1.2em;margin-top:.3rem}
+@media (max-width:780px){
+  .post-item{grid-template-columns:1fr;gap:.5rem}
+  .post-read{text-align:left}
+  .post-read .arrow{display:inline;margin-left:1rem}
+}
+
+.posts-cta{
+  margin-top:3rem;padding:2rem 0;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.posts-cta a{
+  color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:.15rem;
+}
+
+.featured-quote{
+  margin:4rem 0;padding:3rem var(--pad-x);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  text-align:center;
+}
+.featured-quote blockquote{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.4rem, 3vw, 2.4rem);
+  line-height:1.2;letter-spacing:-.01em;
+  color:var(--paper);max-width:36ch;
+  margin:0 auto;font-weight:300;
+}
+.featured-quote blockquote::before{content:"\201C";color:var(--gold);font-size:1.5em;line-height:0;vertical-align:-.3em;margin-right:.1em}
+.featured-quote blockquote::after{content:"\201D";color:var(--gold);font-size:1.5em;line-height:0;vertical-align:-.3em;margin-left:.1em}
+.featured-quote cite{
+  display:block;margin-top:1.5rem;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);font-style:normal;
+}
+.featured-quote cite a{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html" aria-current="page">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="writing-intro">
+  <p class="page-eyebrow">§ 06 · Writing</p>
+  <h1>Notes from <span class="italic">the middle</span>.</h1>
+  <p class="lead">Long-form essays. Most olympiad writing online is either technical (here's the trick) or aspirational (here's how the MOP kids think). I'm trying to write about the part nobody covers — the middle, where you're not great yet, where the gap feels uncrossable.</p>
+  <p class="home">All posts live at <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" data-cursor="hover">alecks67.substack.com</a></p>
+</section>
+
+<section class="posts-section">
+  <ul class="posts-list">
+    <li class="post-item">
+      <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" class="post-link" data-cursor="hover">
+        <div class="post-date">May 19, 2026</div>
+        <div class="post-body">
+          <h2 class="post-title">Education: what school stopped being</h2>
+          <p class="post-desc">On a Kennywood data project that quietly stopped being about physics, a cardstock roller coaster that engaged checked-out kids in ninety minutes, and the slow drift of school from <em>why</em> to <em>how</em>. The quiet one. Posted without the Substack email.</p>
+        </div>
+        <div class="post-read">~25 min<span class="arrow">→</span></div>
+      </a>
+    </li>
+
+    <li class="post-item">
+      <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" class="post-link" data-cursor="hover">
+        <div class="post-date">May 15, 2026</div>
+        <div class="post-body">
+          <h2 class="post-title">A thing or two about school</h2>
+          <p class="post-desc">On the pattern of <em>pride, worry, retroactive support</em>, the inherited framework I'm still trying to filter, and which parts of it I get to keep. About piano, swim, the Eastern Zone cut. About a conversation that ran past midnight.</p>
+        </div>
+        <div class="post-read">~12 min<span class="arrow">→</span></div>
+      </a>
+    </li>
+
+    <li class="post-item">
+      <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" class="post-link" data-cursor="hover">
+        <div class="post-date">May 10, 2026</div>
+        <div class="post-body">
+          <h2 class="post-title">Chasing dreams a long way back</h2>
+          <p class="post-desc">Six years of competition math, mapped from 6th-grade AMC 8 to junior-year USAMO. The wrong studying, the right friend, the very specific decision to <em>stop studying</em> for the AIME and qualify anyway. Long. Honest. For the kid I was in middle school.</p>
+        </div>
+        <div class="post-read">~28 min<span class="arrow">→</span></div>
+      </a>
+    </li>
+
+    <li class="post-item">
+      <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" class="post-link" data-cursor="hover">
+        <div class="post-date">May 09, 2026</div>
+        <div class="post-body">
+          <h2 class="post-title">The end to a beginning</h2>
+          <p class="post-desc">An honest accounting of three years: who carried me, who I owe apologies to, and the part where math stopped being an identity and became something quieter. D1 yap session as promised.</p>
+        </div>
+        <div class="post-read">~18 min<span class="arrow">→</span></div>
+      </a>
+    </li>
+
+    <li class="post-item">
+      <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" class="post-link" data-cursor="hover">
+        <div class="post-date">earlier · 2026</div>
+        <div class="post-body">
+          <h2 class="post-title">What I do when nobody's making me</h2>
+          <p class="post-desc">A Nesbitt generalization that came out of being bored, then a tour: math addictions, the Gilbreath principle, swimming as a productivity hack with terrible ROI, why I let myself be reckless on a mountain twice a year, ten years of being a robot at the piano.</p>
+        </div>
+        <div class="post-read">~22 min<span class="arrow">→</span></div>
+      </a>
+    </li>
+  </ul>
+
+  <div class="posts-cta">
+    <span>More at <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" data-cursor="hover">alecks67.substack.com</a></span>
+    <span>Subscribe via the link &mdash; I write when I have something to say.</span>
+  </div>
+</section>
+
+<section class="featured-quote">
+  <blockquote>
+    The score isn't the point. If you optimize for the score, you do worse than if you optimize for understanding the problems.
+  </blockquote>
+  <cite>from <a href="https://alecks67.substack.com/" target="_blank" rel="noopener" data-cursor="hover">Chasing dreams a long way back</a> &middot; advice to younger me</cite>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+</body>
+</html>

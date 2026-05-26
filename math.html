@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Math — Alexander B. Chen</title>
+<meta name="description" content="Three proofs walked through slowly: USAMO 2021 P1, IMO 1988 P6 by Vieta jumping, and a Nesbitt generalization. Plus my math journey." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+
+<!-- MathJax 3 — SVG output, no SRI hashes, defer-safe -->
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    /* ams, color, cancel are bundled into tex-svg.js — no need to
+       enumerate them in packages or loader.load (which would trigger
+       a "no version information" warning). */
+  },
+  svg: {
+    fontCache: 'global',
+    scale: 1.05
+  },
+  options: {
+    skipHtmlTags: ['script','noscript','style','textarea','pre','code'],
+    enableMenu: false
+  },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        document.documentElement.classList.add('mathjax-loaded');
+      });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+/* ============================================================
+   PROOFS / MATH PAGE
+============================================================ */
+
+/* Hide math until MathJax renders to avoid raw-LaTeX flash */
+html:not(.mathjax-loaded) mjx-container,
+html:not(.mathjax-loaded) .tex-math{
+  visibility:hidden;
+}
+
+/* ============================================================
+   MATHJAX OUTPUT — force inline math to behave like text.
+
+   MathJax 3 SVG output creates <mjx-container> as inline-block,
+   but tall math (fractions, subscripts) inflates the parent line
+   box and the SVG itself is an "atomic inline" introducing soft
+   wrap opportunities around itself. These rules suppress that.
+============================================================ */
+
+/* Inline math: must flow inline with surrounding text. */
+mjx-container[jax="SVG"]:not([display="true"]){
+  display:inline-block !important;
+  vertical-align:-0.22em;
+  line-height:normal;
+  margin:0 0.1em;
+  color:inherit;
+  /* Prevent soft-wrap before/after this atomic inline. */
+  word-spacing:normal;
+}
+mjx-container[jax="SVG"]:not([display="true"]) svg{
+  display:inline-block;
+  vertical-align:baseline;
+  color:inherit;
+  overflow:visible;
+}
+
+/* Display math: belongs on its own line, but we converted all $$
+   blocks to $...$ so this should rarely if ever fire. */
+mjx-container[jax="SVG"][display="true"]{
+  display:block !important;
+  text-align:center;
+  margin:1em 0;
+}
+
+/* Hide the assistive MathML mirror MathJax inserts for screen
+   readers — it can take up layout space otherwise. */
+mjx-assistive-mml{
+  position:absolute !important;
+  top:0;left:0;
+  clip:rect(1px,1px,1px,1px);
+  padding:0 !important;border:0 !important;
+  width:1px !important;height:1px !important;
+  overflow:hidden !important;
+}
+
+.math-intro{
+  padding:7rem var(--pad-x) 4rem;
+  max-width:1200px;
+  margin:0 auto;
+}
+.math-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;max-width:18ch;
+}
+.math-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.math-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.1rem, 1.6vw, 1.35rem);
+  color:var(--paper-dim);max-width:54ch;margin:0;line-height:1.55;
+}
+.math-toc{
+  margin-top:2.5rem;
+  display:flex;gap:2rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;
+}
+.math-toc a{
+  color:var(--paper-dim);
+  display:flex;align-items:center;gap:.5rem;
+  border-bottom:1px solid var(--rule);
+  padding-bottom:.4rem;
+  transition:color .3s var(--ease), border-color .3s var(--ease);
+}
+.math-toc a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.math-toc a .n{color:var(--gold)}
+
+/* ============================================================
+   PROOF SECTION LAYOUT
+============================================================ */
+.proof{
+  position:relative;
+  border-top:1px solid var(--rule);
+}
+.proof-eyebrow{
+  padding:5rem var(--pad-x) 0;
+  max-width:1200px;margin:0 auto;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);
+}
+.proof-heading{
+  padding:.8rem var(--pad-x) 0;
+  max-width:1200px;margin:0 auto;
+}
+.proof-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2rem, 4vw, 3.2rem);
+  line-height:1.05;letter-spacing:-.02em;
+  margin:0 0 1rem;max-width:24ch;
+}
+.proof-title .italic{font-style:italic;color:var(--gold)}
+.proof-claim{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.1rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:60ch;margin:0 0 2.5rem;
+  line-height:1.6;
+}
+.proof-claim mjx-container{font-style:normal}
+
+.proof-sticky-wrap{
+  position:relative;
+  min-height:300vh;
+}
+.proof-sticky{
+  position:sticky;top:5.5rem;
+  height:calc(100vh - 6rem);
+  min-height:560px;
+  display:grid;
+  grid-template-columns:minmax(0, 1.05fr) minmax(0, 1.1fr);
+  gap:1px;
+  background:var(--rule);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  max-width:1280px;
+  margin:0 auto;
+}
+@media (max-width:980px){
+  .proof-sticky-wrap{min-height:auto}
+  .proof-sticky{
+    position:relative;top:auto;
+    height:auto;min-height:auto;
+    grid-template-columns:1fr;
+  }
+}
+.proof-side{
+  background:var(--ink-1);
+  padding:clamp(1.5rem, 3vw, 2.5rem);
+  position:relative;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--rule) transparent;
+}
+.proof-side::-webkit-scrollbar{width:4px}
+.proof-side::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px}
+.proof-side.left{display:flex;flex-direction:column}
+.proof-side.right{display:flex;align-items:center;justify-content:center;overflow:hidden}
+@media (max-width:980px){
+  .proof-side{padding:1.5rem;overflow-y:visible;height:auto}
+  .proof-side.right{min-height:60vh}
+}
+
+/* Step list */
+.steps-header{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--paper-mute);margin-bottom:1.2rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.steps-header .progress{
+  color:var(--gold);
+  font-family:var(--serif);font-size:.85rem;font-style:italic;
+  letter-spacing:0;text-transform:none;
+}
+.steps{
+  list-style:none;margin:0;padding:0;
+  display:flex;flex-direction:column;gap:.95rem;
+  font-family:var(--serif);
+  font-size:1rem;line-height:1.6;
+  color:var(--paper);
+  flex:1;
+}
+.steps li{
+  opacity:.5;
+  transition:opacity .35s var(--ease), transform .35s var(--ease), border-color .35s var(--ease);
+  padding:.3rem 0 .3rem 2.3rem;
+  position:relative;
+  border-left:1px solid transparent;
+  padding-right:.5rem;
+}
+.steps li.passed{opacity:.65}
+.steps li.active{
+  opacity:1;
+  border-left-color:var(--gold);
+  transform:translateX(2px);
+}
+.steps li::before{
+  content:attr(data-step);
+  position:absolute;
+  left:0;top:.4em;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.05em;color:var(--paper-mute);
+  border:1px solid var(--rule);
+  border-radius:50%;
+  width:1.6em;height:1.6em;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--ink-1);
+  transition:background .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
+}
+.steps li.active::before{
+  background:var(--gold);color:var(--ink-1);border-color:var(--gold);
+}
+.steps li.passed::before{
+  background:rgba(212,175,55,0.25);
+  border-color:var(--gold);
+  color:var(--gold);
+}
+.steps li mjx-container{margin:0 .1em}
+
+.qed{
+  margin-top:auto;padding-top:1.5rem;
+  border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:1rem;
+}
+.qed .note{flex:1;text-transform:none;letter-spacing:.02em;font-family:var(--serif);font-style:italic;font-size:.9rem;color:var(--paper-dim)}
+.qed .mark{
+  font-family:var(--serif);font-size:1.8rem;color:var(--gold);
+  font-style:italic;line-height:1;
+}
+
+/* ============================================================
+   GEOMETRY VISUAL (USAMO 2021 P1)
+============================================================ */
+.geo-vis{
+  width:100%;height:100%;
+  display:grid;
+  grid-template-rows:1fr auto;
+  gap:.5rem;padding:.5rem;
+  min-height:0;
+}
+.geo-svg-wrap{
+  position:relative;overflow:hidden;
+  background:rgba(245,241,232,0.015);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  min-height:0;
+}
+.geo-svg{
+  width:100%;height:100%;
+  max-height:100%;
+}
+.geo-svg .triangle{
+  fill:rgba(212,175,55,0.06);
+  stroke:var(--paper);stroke-width:1.8;
+}
+.geo-svg .rect{
+  fill:rgba(245,241,232,0.02);
+  stroke:var(--paper);stroke-width:1.4;
+  stroke-linejoin:round;
+}
+.geo-svg .circ-rect{
+  fill:none;
+  stroke:rgba(212,175,55,0.55);
+  stroke-width:1.2;
+  stroke-dasharray:5 4;
+}
+.geo-svg .line-concur{
+  stroke:var(--gold);stroke-width:1.6;
+  stroke-linecap:round;
+}
+.geo-svg .pt{fill:var(--paper)}
+.geo-svg .pt.gold{fill:var(--gold)}
+.geo-svg .pt-P{
+  fill:var(--gold);
+  filter:drop-shadow(0 0 6px rgba(212,175,55,0.7));
+}
+.geo-svg text{
+  fill:var(--paper);
+  font-family:'Fraunces', serif;
+  font-style:italic;
+  font-size:15px;
+}
+.geo-svg text.gold{fill:var(--gold);font-weight:500}
+.geo-svg text.omega-lbl{
+  fill:var(--gold);font-size:13px;font-style:italic;
+}
+
+/* Anim */
+.geo-svg .anim{
+  opacity:0;
+  transition:opacity .5s var(--ease);
+}
+.geo-svg .anim.shown{opacity:1}
+.geo-svg .draw{
+  stroke-dasharray:2000;
+  stroke-dashoffset:2000;
+  transition:stroke-dashoffset 1.5s var(--ease);
+}
+.geo-svg .draw.shown{stroke-dashoffset:0}
+
+/* Code block */
+.geo-code{
+  background:rgba(0,0,0,0.35);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:.85rem 1rem;
+  font-family:var(--mono);font-size:11px;
+  line-height:1.6;color:var(--paper-dim);
+  height:8.5rem;overflow:hidden;
+  position:relative;
+}
+.geo-code::before{
+  content:"% usamo-2021-p1.tex";
+  display:block;color:var(--paper-mute);
+  font-style:italic;margin-bottom:.4rem;
+}
+.tikz-line{
+  display:block;opacity:0;white-space:pre;
+  transition:opacity .35s var(--ease);
+}
+.tikz-line.shown{opacity:1}
+.tikz-line .kw{color:var(--gold)}
+.tikz-line .arg{color:#9ec5ff}
+.tikz-line .com{color:var(--paper-mute);font-style:italic}
+
+/* ============================================================
+   VIETA — staircase, with conclusion OUTSIDE the absolute layout
+============================================================ */
+.vieta-vis{
+  width:100%;max-width:480px;
+  padding:1rem;
+  display:flex;flex-direction:column;
+}
+.vieta-stair{
+  position:relative;
+  height:280px;          /* fixed height for the absolute stairs */
+  margin-bottom:1.2rem;
+}
+.stair{
+  position:absolute;
+  left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 1.1rem;
+  border:1px solid var(--rule);
+  background:rgba(255,255,255,0.015);
+  border-radius:6px;
+  opacity:0;
+  transform:translate(-12px, 0);
+  transition:opacity .5s var(--ease), transform .5s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+  font-family:'Latin Modern Math', serif;font-style:italic;
+  font-size:1rem;
+}
+.stair.shown{opacity:1;transform:translate(0, 0)}
+.stair.current{
+  border-color:var(--gold);
+  background:rgba(212,175,55,0.07);
+}
+.stair.faded{opacity:.45}
+.stair .pair-label{color:var(--paper)}
+.stair .pair-label mjx-container{margin-right:.2em}
+.stair .sum-val{
+  color:var(--gold);
+  font-family:var(--mono);font-size:.85em;
+  font-style:normal;letter-spacing:.04em;
+}
+.stair[data-i="0"]{top:0}
+.stair[data-i="1"]{top:64px;margin-left:32px}
+.stair[data-i="2"]{top:128px;margin-left:64px}
+.stair[data-i="3"]{top:192px;margin-left:96px;opacity:.6}
+.stair[data-i="3"].shown{opacity:.6}
+
+.jump-arrow{
+  position:absolute;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:var(--gold);opacity:0;
+  transition:opacity .4s var(--ease);
+}
+.jump-arrow.shown{opacity:.8}
+.jump-arrow[data-i="0"]{top:46px;left:12px}
+.jump-arrow[data-i="1"]{top:110px;left:44px}
+.jump-arrow[data-i="2"]{top:174px;left:76px}
+
+.vieta-conclusion{
+  padding:1rem 1.2rem;
+  border-top:1px solid var(--gold);
+  background:rgba(212,175,55,0.05);
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper);font-size:.98rem;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+  line-height:1.5;
+}
+.vieta-conclusion.shown{opacity:1;transform:none}
+.vieta-conclusion strong{color:var(--gold);font-style:normal;font-weight:500}
+
+/* ============================================================
+   NESBITT VISUAL
+============================================================ */
+.nesbitt-vis{
+  width:100%;max-width:580px;
+  padding:1rem;
+}
+.nesbitt-eq{
+  display:flex;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:.3rem;
+  font-size:1.2rem;
+}
+.nesbitt-term{
+  padding:.8rem .6rem;
+  border:1px solid transparent;
+  border-radius:6px;
+  transition:border-color .55s var(--ease), background .55s var(--ease);
+}
+.nesbitt-term.lit{
+  border-color:rgba(212,175,55,0.5);
+  background:rgba(212,175,55,0.06);
+}
+.nesbitt-op{
+  color:var(--paper-mute);
+  font-family:serif;font-size:1.4rem;
+  padding:0 .15em;
+}
+.nesbitt-rhs{
+  margin-top:2rem;text-align:center;
+  color:var(--paper-dim);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .5s var(--ease), transform .5s var(--ease);
+  font-size:1.15rem;
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  min-height:3em;
+}
+.nesbitt-rhs.shown{opacity:1;transform:none}
+.nesbitt-rhs .bound-val{
+  color:var(--gold);font-size:1.2em;
+  display:inline-flex;align-items:center;
+  min-height:2em;
+}
+.nesbitt-rhs .regime{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-mute);
+  margin-left:.4em;
+}
+
+.alpha-axis{
+  margin-top:2.5rem;
+  position:relative;height:60px;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--paper-mute);
+}
+.alpha-axis .track{
+  position:absolute;left:0;right:0;top:50%;height:1px;
+  background:linear-gradient(to right, transparent, var(--rule-strong) 15%, var(--rule-strong) 85%, transparent);
+}
+.alpha-axis .tick{
+  position:absolute;top:50%;width:1px;height:14px;
+  background:var(--paper-mute);transform:translate(-50%, -50%);
+}
+.alpha-axis .tick.gold{background:var(--gold);height:18px}
+.alpha-axis .label{
+  position:absolute;top:calc(50% + 14px);
+  transform:translateX(-50%);white-space:nowrap;
+}
+.alpha-axis .label.gold{color:var(--gold)}
+.alpha-axis .knob{
+  position:absolute;top:50%;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--gold);transform:translate(-50%, -50%);
+  box-shadow:0 0 14px rgba(212,175,55,0.6);
+  transition:left .08s linear;
+}
+.alpha-axis .knob::after{
+  content:attr(data-alpha);
+  position:absolute;bottom:18px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;color:var(--gold);
+  letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
+}
+
+/* ============================================================
+   MATH JOURNEY SECTION
+============================================================ */
+.journey{
+  padding:7rem var(--pad-x);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  max-width:1280px;margin:0 auto;
+}
+.journey-grid{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1.8fr);
+  gap:clamp(2rem, 6vw, 5rem);
+  align-items:start;
+}
+@media (max-width:980px){.journey-grid{grid-template-columns:1fr}}
+.journey-aside{
+  position:sticky;top:7rem;
+}
+@media (max-width:980px){.journey-aside{position:static}}
+.journey-num{
+  font-family:var(--serif);font-style:italic;
+  font-size:6rem;line-height:1;color:var(--gold);
+  letter-spacing:-.04em;margin:0 0 1rem;font-weight:300;
+}
+.journey-aside .label{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper-mute);max-width:20ch;line-height:1.6;
+}
+
+.journey-body h2{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.4rem, 6vw, 4.4rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 2rem;max-width:22ch;
+}
+.journey-body h2 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.journey-body h3{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin:3rem 0 1.2rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.journey-body h3::before{
+  content:"";display:inline-block;
+  width:24px;height:1px;background:var(--gold);
+}
+.journey-body p{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.05rem, 1.4vw, 1.2rem);
+  line-height:1.7;color:var(--paper);
+  margin:0 0 1.4em;max-width:54ch;
+}
+.journey-body p em{color:var(--gold);font-style:italic}
+.journey-body p strong{color:var(--paper);font-weight:500}
+.journey-body mjx-container{font-style:normal}
+
+.journey-stats{
+  margin-top:2rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+}
+.journey-stat{
+  background:var(--ink-1);
+  padding:1.5rem 1.2rem;
+}
+.journey-stat .v{
+  font-family:var(--serif);font-style:italic;
+  font-size:2rem;color:var(--gold);line-height:1;
+  letter-spacing:-.02em;font-weight:400;
+  margin-bottom:.4rem;
+}
+.journey-stat .k{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);line-height:1.4;
+}
+
+.journey-quote{
+  margin:3rem -2rem 3rem -2rem;
+  padding:2.5rem 2rem;
+  background:rgba(212,175,55,0.04);
+  border-left:3px solid var(--gold);
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.4rem, 2.6vw, 2.2rem);
+  line-height:1.2;letter-spacing:-.01em;
+  color:var(--paper);font-weight:300;
+}
+.journey-quote::before{
+  content:"\201C";
+  color:var(--gold);font-size:1.5em;line-height:0;
+  vertical-align:-.3em;margin-right:.05em;font-style:normal;
+}
+.journey-quote::after{
+  content:"\201D";
+  color:var(--gold);font-size:1.5em;line-height:0;
+  vertical-align:-.3em;font-style:normal;
+}
+@media (max-width:720px){.journey-quote{margin-left:0;margin-right:0}}
+
+/* ============================================================
+   FOOT
+============================================================ */
+.proof-foot{
+  padding:5rem var(--pad-x);
+  text-align:center;
+}
+.proof-foot p{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);font-size:1.05rem;
+  max-width:48ch;margin:0 auto 1.5rem;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html" aria-current="page">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<!-- ============================================================
+     INTRO
+============================================================ -->
+<section class="math-intro">
+  <p class="page-eyebrow">§ 02 · Math</p>
+  <h1>Three proofs, one <span class="italic">journey</span>.</h1>
+  <p class="lead">
+    Three proofs walked through slowly: a geometry problem with circumcircles, a number-theory problem solved by descent, and a generalization of Nesbitt I've been chewing on for months. After them, the longer story of how I got here.
+  </p>
+  <div class="math-toc">
+    <a href="#proof-geo" data-cursor="hover"><span class="n">i</span> USAMO 2021 P1</a>
+    <a href="#proof-vieta" data-cursor="hover"><span class="n">ii</span> IMO 1988 P6 · Vieta jumping</a>
+    <a href="#journey" data-cursor="hover"><span class="n">·</span> the math journey</a>
+    <a href="#proof-nesbitt" data-cursor="hover"><span class="n">iii</span> Nesbitt generalization (a treat)</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROOF I — USAMO 2021/1
+============================================================ -->
+<section class="proof" id="proof-geo">
+  <div class="proof-eyebrow">i · geometry · usamo 2021 / p1</div>
+  <div class="proof-heading">
+    <h2 class="proof-title">Three circumcircles, <span class="italic">one point</span>.</h2>
+    <p class="proof-claim">
+      Rectangles $BCC_1B_2$, $CAA_1C_2$, $ABB_1A_2$ are erected outside an acute $\triangle ABC$, satisfying the problem's angle condition. Prove that the three lines $A_1B_2$, $B_1C_2$, $C_1A_2$ are concurrent.
+    </p>
+  </div>
+
+  <div class="proof-sticky-wrap" data-proof="geo">
+    <div class="proof-sticky">
+      <div class="proof-side left">
+        <div class="steps-header">
+          <span>proof · six lines</span>
+          <span class="progress" id="geoProg">step 1 / 6</span>
+        </div>
+        <ol class="steps" id="geoSteps">
+          <li data-step="1">
+            The triangle and three rectangles, erected outward. Each rectangle has a <em>circumscribed circle</em> — its diagonals are equal in length and bisect each other, so a circle passes through all four corners.
+          </li>
+          <li data-step="2">
+            Call the three circumcircles $\omega_A$ (through $C, A, A_1, C_2$), $\omega_B$ (through $A, B, B_1, A_2$), $\omega_C$ (through $B, C, C_1, B_2$).
+          </li>
+          <li data-step="3">
+            <em>The problem's angle condition forces the three circumcircles to concur at one point.</em> Call it $P$. This is where all the substance of the problem lives — every line afterward is a one-line consequence.
+          </li>
+          <li data-step="4">
+            Since $CB_2$ is a diagonal of the rectangle $BCC_1B_2$, it's a <strong>diameter</strong> of $\omega_C$. Thales: $\angle CPB_2 = 90^\circ$.
+          </li>
+          <li data-step="5">
+            Symmetrically, $CA_1$ is a diameter of $\omega_A$, so $\angle CPA_1 = 90^\circ$.
+          </li>
+          <li data-step="6">
+            Two right angles at $P$ both standing on $\overline{CP}$ from opposite sides force $A_1, P, B_2$ to be collinear. So $P$ lies on $A_1B_2$. The same argument places $P$ on $B_1C_2$ and $C_1A_2$. The three lines concur at $P$. $\blacksquare$
+          </li>
+        </ol>
+        <div class="qed">
+          <span class="note">"Once you have $P$, the rest is one line."</span>
+          <span class="mark">P</span>
+        </div>
+      </div>
+
+      <div class="proof-side right">
+        <div class="geo-vis">
+          <div class="geo-svg-wrap">
+            <svg class="geo-svg" id="geoSvg" viewBox="-50 -30 620 600" xmlns="http://www.w3.org/2000/svg" aria-label="USAMO 2021 P1 — three circumcircles concurring at P">
+              <!-- Triangle ABC (scalene) -->
+              <polygon id="g-triangle" class="triangle anim draw" points="225,130 146,287 405,285" pathLength="2000"/>
+              <text id="g-A-label" class="anim gold" x="225" y="120" text-anchor="middle">A</text>
+              <text id="g-B-label" class="anim gold" x="135" y="297" text-anchor="end">B</text>
+              <text id="g-C-label" class="anim gold" x="416" y="295" text-anchor="start">C</text>
+              <circle id="g-A-pt" class="pt gold anim" cx="225" cy="130" r="3.5"/>
+              <circle id="g-B-pt" class="pt gold anim" cx="146" cy="287" r="3.5"/>
+              <circle id="g-C-pt" class="pt gold anim" cx="405" cy="285" r="3.5"/>
+
+              <!-- Rectangle on BC: BCC1B2 -->
+              <polygon id="g-rect-BC" class="rect anim draw" points="146,287 405,285 405.98,411.49 146.98,413.49" pathLength="2000"/>
+              <text id="g-B2-label" class="anim" x="140" y="429" text-anchor="end">B₂</text>
+              <text id="g-C1-label" class="anim" x="412" y="429" text-anchor="start">C₁</text>
+
+              <!-- Rectangle on CA: CAA1C2 -->
+              <polygon id="g-rect-CA" class="rect anim draw" points="405,285 225,130 306.57,35.27 486.57,190.27" pathLength="2000"/>
+              <text id="g-A1-label" class="anim" x="313" y="28" text-anchor="start">A₁</text>
+              <text id="g-C2-label" class="anim" x="495" y="190" text-anchor="start">C₂</text>
+
+              <!-- Rectangle on AB: ABB1A2 -->
+              <polygon id="g-rect-AB" class="rect anim draw" points="225,130 146,287 31.04,229.15 110.04,72.15" pathLength="2000"/>
+              <text id="g-A2-label" class="anim" x="103" y="65" text-anchor="end">A₂</text>
+              <text id="g-B1-label" class="anim" x="22" y="230" text-anchor="end">B₁</text>
+
+              <!-- Three circumcircles -->
+              <circle id="g-omegaC" class="circ-rect anim" cx="275.99" cy="349.25" r="144.12"/>
+              <text id="g-omegaC-label" class="omega-lbl anim" x="305" y="500" text-anchor="middle">ω_C</text>
+              <circle id="g-omegaA" class="circ-rect anim" cx="355.79" cy="160.13" r="134.21"/>
+              <text id="g-omegaA-label" class="omega-lbl anim" x="490" y="80" text-anchor="start">ω_A</text>
+              <circle id="g-omegaB" class="circ-rect anim" cx="128.02" cy="179.58" r="108.92"/>
+              <text id="g-omegaB-label" class="omega-lbl anim" x="20" y="120" text-anchor="end">ω_B</text>
+
+              <!-- Three concurrent lines through P -->
+              <line id="g-line-A1B2" class="line-concur anim draw" x1="306.57" y1="35.27" x2="146.98" y2="413.49" pathLength="2000"/>
+              <line id="g-line-B1C2" class="line-concur anim draw" x1="31.04" y1="229.15" x2="486.57" y2="190.27" pathLength="2000"/>
+              <line id="g-line-C1A2" class="line-concur anim draw" x1="405.98" y1="411.49" x2="110.04" y2="72.15" pathLength="2000"/>
+
+              <!-- Concurrence point P -->
+              <circle id="g-P" class="pt pt-P anim" cx="232" cy="212" r="6"/>
+              <text id="g-P-label" class="anim gold" x="245" y="208" style="font-size:17px;font-weight:500">P</text>
+            </svg>
+          </div>
+          <div class="geo-code" id="geoCode"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROOF II — IMO 1988/6 (Vieta jumping)
+============================================================ -->
+<section class="proof" id="proof-vieta">
+  <div class="proof-eyebrow">ii · number theory · imo 1988 / p6</div>
+  <div class="proof-heading">
+    <h2 class="proof-title">Vieta jumping, <span class="italic">infinite descent</span>.</h2>
+    <p class="proof-claim">
+      If $a, b$ are positive integers and $ab + 1 \mid a^2 + b^2$, then $\frac{a^2 + b^2}{ab + 1}$ is a perfect square.
+    </p>
+  </div>
+
+  <div class="proof-sticky-wrap" data-proof="vieta">
+    <div class="proof-sticky">
+      <div class="proof-side left">
+        <div class="steps-header">
+          <span>proof · by descent</span>
+          <span class="progress" id="vietaProg">step 1 / 6</span>
+        </div>
+        <ol class="steps" id="vietaSteps">
+          <li data-step="1">
+            Suppose, for contradiction, $c = \frac{a^2+b^2}{ab+1}$ is a positive integer but not a square. Among all valid pairs $(a, b)$ giving this $c$, choose one minimizing $a + b$, with $a \geq b$ WLOG.
+          </li>
+          <li data-step="2">
+            Fixing $b$ and $c$, expand the equation as $P(x) = x^2 - bc \cdot x + (b^2 - c) = 0$, with $a$ as one root.
+          </li>
+          <li data-step="3">
+            By Vieta's, the second root $r_2$ satisfies $\textbf{(1)}\; r_2 = bc - a$ (so $r_2 \in \mathbb{Z}$) and $\textbf{(2)}\; r_2 = \frac{b^2 - c}{a}$ (so $r_2 \ne 0$, since $c$ is not a square).
+          </li>
+          <li data-step="4">
+            Plugging $r_2$ in: $c = \frac{r_2^2 + b^2}{r_2 b + 1}$. Since $c > 0$ and $b > 0$, the denominator $r_2 b + 1 > 0$, forcing $r_2 > 0$.
+          </li>
+          <li data-step="5">
+            From $\textbf{(2)}$: $r_2 = \frac{b^2 - c}{a} < \frac{b^2}{a} \leq a$ (using $a \geq b$ and $c > 0$). So $r_2 + b < a + b$.
+          </li>
+          <li data-step="6">
+            But $(r_2, b)$ is also a valid pair giving the same $c$, with $r_2 + b < a + b$ — contradicting the minimality of $a + b$. So $c$ must have been a square after all. $\blacksquare$
+          </li>
+        </ol>
+        <div class="qed">
+          <span class="note">descent into $\mathbb{Z}_{>0}$ — which is well-ordered.</span>
+          <span class="mark">⤓</span>
+        </div>
+      </div>
+
+      <div class="proof-side right">
+        <div class="vieta-vis">
+          <div class="vieta-stair">
+            <div class="stair" data-i="0">
+              <span class="pair-label">$(a, b)$</span>
+              <span class="sum-val">sum = a + b</span>
+            </div>
+            <div class="jump-arrow" data-i="0">⤓ vieta-jump</div>
+            <div class="stair" data-i="1">
+              <span class="pair-label">$(r_2, b)$</span>
+              <span class="sum-val">&lt; a + b</span>
+            </div>
+            <div class="jump-arrow" data-i="1">⤓ vieta-jump</div>
+            <div class="stair" data-i="2">
+              <span class="pair-label">$(r_2', b)$</span>
+              <span class="sum-val">smaller still</span>
+            </div>
+            <div class="jump-arrow" data-i="2">⤓ ⋯</div>
+            <div class="stair" data-i="3">
+              <span class="pair-label">$\cdots$</span>
+              <span class="sum-val">infinite descent</span>
+            </div>
+          </div>
+          <div class="vieta-conclusion" id="vietaConclusion">
+            Each pair has a strictly smaller positive sum. But $\mathbb{Z}_{>0}$ is <strong>well-ordered</strong> — descent must terminate. Contradiction.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MATH JOURNEY
+============================================================ -->
+<section class="journey" id="journey">
+  <div class="journey-grid">
+    <aside class="journey-aside">
+      <div class="journey-num">·</div>
+      <div class="label">An interlude.<br/>How I got here.<br/>What I still don't know.</div>
+    </aside>
+    <div class="journey-body">
+      <h2>Six years of <span class="italic">tagging along</span>.</h2>
+
+      <p>
+        I took my first competition math test in sixth grade. I scored a $12/25$ on the AMC 8, didn't understand half the questions, and thought "stars and bars" was a phrase about flags. The next year I scored $19/25$ and was one point off honor roll. The year after, my teacher pulled me aside to tell me I should stop dreaming about the AIME. I qualified the following year.
+      </p>
+
+      <p>
+        Freshman year I took BC Calculus with juniors and seniors, got a $115.5$ on the AMC 10A (top 5%) and a $5$ on the AIME I. I started teaching the class for three weeks when our regular teacher was out and three substitutes gave up — the first time I'd taught math instead of just done it. I didn't process this until much later, but I think those three weeks were more important than any score I got that year.
+      </p>
+
+      <p>
+        Sophomore year I wrote a 360-page <em>multivariable calculus textbook</em> for my classmates, took Physics C, dropped to a $94.5$ on the 12B, then scored an $8$ on the AIME with no real prep. I was 50 points short of the USAJMO cutoff. The cutoff would land in late spring; my AMC index was exactly $192.5$, the rumored magic number. The cutoff turned out to be $242.5$. I didn't do math for two weeks after that.
+      </p>
+
+      <h3>The Ryan factor</h3>
+
+      <p>
+        That spring my best friend <span class="name-ryan">Ryan Gong</span> joined the school. He's a number-theory main; I'm a combinatorics-and-geometry main. We started solving olympiad problems together over the summer and didn't stop. We worked through past USAMTS, USAMO, IMO, CMO (Chinese and Canadian), TST and TSTST problems. The thing that changed wasn't the amount of practice — it was the conversation. Before <span class="name-ryan">Ryan</span>, "studying" meant doing past problems and checking answers. After <span class="name-ryan">Ryan</span>, "studying" meant sitting at a table for three hours arguing about whether a particular induction setup actually worked.
+      </p>
+
+      <p>
+        Junior year I became <strong>president of our school's Math Club</strong>, with <span class="name-ryan">Ryan</span> as VP. We restructured the club: secured school-board funding for travel and registration fees, ran twice-weekly meetings, set up separate competition and learning tracks, brought kids to MathLeague qualifiers, took our team to BrUMO at Brown and PuMAC at Princeton. In April we ran <strong>SSAMO</strong> — the first-ever Shady Side Academy Mathematics Olympiad. Months of original problem design, kids from multiple schools, our problems on the table. The first time I'd watched my own math from the other side.
+      </p>
+
+      <div class="journey-quote">
+        When you stop focusing on yourself, you improve more than if you lock yourself in a room and grind.
+      </div>
+
+      <h3>The 12, the 5, and the lesson</h3>
+
+      <p>
+        In December, I scored $117/127.5$ on AMC 12A/B. With cheating-scandal cutoffs pushing the index above $400$, I'd need to score $13$ or $14$ on the AIME to qualify for USAMO. I'd never broken $8$. So I made what sounded, at the time, like an insane decision: I stopped studying for the AIME. Instead I spent the six weeks before working through the application problem sets for SUMaC, PROMYS, and Ross — long, formal, written-up-in-LaTeX problems that rewarded sitting with one thing for a week. I scored a $12$ on the AIME. Biggest single-year jump I've ever made.
+      </p>
+
+      <p>
+        The USAMO invite came through the <em>USAMTS</em> route (I'd scored a $74$ over the fall). My testing site was Vancouver, because I was at Whistler that week. Day 1 I thought I solved P1 and made progress on P2. Day 2 I had what I thought was a clean induction on P4 and a Miquel-point argument on P5. I left thinking I had something like a $21$. I got a $5$. The median was $6$.
+      </p>
+
+      <p>
+        I was mad for a week. Then I noticed I was happier, because the constant background pressure of <em>am I going to make USAMO</em> had been silenced for the first time in years. What I came back to wasn't past USAMO problems. It was the Math Team. Helping freshmen who were trying to qualify for AIME for the first time. Opening the <em>ARC textbook</em> I'd been writing with <span class="name-ryan">Ryan</span> — a free olympiad-prep book for kids without expensive resources, four sections (Algebra, Number Theory, Combinatorics, Geometry) — and starting another section.
+      </p>
+
+      <h3>What's next</h3>
+
+      <p>
+        Heading to the <strong>Ross Mathematics Program</strong> this summer — six weeks of number theory, the subject I avoided for years. I got into SUMaC and PROMYS too, and spent two full weeks staring at the three acceptance letters before choosing Ross. I think it reflects my values and character the best. After that: senior year, ARC textbook release before AMC season, another SSAMO, and another USAMO attempt — this time with the explicit goal of medaling. The contradiction of "the score isn't the point, also I want a specific score" is real. I think it has to be.
+      </p>
+
+      <div class="journey-stats">
+        <div class="journey-stat">
+          <div class="v">6 years</div>
+          <div class="k">in competition math</div>
+        </div>
+        <div class="journey-stat">
+          <div class="v">President</div>
+          <div class="k">Math Club, 2025–26</div>
+        </div>
+        <div class="journey-stat">
+          <div class="v">Founder</div>
+          <div class="k">SSAMO · 2026</div>
+        </div>
+        <div class="journey-stat">
+          <div class="v">~600 pp</div>
+          <div class="k">ARC textbook · combi done</div>
+        </div>
+        <div class="journey-stat">
+          <div class="v">Ross '26</div>
+          <div class="k">incoming · 6 weeks of NT</div>
+        </div>
+        <div class="journey-stat">
+          <div class="v">12 / 5</div>
+          <div class="k">AIME · USAMO scores '26</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROOF III — NESBITT GENERALIZATION (the treat)
+============================================================ -->
+<section class="proof" id="proof-nesbitt">
+  <div class="proof-eyebrow">iii · a treat · inequality · my own work</div>
+  <div class="proof-heading">
+    <h2 class="proof-title">A sharp piecewise <span class="italic">generalization</span> of Nesbitt.</h2>
+    <p class="proof-claim">
+      Saved this one for last, because it's mine. For positive reals $a, b, c$ and an exponent $\alpha \in (0, 1]$, the cyclic sum $\sum_{\text{cyc}}\left(\frac{a}{b+c}\right)^{\alpha}$ has a sharp lower bound with a phase transition at $\alpha^\star = \log_2(3/2)$.
+    </p>
+  </div>
+
+  <div class="proof-sticky-wrap" data-proof="nesbitt">
+    <div class="proof-sticky">
+      <div class="proof-side left">
+        <div class="steps-header">
+          <span>proof sketch · six lines</span>
+          <span class="progress" id="nesbittProg">step 1 / 6</span>
+        </div>
+        <ol class="steps" id="nesbittSteps">
+          <li data-step="1">
+            Classical Nesbitt: $\displaystyle\sum_{\text{cyc}} \frac{a}{b+c} \geq \frac{3}{2}$, with equality at $a = b = c$.
+          </li>
+          <li data-step="2">
+            Raise each term to a power $\alpha \in (0, 1]$. Study $f_\alpha(a, b, c) = \sum_{\text{cyc}} \left(\frac{a}{b+c}\right)^{\!\alpha}$.
+          </li>
+          <li data-step="3">
+            On the symmetric ray $a = b = c$, each fraction equals $1/2$, so $f_\alpha = 3 \cdot 2^{-\alpha} = 3/2^{\alpha}$.
+          </li>
+          <li data-step="4">
+            On the degenerate boundary $c \to 0^+$, $a = b$: two fractions tend to $1^\alpha = 1$, the third to $0$. Sum $\to 2$.
+          </li>
+          <li data-step="5">
+            Compare the two regimes: $3/2^\alpha = 2 \iff \alpha = \log_2(3/2) \approx 0.585$. Below this threshold the boundary wins; above it, the symmetric point wins.
+          </li>
+          <li data-step="6">
+            Therefore the sharp lower bound is $f_\alpha \geq \min\!\left(2,\; \frac{3}{2^{\alpha}}\right)$, attained at one of the two extremal configurations. $\blacksquare$
+          </li>
+        </ol>
+        <div class="qed">
+          <span class="note">writing this up as a preprint — phase transition at $\alpha^\star$.</span>
+          <span class="mark">α*</span>
+        </div>
+      </div>
+
+      <div class="proof-side right">
+        <div class="nesbitt-vis">
+          <div class="nesbitt-eq">
+            <span class="nesbitt-term" data-i="0">$\left(\dfrac{a}{b+c}\right)^{\alpha}$</span>
+            <span class="nesbitt-op">+</span>
+            <span class="nesbitt-term" data-i="1">$\left(\dfrac{b}{c+a}\right)^{\alpha}$</span>
+            <span class="nesbitt-op">+</span>
+            <span class="nesbitt-term" data-i="2">$\left(\dfrac{c}{a+b}\right)^{\alpha}$</span>
+          </div>
+          <div class="nesbitt-rhs" id="nesbittRhs">
+            <span>$\geq$</span>
+            <span class="bound-val" id="nesbittBound">$\min\!\left(2,\; \dfrac{3}{2^{\alpha}}\right)$</span>
+          </div>
+          <div class="alpha-axis" aria-hidden="true">
+            <div class="track"></div>
+            <div class="tick" style="left:0%"></div>
+            <div class="label" style="left:0%">α = 0</div>
+            <div class="tick gold" style="left:58.5%"></div>
+            <div class="label gold" style="left:58.5%">α* ≈ .585</div>
+            <div class="tick" style="left:100%"></div>
+            <div class="label" style="left:100%">α = 1</div>
+            <div class="knob" id="nesbittKnob" style="left:0%" data-alpha="α=0.00"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOT
+============================================================ -->
+<section class="proof-foot">
+  <p>Three proofs and a story. There are more where these came from — the ARC textbook draft has plenty.</p>
+  <a href="projects.html" class="gold-link" data-cursor="hover">See the textbook drafts &rarr;</a>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Built in Pittsburgh between sets. Set in Fraunces &amp; JetBrains Mono. The Gilbreath trick really works.</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+<script>
+/* ============================================================
+   PROOF PAGE INTERACTIONS
+   - Math is rendered by MathJax 3 (loaded via CDN, no SRI).
+   - Sticky panels drive step highlighting + visual reveals.
+============================================================ */
+(function(){
+  'use strict';
+
+  function ready(fn){
+    if (document.readyState !== 'loading') fn();
+    else document.addEventListener('DOMContentLoaded', fn);
+  }
+
+  ready(init);
+
+  function init(){
+    initNesbitt();
+    initGeo();
+    initVieta();
+  }
+
+  function trackProgress(wrap, onProgress){
+    function update(){
+      const rect = wrap.getBoundingClientRect();
+      const total = wrap.offsetHeight - window.innerHeight;
+      let p = total > 0 ? -rect.top / total : 0;
+      p = Math.max(0, Math.min(1, p));
+      onProgress(p);
+    }
+    update();
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+  }
+
+  function updateSteps(steps, idx){
+    steps.forEach((li, i) => {
+      li.classList.toggle('active', i === idx);
+      li.classList.toggle('passed', i < idx);
+    });
+  }
+
+  /* ============================================================
+     NESBITT
+  ============================================================ */
+  function initNesbitt(){
+    const wrap = document.querySelector('[data-proof="nesbitt"]');
+    if (!wrap) return;
+    const steps = wrap.querySelectorAll('.steps li');
+    const terms = wrap.querySelectorAll('.nesbitt-term');
+    const rhs = document.getElementById('nesbittRhs');
+    const bound = document.getElementById('nesbittBound');
+    const knob = document.getElementById('nesbittKnob');
+    const progEl = document.getElementById('nesbittProg');
+    const N = steps.length;
+
+    // Save the original "min(2, 3/2^α)" math element so we can swap it back
+    let originalBoundHTML = bound ? bound.innerHTML : '';
+
+    trackProgress(wrap, function(p){
+      const idx = Math.min(N-1, Math.floor(p * N));
+      updateSteps(steps, idx);
+      progEl.textContent = `step ${idx+1} / ${N}`;
+
+      terms.forEach((t, i) => {
+        const litIdx = Math.floor(p * 9) % 3;
+        t.classList.toggle('lit', i === litIdx);
+      });
+
+      if (rhs) rhs.classList.toggle('shown', idx >= 1);
+
+      const alpha = p;
+      knob.style.left = (alpha * 100).toFixed(1) + '%';
+      knob.setAttribute('data-alpha', 'α = ' + alpha.toFixed(2));
+
+      if (bound){
+        let html, regime = '';
+        if (idx < 4){
+          html = originalBoundHTML;
+        } else if (alpha < 0.585){
+          html = '$2$';
+          regime = '<span class="regime">boundary wins</span>';
+        } else {
+          html = '$\\dfrac{3}{2^{\\alpha}}$';
+          regime = '<span class="regime">symmetric wins</span>';
+        }
+        const newHtml = html + regime;
+        if (bound.dataset.curr !== newHtml){
+          bound.dataset.curr = newHtml;
+          bound.innerHTML = newHtml;
+          if (window.MathJax && MathJax.typesetPromise){
+            MathJax.typesetPromise([bound]).catch(()=>{});
+          }
+        }
+      }
+    });
+  }
+
+  /* ============================================================
+     USAMO 2021/1
+  ============================================================ */
+  function initGeo(){
+    const wrap = document.querySelector('[data-proof="geo"]');
+    if (!wrap) return;
+    const steps = wrap.querySelectorAll('.steps li');
+    const progEl = document.getElementById('geoProg');
+    const codeBox = document.getElementById('geoCode');
+    const N = steps.length;
+
+    const stages = [
+      {
+        svg: ['g-triangle','g-A-pt','g-B-pt','g-C-pt','g-A-label','g-B-label','g-C-label'],
+        code: [
+          {html:'<span class="com">% step 1 — triangle ABC</span>'},
+          {html:'<span class="kw">\\coordinate</span> (A) <span class="kw">at</span> <span class="arg">(2.25, 1.30)</span>;'},
+          {html:'<span class="kw">\\coordinate</span> (B) <span class="kw">at</span> <span class="arg">(1.46, 2.87)</span>;'},
+          {html:'<span class="kw">\\coordinate</span> (C) <span class="kw">at</span> <span class="arg">(4.05, 2.85)</span>;'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[fill=gold!8]</span> (A) -- (B) -- (C) -- <span class="kw">cycle</span>;'}
+        ]
+      },
+      {
+        svg: ['g-triangle','g-A-pt','g-B-pt','g-C-pt','g-A-label','g-B-label','g-C-label',
+              'g-rect-BC','g-rect-CA','g-rect-AB',
+              'g-A1-label','g-A2-label','g-B1-label','g-B2-label','g-C1-label','g-C2-label'],
+        code: [
+          {html:'<span class="com">% step 2 — rectangles outside ABC</span>'},
+          {html:'<span class="kw">\\draw</span> (B) -- (B2) -- (C1) -- (C);'},
+          {html:'<span class="kw">\\draw</span> (C) -- (C2) -- (A1) -- (A);'},
+          {html:'<span class="kw">\\draw</span> (A) -- (A2) -- (B1) -- (B);'}
+        ]
+      },
+      {
+        svg: ['g-triangle','g-A-pt','g-B-pt','g-C-pt','g-A-label','g-B-label','g-C-label',
+              'g-rect-BC','g-rect-CA','g-rect-AB',
+              'g-A1-label','g-A2-label','g-B1-label','g-B2-label','g-C1-label','g-C2-label',
+              'g-omegaA','g-omegaB','g-omegaC','g-omegaA-label','g-omegaB-label','g-omegaC-label'],
+        code: [
+          {html:'<span class="com">% step 3 — circumcircles of each rectangle</span>'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[gold, dashed]</span> (\\omega_A) <span class="kw">circle</span>;'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[gold, dashed]</span> (\\omega_B) <span class="kw">circle</span>;'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[gold, dashed]</span> (\\omega_C) <span class="kw">circle</span>;'}
+        ]
+      },
+      {
+        svg: ['g-triangle','g-A-pt','g-B-pt','g-C-pt','g-A-label','g-B-label','g-C-label',
+              'g-rect-BC','g-rect-CA','g-rect-AB',
+              'g-A1-label','g-A2-label','g-B1-label','g-B2-label','g-C1-label','g-C2-label',
+              'g-omegaA','g-omegaB','g-omegaC','g-omegaA-label','g-omegaB-label','g-omegaC-label',
+              'g-P','g-P-label'],
+        code: [
+          {html:'<span class="com">% step 4 — angle condition ⇒ ω_A, ω_B, ω_C concur</span>'},
+          {html:'<span class="kw">\\fill</span><span class="arg">[gold]</span> (P) <span class="kw">circle</span> <span class="arg">(4pt)</span>;'},
+          {html:'<span class="kw">\\node</span><span class="arg">[gold, right=2pt]</span> at (P) {<span class="arg">P</span>};'}
+        ]
+      },
+      {
+        svg: ['g-triangle','g-A-pt','g-B-pt','g-C-pt','g-A-label','g-B-label','g-C-label',
+              'g-rect-BC','g-rect-CA','g-rect-AB',
+              'g-A1-label','g-A2-label','g-B1-label','g-B2-label','g-C1-label','g-C2-label',
+              'g-omegaA','g-omegaB','g-omegaC','g-omegaA-label','g-omegaB-label','g-omegaC-label',
+              'g-P','g-P-label',
+              'g-line-A1B2','g-line-B1C2','g-line-C1A2'],
+        code: [
+          {html:'<span class="com">% step 5–6 — Thales ⇒ A1, P, B2 collinear, etc.</span>'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[gold]</span> (A1) -- (B2);'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[gold]</span> (B1) -- (C2);'},
+          {html:'<span class="kw">\\draw</span><span class="arg">[gold]</span> (C1) -- (A2);'}
+        ]
+      },
+      {
+        svg: ['g-triangle','g-A-pt','g-B-pt','g-C-pt','g-A-label','g-B-label','g-C-label',
+              'g-rect-BC','g-rect-CA','g-rect-AB',
+              'g-A1-label','g-A2-label','g-B1-label','g-B2-label','g-C1-label','g-C2-label',
+              'g-omegaA','g-omegaB','g-omegaC','g-omegaA-label','g-omegaB-label','g-omegaC-label',
+              'g-P','g-P-label',
+              'g-line-A1B2','g-line-B1C2','g-line-C1A2'],
+        code: [
+          {html:'<span class="com">% the three lines all pass through P — QED.</span>'},
+          {html:'<span class="kw">\\node</span> at (.5, .5) {<span class="arg">∎</span>};'}
+        ]
+      }
+    ];
+
+    const allIds = new Set();
+    stages.forEach(s => s.svg.forEach(id => allIds.add(id)));
+
+    function showStage(idx){
+      const stage = stages[idx];
+      const showIds = new Set(stage.svg);
+      allIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (showIds.has(id)){
+          el.classList.add('shown');
+          if (el.classList.contains('draw')) el.classList.add('shown');
+        } else {
+          el.classList.remove('shown');
+        }
+      });
+      if (codeBox){
+        codeBox.innerHTML = '';
+        stage.code.forEach((l, i) => {
+          const ln = document.createElement('span');
+          ln.className = 'tikz-line';
+          ln.innerHTML = l.html;
+          codeBox.appendChild(ln);
+          setTimeout(() => ln.classList.add('shown'), i * 80);
+        });
+      }
+    }
+
+    let lastStage = -1;
+    trackProgress(wrap, function(p){
+      const idx = Math.min(N-1, Math.floor(p * N));
+      updateSteps(steps, idx);
+      progEl.textContent = `step ${idx+1} / ${N}`;
+      const stageIdx = Math.min(stages.length - 1, idx);
+      if (stageIdx !== lastStage){
+        lastStage = stageIdx;
+        showStage(stageIdx);
+      }
+    });
+
+    showStage(0);
+  }
+
+  /* ============================================================
+     VIETA
+  ============================================================ */
+  function initVieta(){
+    const wrap = document.querySelector('[data-proof="vieta"]');
+    if (!wrap) return;
+    const steps = wrap.querySelectorAll('.steps li');
+    const stairs = wrap.querySelectorAll('.stair');
+    const arrows = wrap.querySelectorAll('.jump-arrow');
+    const conclusion = document.getElementById('vietaConclusion');
+    const progEl = document.getElementById('vietaProg');
+    const N = steps.length;
+
+    trackProgress(wrap, function(p){
+      const idx = Math.min(N-1, Math.floor(p * N));
+      updateSteps(steps, idx);
+      progEl.textContent = `step ${idx+1} / ${N}`;
+
+      const stairIdx = Math.floor(p * (stairs.length + 1));
+      stairs.forEach((s, i) => {
+        s.classList.toggle('shown', i <= stairIdx);
+        s.classList.toggle('current', i === Math.min(stairs.length-1, stairIdx));
+        s.classList.toggle('faded', i < stairIdx - 1);
+      });
+      arrows.forEach((a, i) => {
+        a.classList.toggle('shown', i < stairIdx);
+      });
+      conclusion.classList.toggle('shown', idx >= N-1);
+    });
+  }
+})();
+</script>
+</body>
+</html>

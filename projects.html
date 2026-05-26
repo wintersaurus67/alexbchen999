@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Projects — Alexander B. Chen</title>
+<meta name="description" content="SSAMO, the ARC textbook, the 360-page multivariable calc book, the Markov-frog mock AMC." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.projects-intro{padding:7rem var(--pad-x) 3rem}
+.projects-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;max-width:20ch;
+}
+.projects-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.projects-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:46ch;margin:0;
+}
+
+.project-list{padding:0 var(--pad-x) var(--pad-y)}
+.project{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(2rem, 6vw, 5rem);
+  align-items:center;
+  padding:clamp(3rem, 8vh, 5rem) 0;
+  border-bottom:1px solid var(--rule);
+}
+.project:nth-of-type(even) .project-visual{order:-1}
+@media (max-width:880px){
+  .project{grid-template-columns:1fr;gap:2rem}
+  .project:nth-of-type(even) .project-visual{order:0}
+}
+
+.project-meta{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1rem;
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+}
+.project-meta .badge{
+  border:1px solid var(--gold);
+  padding:.15rem .5rem;
+  font-size:9px;letter-spacing:.2em;
+  color:var(--gold);
+}
+.project-title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(2rem, 4.5vw, 3.6rem);
+  line-height:1.02;letter-spacing:-.02em;
+  margin:0 0 1rem;
+}
+.project-title .italic{font-style:italic;color:var(--gold)}
+.project-desc{
+  font-family:var(--serif);font-size:1.1rem;
+  line-height:1.55;color:var(--paper-dim);
+  max-width:42ch;margin:0 0 2rem;
+}
+.project-meta-info{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper-mute);margin-bottom:2rem;
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+}
+.project-meta-info strong{color:var(--paper);font-weight:500}
+
+.project-visual{
+  position:relative;
+  aspect-ratio:4/3;
+  background:var(--ink-2);
+  border:1px solid var(--rule);
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .5s var(--ease);
+}
+.project-visual .layer{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  will-change:transform;
+}
+.project-visual .bg-grad{
+  background:radial-gradient(ellipse at center, rgba(212,175,55,0.08), transparent 60%);
+}
+.project-visual .grid-overlay{
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size:32px 32px;opacity:.4;
+}
+.project-visual .glyph{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(4.5rem, 11vw, 10rem);
+  color:rgba(212,175,55,0.18);font-weight:300;
+  letter-spacing:-.03em;
+}
+.project-visual .accent{
+  position:absolute;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);opacity:.7;
+}
+.project-visual .accent.tl{top:1rem;left:1rem}
+.project-visual .accent.br{bottom:1rem;right:1rem}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html" aria-current="page">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="projects-intro">
+  <p class="page-eyebrow">§ 03 · Projects</p>
+  <h1>Things I'm <span class="italic">making</span>.</h1>
+  <p class="lead">Some live, some in draft, all real. Each one started as a thing I wanted to exist that didn't yet.</p>
+</section>
+
+<section class="project-list">
+  <article class="project" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Olympiad · founder</div>
+      <h2 class="project-title"><span class="italic">SSAMO</span> — Shady Side Academy Mathematics Olympiad</h2>
+      <div class="project-meta-info">
+        <span><strong>April 2026</strong> · first edition</span>
+        <span>5 schools · original problems</span>
+      </div>
+      <p class="project-desc">
+        The first-ever olympiad I founded and ran at my school. Months of original problem design, school-board funding, logistics. Kids from multiple schools competed on problems <span class="name-ryan">Ryan Gong</span> and I had co-written. We watched our problems being solved from the other side of the table.
+      </p>
+      <a href="https://sites.google.com/view/ssamo-ssa-mathematics-olympiad/home" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">Visit SSAMO &rarr;</a>
+    </div>
+    <div class="project-visual">
+      <div class="layer bg-grad"></div>
+      <div class="layer grid-overlay"></div>
+      <div class="layer"><div class="glyph">Ω</div></div>
+      <div class="accent tl">vol. i · 2026</div>
+      <div class="accent br">april</div>
+    </div>
+  </article>
+
+  <article class="project" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Textbook · w/ <span class="name-ryan">Ryan Gong</span> <span class="badge">Coming Soon</span></div>
+      <h2 class="project-title"><span class="italic">ARC</span> — AIME Roadmap &amp; Curriculum</h2>
+      <div class="project-meta-info">
+        <span><strong>Combinatorics</strong> done · ~600 pp</span>
+        <span>Algebra · NT · C · G</span>
+      </div>
+      <p class="project-desc">
+        Four sections — Algebra, Number Theory, Combinatorics, Geometry — written for the kid scoring 75 on the AMC 10 who doesn't know if they'll ever break 100. Free olympiad-prep for students without access to expensive prep, in a moment when online resources have been compromised by cheating scandals.
+      </p>
+      <a href="https://drive.google.com/drive/folders/1r_W_rcSNr5aO2rfgV_lvlJTAHKZkOKyN?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">Read drafts &rarr;</a>
+    </div>
+    <div class="project-visual">
+      <div class="layer bg-grad"></div>
+      <div class="layer grid-overlay"></div>
+      <div class="layer"><div class="glyph">A · NT · C · G</div></div>
+      <div class="accent tl">manuscript · ongoing</div>
+      <div class="accent br">drop sept '26</div>
+    </div>
+  </article>
+
+  <article class="project" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Textbook · solo</div>
+      <h2 class="project-title">Multivariable Calculus, <span class="italic">written for peers</span></h2>
+      <div class="project-meta-info">
+        <span><strong>360 pages</strong></span>
+        <span>iPe + LaTeX · classroom reference</span>
+      </div>
+      <p class="project-desc">
+        Started when our regular BC Calc teacher was out for three weeks and three substitutes gave up trying to teach the class. I wanted my classmates to have something they could actually read. Vector fields and 3D solids drawn in iPe. Used by this year's Calc 3 cohort.
+      </p>
+      <a href="https://drive.google.com/file/d/14erpD4iBdTqWrkAp4FkGKjTiEO3C7mgQ/view?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">Read the PDF &rarr;</a>
+    </div>
+    <div class="project-visual">
+      <div class="layer bg-grad"></div>
+      <div class="layer grid-overlay"></div>
+      <div class="layer"><div class="glyph">∇·F</div></div>
+      <div class="accent tl">calc iii</div>
+      <div class="accent br">360 pp</div>
+    </div>
+  </article>
+
+  <article class="project" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Mock exam · co-written</div>
+      <h2 class="project-title">AMC Mock — <span class="italic">the Markov-frog edition</span></h2>
+      <div class="project-meta-info">
+        <span><strong>25 problems</strong></span>
+        <span>predicted real AMC question</span>
+      </div>
+      <p class="project-desc">
+        Co-written AMC mock. We accidentally predicted a real AMC question about Markov chains and jumping frogs — the kind of accident that only happens after months of writing problems and arguing about which configuration looks "AMC enough."
+      </p>
+      <a href="https://drive.google.com/drive/folders/1WGSIBr1KYUvb8-5sz56ZHuGNUHe9GrKC?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">See the problems &rarr;</a>
+    </div>
+    <div class="project-visual">
+      <div class="layer bg-grad"></div>
+      <div class="layer grid-overlay"></div>
+      <div class="layer"><div class="glyph">P[k]</div></div>
+      <div class="accent tl">aops · mock amc</div>
+      <div class="accent br">25 Q</div>
+    </div>
+  </article>
+
+  <article class="project" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Research · solo</div>
+      <h2 class="project-title">A Sharp Piecewise Generalization of <span class="italic">Nesbitt's Inequality</span></h2>
+      <div class="project-meta-info">
+        <span><strong>preprint</strong> · 2026</span>
+        <span>α ∈ (0,1] · phase at log₂(3/2)</span>
+      </div>
+      <p class="project-desc">
+        Establishes a sharp lower bound for the cyclic power sum ∑(a/(b+c))<sup>α</sup> on positive reals for α ∈ (0,1], with a phase transition at α* = log₂(3/2). Above the threshold, the symmetric minimum is sharp; below it, the infimum is 2, approached as one variable vanishes. Recovers classical Nesbitt at α=1.
+      </p>
+      <a href="math.html" class="gold-link" data-cursor="hover">Walk through the proof &rarr;</a>
+    </div>
+    <div class="project-visual">
+      <div class="layer bg-grad"></div>
+      <div class="layer grid-overlay"></div>
+      <div class="layer"><div class="glyph">∑<sub>cyc</sub></div></div>
+      <div class="accent tl">research · inequality</div>
+      <div class="accent br">preprint</div>
+    </div>
+  </article>
+
+  <article class="project" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Research · PReMA · Texas A&amp;M</div>
+      <h2 class="project-title">Random Schrödinger Operators &amp; <span class="italic">Anderson Localization</span></h2>
+      <div class="project-meta-info">
+        <span><strong>w/ Mei, Shaw, Tang</strong></span>
+        <span>advised by Prof. Wencai Liu</span>
+      </div>
+      <p class="project-desc">
+        Studying eigenvector decay in discrete random Schrödinger operators on the lattice, with i.i.d. Bernoulli potentials on the diagonal of a tridiagonal matrix. Building computational frameworks to numerically observe exponential localization — distinguishing real decay from rounding artifact — and connecting numerics to the analytic statements about almost-sure localization.
+      </p>
+      <span class="gold-link" style="cursor:default;border-bottom-color:var(--paper-mute);color:var(--paper-mute)">In progress · PReMA 2026</span>
+    </div>
+    <div class="project-visual">
+      <div class="layer bg-grad"></div>
+      <div class="layer grid-overlay"></div>
+      <div class="layer"><div class="glyph">Hψ=Eψ</div></div>
+      <div class="accent tl">math physics</div>
+      <div class="accent br">PReMA</div>
+    </div>
+  </article>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Built in Pittsburgh between sets. Set in Fraunces &amp; JetBrains Mono. The Gilbreath trick really works.</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+<script>
+/* Subtle parallax tilt on hover (desktop only) */
+(function(){
+  if (window.matchMedia('(hover:none),(pointer:coarse)').matches) return;
+  document.querySelectorAll('.project-visual').forEach(vis=>{
+    vis.addEventListener('mousemove', e=>{
+      const r = vis.getBoundingClientRect();
+      const x = ((e.clientX - r.left)/r.width - .5);
+      const y = ((e.clientY - r.top)/r.height - .5);
+      vis.style.transform = `perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`;
+      const layers = vis.querySelectorAll('.layer');
+      layers.forEach((l,i)=>{
+        const depth = (i+1) * 6;
+        l.style.transform = `translate3d(${x*depth}px, ${y*depth}px, 0)`;
+      });
+    });
+    vis.addEventListener('mouseleave', ()=>{
+      vis.style.transform = '';
+      vis.querySelectorAll('.layer').forEach(l=>l.style.transform='');
+    });
+  });
+})();
+</script>
+</body>
+</html>

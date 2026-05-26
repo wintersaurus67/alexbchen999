@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Beyond the math — Alexander B. Chen</title>
+<meta name="description" content="Swimming, piano, skiing, card magic. The other half." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.beyond-intro{padding:7rem var(--pad-x) 3rem}
+.beyond-intro h1{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0 0 1.5rem;max-width:18ch;
+}
+.beyond-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.beyond-intro .lead{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  color:var(--paper-dim);max-width:50ch;margin:0;
+}
+
+.beyond-grid{
+  padding:0 var(--pad-x) var(--pad-y);
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  margin:0 var(--pad-x) var(--pad-y);
+}
+@media (max-width:880px){.beyond-grid{grid-template-columns:1fr;margin:0;padding:0}}
+.beyond-card{
+  background:var(--ink-1);
+  padding:clamp(2rem, 4vw, 3rem);
+  min-height:440px;
+  display:flex;flex-direction:column;
+  transition:background .4s var(--ease);
+}
+.beyond-card:hover{background:var(--ink-2)}
+.beyond-card .tag{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:auto;
+}
+.beyond-card h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height:1.1;letter-spacing:-.01em;
+  margin:2rem 0 1rem;
+}
+.beyond-card h3 .italic{font-style:italic;color:var(--gold)}
+.beyond-card p{
+  font-family:var(--serif);font-size:1.02rem;
+  line-height:1.55;color:var(--paper-dim);
+  margin:0 0 .8em;max-width:44ch;
+}
+.beyond-card em{color:var(--paper);font-style:italic}
+.beyond-card .stats{
+  margin-top:1.5rem;
+  font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--paper-mute);
+  display:flex;flex-wrap:wrap;gap:1rem 2rem;
+}
+.beyond-card .stats span strong{
+  display:block;color:var(--paper);font-weight:500;
+  font-size:1.6rem;font-family:var(--serif);font-style:italic;
+  letter-spacing:-.02em;margin-bottom:.1rem;
+}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html" aria-current="page">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="beyond-intro">
+  <p class="page-eyebrow">§ 05 · Beyond the math</p>
+  <h1>Outside <span class="italic">the room</span>.</h1>
+  <p class="lead">I'm not a nerd who happens to also swim. I'm a swimmer who happens to also do olympiad math, plus a few other things. None of this is on my transcript. All of it adds up to me.</p>
+</section>
+
+<section class="beyond-grid">
+  <article class="beyond-card" data-reveal>
+    <div class="tag">i · swimming</div>
+    <h3>I have voluntarily destroyed my <span class="italic">circadian rhythm</span>.</h3>
+    <p>
+      Nine years competitive. About sixteen hours a week in season, which works out to roughly one entire month of waking life per year spent staring at a black line at the bottom of a pool.
+    </p>
+    <p>
+      WPIAL States qualifier in the 50 and 100 free. I dropped 1.8 seconds at last States to close out a relay with a 22.2 split. The thing I never expected: some of my best math happens in the half-hour <em>after</em> practice — exhausted, walking home, brain too tired to talk itself out of an idea.
+    </p>
+    <div class="stats">
+      <span><strong>States</strong> qualifier · varsity</span>
+      <span><strong>22.2</strong> · 50 free split</span>
+      <span><strong>16 h</strong>/wk · in-season</span>
+    </div>
+  </article>
+
+  <article class="beyond-card" data-reveal data-delay="1">
+    <div class="tag">ii · piano</div>
+    <h3>A long &amp; ongoing relationship with <span class="italic">mediocrity</span>.</h3>
+    <p>
+      Ten years. I have the fingers — Chopin ballades, Liszt études, Rachmaninoff preludes, technically in reach. What I don't quite have yet is the musicality. I'm a robot who has read a manual on how to feel things.
+    </p>
+    <p>
+      I still play almost every day. There's something about working through a piece you can't quite express that keeps a person honest.
+    </p>
+    <div class="stats">
+      <span><strong>Carmel Klavier</strong> · GP '19 · 2nd '21</span>
+      <span><strong>Pittsburgh Int'l</strong> · 1st, multiple GP</span>
+      <span><strong>Steinway Society</strong> W. PA · audition winner</span>
+    </div>
+  </article>
+
+  <article class="beyond-card" data-reveal data-delay="2">
+    <div class="tag">iii · skiing</div>
+    <h3>The only thing I let myself be <span class="italic">reckless</span> about.</h3>
+    <p>
+      Christmas in Colorado — Vail, Breckenridge, Keystone. Spring break at Whistler. Most of my life is a tightly-controlled exercise in not making stupid choices. Skiing is the one place where the answer to <em>"is this a good idea?"</em> is <em>who cares, let's find out</em>.
+    </p>
+    <p>
+      Purple Haze, Spanky's Ladder, DOA. Not Olympic, not even close. But the version of me on a black diamond in March is somehow the most <em>me</em> version of me there is.
+    </p>
+    <div class="stats">
+      <span><strong>Whistler</strong> · spring · back side</span>
+      <span><strong>Vail / Breck / Keystone</strong> · winter</span>
+    </div>
+  </article>
+
+  <article class="beyond-card" data-reveal data-delay="3">
+    <div class="tag">iv · card magic</div>
+    <h3>Self-working tricks, hundred-year-old <span class="italic">combinatorics</span>.</h3>
+    <p>
+      Tried sleight-of-hand during COVID. Discovered my hands have the dexterity of a polite raccoon. So I switched to self-working tricks — the kind where modular arithmetic and permutation parity do the work and you just deal cards in the right order.
+    </p>
+    <p>
+      My favorite is the Gilbreath Principle: alternate the deck, let the spectator riffle-shuffle, deal in pairs — every pair is one red and one black. Not marked cards. Just a fact about permutations. There's a working version of it on the <a href="reach.html" data-cursor="hover" style="color:var(--gold);border-bottom:1px solid var(--gold)">Reach page</a>.
+    </p>
+  </article>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Alexander B. Chen</title>
+<meta name="description" content="Personal site of Alexander B. Chen — competition math, research, swimming, piano, ski. Heading to the Ross Mathematics Program, 2026." />
+<meta name="theme-color" content="#0a1733" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+.hero{
+  position:relative;
+  min-height:100vh;
+  padding:7rem var(--pad-x) 4rem;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  overflow:hidden;
+}
+.hero-meta{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-mute);
+  margin-bottom:2.5rem;flex-wrap:wrap;gap:1.5rem;
+}
+.hero-meta .left{max-width:24ch;line-height:1.6}
+.hero-meta .right{text-align:right}
+
+.hero-name{
+  font-family:var(--serif);
+  font-weight:300;
+  font-size:clamp(3.4rem, 13vw, 12rem);
+  line-height:.9;
+  letter-spacing:-.045em;
+  margin:0 0 1.5rem;
+  color:var(--paper);
+}
+.hero-name .ln{display:block;overflow:hidden;line-height:.9}
+.hero-name .letter{
+  display:inline-block;
+  animation:letter-up 1.1s cubic-bezier(.16,1,.3,1) both;
+  animation-delay:calc(var(--i,0) * 0.04s);
+}
+.hero-name .space{display:inline-block;width:.3em}
+.hero-name .italic{font-style:italic;font-weight:500;color:var(--gold)}
+@keyframes letter-up{
+  0%{transform:translateY(110%);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+
+.hero-tag{
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:.6em;
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(1.4rem, 3vw, 2.4rem);
+  letter-spacing:-.01em;margin:0 0 2rem;
+  animation:fade-up 1s cubic-bezier(.16,1,.3,1) 1.1s both;
+}
+.hero-tag .em{font-style:normal;font-weight:400;color:var(--paper-dim)}
+.hero-tag .em::before{content:"— "}
+.role-slot{
+  position:relative;display:inline-block;
+  height:1.2em;overflow:hidden;
+  vertical-align:baseline;min-width:13ch;
+}
+.role-slot .role{
+  display:block;font-style:italic;color:var(--gold);
+  white-space:nowrap;line-height:1.2em;
+  animation:role-cycle 16s steps(1) infinite;
+}
+@keyframes role-cycle{
+  0%,10.5%   {transform:translateY(0)}
+  12.5%,22.5%{transform:translateY(-1.2em)}
+  24.5%,34.5%{transform:translateY(-2.4em)}
+  36.5%,46.5%{transform:translateY(-3.6em)}
+  48.5%,58.5%{transform:translateY(-4.8em)}
+  60.5%,70.5%{transform:translateY(-6em)}
+  72.5%,82.5%{transform:translateY(-7.2em)}
+  84.5%,94.5%{transform:translateY(-8.4em)}
+  100%       {transform:translateY(-9.6em)}
+}
+@keyframes fade-up{
+  0%{opacity:0;transform:translateY(20px)}
+  100%{opacity:1;transform:none}
+}
+
+.hero-line{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  gap:2rem;flex-wrap:wrap;
+  border-top:1px solid var(--rule);padding-top:2rem;
+  animation:fade-up 1s cubic-bezier(.16,1,.3,1) 1.4s both;
+}
+.hero-positioning{
+  font-family:var(--serif);
+  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
+  font-style:italic;color:var(--paper-dim);
+  max-width:42ch;line-height:1.55;margin:0;
+}
+.hero-positioning::first-letter{
+  font-size:1.6em;font-style:normal;color:var(--gold);margin-right:.05em;
+}
+.hero-scroll-hint{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--paper-mute);display:flex;align-items:center;gap:.8rem;
+}
+.hero-scroll-hint .line{
+  display:inline-block;width:48px;height:1px;
+  background:var(--paper-mute);position:relative;overflow:hidden;
+}
+.hero-scroll-hint .line::after{
+  content:"";position:absolute;inset:0;background:var(--gold);
+  transform:translateX(-100%);
+  animation:scroll-hint 2.4s cubic-bezier(.2,.7,.2,1) infinite;
+}
+@keyframes scroll-hint{
+  0%{transform:translateX(-100%)}
+  50%{transform:translateX(0)}
+  100%{transform:translateX(100%)}
+}
+
+.index{
+  padding:var(--pad-y) var(--pad-x);
+  border-top:1px solid var(--rule);position:relative;
+}
+.index h2{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 3rem;
+}
+.index-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:1px;background:var(--rule);
+  border:1px solid var(--rule);
+}
+.index-card{
+  background:var(--ink-1);padding:2.5rem 2rem 2rem;
+  display:flex;flex-direction:column;min-height:240px;
+  position:relative;color:inherit;
+  transition:background .35s var(--ease), padding-left .35s var(--ease);
+}
+.index-card:hover{background:var(--ink-2);padding-left:2.4rem}
+.index-card .num{
+  font-family:var(--mono);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:auto;
+}
+.index-card h3{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.6rem, 2.3vw, 2rem);
+  line-height:1.1;letter-spacing:-.02em;margin:1.5rem 0 .8rem;
+}
+.index-card h3 .italic{font-style:italic;color:var(--gold)}
+.index-card p{
+  font-family:var(--serif);font-style:italic;font-size:.95rem;
+  color:var(--paper-dim);margin:0;line-height:1.45;max-width:32ch;
+}
+.index-card .arrow{
+  margin-top:1.5rem;font-family:var(--mono);font-size:11px;
+  letter-spacing:.2em;color:var(--gold);text-transform:uppercase;
+  display:inline-flex;gap:.5rem;align-items:center;
+  transition:gap .3s var(--ease);
+}
+.index-card:hover .arrow{gap:.9rem}
+</style>
+</head>
+<body>
+
+<div class="bg-symbols" aria-hidden="true"></div>
+<div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" aria-hidden="true"></div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" data-cursor="hover">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>A. B. Chen</span>
+  </a>
+  <nav>
+    <ul class="nav-list">
+      <li><a href="about.html">About</a></li>
+      <li><a href="math.html">Math</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="beyond.html">Beyond</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="reach.html">Reach</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-meta">
+    <span class="left">Math, swimming, piano,<br/>and the long-distance pursuit of <em>why</em>.</span>
+    <span class="right">Pittsburgh, PA<br/>est. 2009</span>
+  </div>
+
+  <h1 class="hero-name" aria-label="Alexander B. Chen">
+    <span class="ln">
+      <span class="letter" style="--i:0">A</span><span class="letter" style="--i:1">l</span><span class="letter" style="--i:2">e</span><span class="letter" style="--i:3">x</span><span class="letter" style="--i:4">a</span><span class="letter" style="--i:5">n</span><span class="letter" style="--i:6">d</span><span class="letter" style="--i:7">e</span><span class="letter" style="--i:8">r</span>
+    </span>
+    <span class="ln">
+      <span class="letter italic" style="--i:9">B</span><span class="letter italic" style="--i:10">.</span><span class="space"></span><span class="letter" style="--i:11">C</span><span class="letter" style="--i:12">h</span><span class="letter" style="--i:13">e</span><span class="letter" style="--i:14">n</span>
+    </span>
+  </h1>
+
+  <p class="hero-tag">
+    <span class="em">I am a</span>
+    <span class="role-slot" aria-live="polite">
+      <span class="role">mathematician<br/>swimmer<br/>pianist<br/>researcher<br/>problem-setter<br/>author<br/>competitor<br/>skier<br/>mathematician</span>
+    </span>
+  </p>
+
+  <div class="hero-line">
+    <p class="hero-positioning">
+      Math, structure, and the long-distance pursuit of <em>why</em>. The black line at the bottom of a pool and a stubborn proof are the same object — I'm interested in both.
+    </p>
+    <div class="hero-scroll-hint">
+      <span>Scroll for the index</span>
+      <span class="line" aria-hidden="true"></span>
+    </div>
+  </div>
+</section>
+
+<section class="index">
+  <h2>The site, in seven rooms</h2>
+  <div class="index-grid">
+    <a href="about.html" class="index-card" data-reveal data-cursor="hover">
+      <span class="num">01 · About</span>
+      <h3>From sprinter to <span class="italic">architect</span>.</h3>
+      <p>Swimming, persistence, the arc from middle school to USAMO and Ross. The longer story.</p>
+      <span class="arrow">read &rarr;</span>
+    </a>
+    <a href="math.html" class="index-card" data-reveal data-delay="1" data-cursor="hover">
+      <span class="num">02 · Math</span>
+      <h3>Three proofs, <span class="italic">one journey</span>.</h3>
+      <p>USAMO 2021 P1 with circumcircles drawn live, IMO 1988 P6 by Vieta jumping, the long arc of how I got here, and a Nesbitt generalization at the end as a treat.</p>
+      <span class="arrow">scroll through &rarr;</span>
+    </a>
+    <a href="projects.html" class="index-card" data-reveal data-delay="2" data-cursor="hover">
+      <span class="num">03 · Projects</span>
+      <h3>Things I'm <span class="italic">making</span>.</h3>
+      <p>SSAMO, the ARC textbook (A · NT · C · G), the 360-page Calc 3 book, the Markov-frog mock AMC.</p>
+      <span class="arrow">browse &rarr;</span>
+    </a>
+    <a href="competitions.html" class="index-card" data-reveal data-delay="3" data-cursor="hover">
+      <span class="num">04 · Competitions</span>
+      <h3>The <span class="italic">reel</span>.</h3>
+      <p>MathLeague Nationals, USAMO, USAMTS, AIME, AMC, swimming States, DECA, piano.</p>
+      <span class="arrow">see the record &rarr;</span>
+    </a>
+    <a href="beyond.html" class="index-card" data-reveal data-delay="4" data-cursor="hover">
+      <span class="num">05 · Beyond</span>
+      <h3>Outside <span class="italic">the room</span>.</h3>
+      <p>Swimming, piano, skiing, card magic. Each one a small essay, not a hobby grid.</p>
+      <span class="arrow">read &rarr;</span>
+    </a>
+    <a href="writing.html" class="index-card" data-reveal data-delay="5" data-cursor="hover">
+      <span class="num">06 · Writing</span>
+      <h3>Substack &amp; <span class="italic">notes</span>.</h3>
+      <p>Long-form posts on USAMO prep, school, parents, and a 5 that taught me more than a medal would have.</p>
+      <span class="arrow">read &rarr;</span>
+    </a>
+    <a href="reach.html" class="index-card" data-reveal data-cursor="hover">
+      <span class="num">07 · Reach</span>
+      <h3>Prove a <span class="italic">card trick</span>, then write to me.</h3>
+      <p>A working Gilbreath shuffle, a four-way booking calendar, an email. The unusual front door.</p>
+      <span class="arrow">come in &rarr;</span>
+    </a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div>Alexander B. Chen · 2026</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
+</footer>
+
+<script defer src="site.js"></script>
+</body>
+</html>
