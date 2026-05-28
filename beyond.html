@@ -737,53 +737,53 @@
   </div>
 </section>
 <!-- Full-width piano breakout (outside the .deep article column) -->
-<div class="piano-block" id="pianoBlock">
+<div class="piano-block" data-piano-block="pathetique">
   <div class="piano-block-head">
     <div class="piano-block-title">Beethoven · <span class="piece">Sonata No. 8 in C minor, Op. 13 · "Pathétique"</span></div>
-    <div class="piano-meta"><span id="pianoNowPlaying" class="now-playing">— select a movement</span></div>
+    <div class="piano-meta"><span data-el="nowPlaying" class="now-playing">— select a movement</span></div>
   </div>
   <div class="piano-controls">
     <div class="piano-modes">
-      <button data-mode="robot" id="pianoModeRobot">▶ robot · me</button>
-      <button data-mode="rubato" class="active" id="pianoModeRubato">▶ rubato · should be</button>
+      <button data-el="modeRobot">▶ robot · me</button>
+      <button data-el="modeRubato" class="active">▶ rubato · should be</button>
     </div>
     <div class="piano-mvts">
-      <button data-mvt="1" class="active"><span class="num">I.</span>Grave · Allegro</button>
-      <button data-mvt="2"><span class="num">II.</span>Adagio cantabile</button>
-      <button data-mvt="3"><span class="num">III.</span>Rondo</button>
+      <button data-el="secBtn" data-section="1" class="active"><span class="num">I.</span>Grave · Allegro</button>
+      <button data-el="secBtn" data-section="2"><span class="num">II.</span>Adagio cantabile</button>
+      <button data-el="secBtn" data-section="3"><span class="num">III.</span>Rondo</button>
     </div>
     <div class="piano-vol">
       <span>vol</span>
-      <input type="range" id="pianoVol" min="0" max="100" value="65"/>
+      <input type="range" data-el="vol" min="0" max="100" value="65"/>
     </div>
   </div>
   <div class="piano-kb-wrap">
-    <div class="piano-kb" id="pianoKb"></div>
+    <div class="piano-kb" data-el="kb"></div>
   </div>
   <div class="piano-scrub-wrap">
     <div class="piano-scrub-times">
-      <span><span class="now" id="pianoCurTime">0:00</span></span>
-      <button class="play" id="pianoPlay" aria-label="play/pause">
-        <svg viewBox="0 0 16 16" id="pianoPlayIcon"><path d="M3 2 L13 8 L3 14 Z"/></svg>
+      <span><span class="now" data-el="curTime">0:00</span></span>
+      <button class="play" data-el="play" aria-label="play/pause">
+        <svg viewBox="0 0 16 16" data-el="playIcon"><path d="M3 2 L13 8 L3 14 Z"/></svg>
       </button>
-      <span id="pianoTotalTime">0:00</span>
+      <span data-el="totalTime">0:00</span>
     </div>
-    <div class="piano-scrub" id="pianoScrub">
+    <div class="piano-scrub" data-el="scrub">
       <div class="track">
         <div class="buffered"></div>
-        <div class="hover-fill" id="pianoScrubHover"></div>
-        <div class="played" id="pianoScrubPlayed"></div>
+        <div class="hover-fill" data-el="scrubHover"></div>
+        <div class="played" data-el="scrubPlayed"></div>
       </div>
-      <div class="handle" id="pianoScrubHandle"></div>
-      <div class="tooltip" id="pianoScrubTip">0:00</div>
+      <div class="handle" data-el="scrubHandle"></div>
+      <div class="tooltip" data-el="scrubTip">0:00</div>
     </div>
   </div>
-  <div class="piano-dyn shown" id="pianoDyn">
-    <span class="marking" id="pianoDynMark">p</span>
-    <div class="bar"><div class="fill" id="pianoDynFill"></div></div>
-    <span id="pianoDynLabel">soft</span>
+  <div class="piano-dyn shown" data-el="dyn">
+    <span class="marking" data-el="dynMark">p</span>
+    <div class="bar"><div class="fill" data-el="dynFill"></div></div>
+    <span data-el="dynLabel">soft</span>
   </div>
-  <p class="piano-caption" id="pianoCaption">
+  <p class="piano-caption">
     Two versions of the same piece. The <span class="em">robot</span> is what I sound like. The <span class="em">rubato</span> is what the music actually wants.
   </p>
 </div>
@@ -802,6 +802,70 @@
     </div>
   </div>
 </section>
+<!-- LISZT-PAGANINI ETUDES — second piano block, "what I'm good at" -->
+<section class="deep" id="liszt" style="border-top:none;padding-top:0">
+  <div class="deep-grid">
+    <aside class="deep-aside">
+      <div class="deep-num">⁂</div>
+      <div class="label">all six.<br/><span class="gold">what I'm good at.</span></div>
+    </aside>
+    <div class="deep-body" data-reveal>
+      <h2>What I'm <span class="italic">good at</span>.</h2>
+      <p>If the Pathétique is the piece that exposed me, the Liszt-Paganini etudes are the ones that don't. They're not <em>about</em> anything. They're studies — Liszt transcribed Paganini's violin caprices for piano and made them harder than the originals. Tremolo. Octaves. <em>La Campanella</em>. Arpeggios that cover the whole keyboard in one bar. A hunt. A theme and twelve variations that ends with both hands doing things hands aren't supposed to do simultaneously.</p>
+      <p>None of this needs me to feel anything. It needs me to land the notes. That I can do. All six below, in order.</p>
+    </div>
+  </div>
+</section>
+<div class="piano-block" data-piano-block="liszt">
+  <div class="piano-block-head">
+    <div class="piano-block-title">Liszt · <span class="piece">Grandes études de Paganini, S. 141 · all six</span></div>
+    <div class="piano-meta"><span data-el="nowPlaying" class="now-playing">— select an etude</span></div>
+  </div>
+  <div class="piano-controls">
+    <div class="piano-modes" style="visibility:hidden"><button>&nbsp;</button></div>
+    <div class="piano-mvts">
+      <button data-el="secBtn" data-section="1" class="active"><span class="num">I.</span>Tremolo</button>
+      <button data-el="secBtn" data-section="2"><span class="num">II.</span>Octaves</button>
+      <button data-el="secBtn" data-section="3"><span class="num">III.</span>Campanella</button>
+      <button data-el="secBtn" data-section="4"><span class="num">IV.</span>Arpeggio</button>
+      <button data-el="secBtn" data-section="5"><span class="num">V.</span>La Chasse</button>
+      <button data-el="secBtn" data-section="6"><span class="num">VI.</span>Theme &amp; Variations</button>
+    </div>
+    <div class="piano-vol">
+      <span>vol</span>
+      <input type="range" data-el="vol" min="0" max="100" value="65"/>
+    </div>
+  </div>
+  <div class="piano-kb-wrap">
+    <div class="piano-kb" data-el="kb"></div>
+  </div>
+  <div class="piano-scrub-wrap">
+    <div class="piano-scrub-times">
+      <span><span class="now" data-el="curTime">0:00</span></span>
+      <button class="play" data-el="play" aria-label="play/pause">
+        <svg viewBox="0 0 16 16" data-el="playIcon"><path d="M3 2 L13 8 L3 14 Z"/></svg>
+      </button>
+      <span data-el="totalTime">0:00</span>
+    </div>
+    <div class="piano-scrub" data-el="scrub">
+      <div class="track">
+        <div class="buffered"></div>
+        <div class="hover-fill" data-el="scrubHover"></div>
+        <div class="played" data-el="scrubPlayed"></div>
+      </div>
+      <div class="handle" data-el="scrubHandle"></div>
+      <div class="tooltip" data-el="scrubTip">0:00</div>
+    </div>
+  </div>
+  <div class="piano-dyn shown" data-el="dyn">
+    <span class="marking" data-el="dynMark">p</span>
+    <div class="bar"><div class="fill" data-el="dynFill"></div></div>
+    <span data-el="dynLabel">soft</span>
+  </div>
+  <p class="piano-caption">
+    Six etudes, in order. Click any number to jump. <span class="em">Campanella</span> is the famous one — third up.
+  </p>
+</div>
 <!-- SKI section unchanged -->
 <section class="deep" id="ski">
   <div class="deep-grid">
