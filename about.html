@@ -154,6 +154,7 @@ mjx-assistive-mml{
   border-radius:6px;
   padding:1.8rem 1.4rem 1.6rem;
   position:relative;min-height:520px;
+  overflow:hidden;
 }
 .magic-top{
   display:grid;
@@ -176,7 +177,7 @@ mjx-assistive-mml{
 .magic-step-bar .step.current{ color:var(--ink-1);background:var(--gold);border-color:var(--gold); }
 .magic-step-bar .step.passed{ color:var(--gold);border-color:var(--gold); }
 .ace-tray{
-  display:flex;flex-direction:column;gap:.4rem;
+  display:flex;flex-direction:column;gap:.45rem;
   align-items:center;
 }
 .ace-tray-label{
@@ -184,7 +185,7 @@ mjx-assistive-mml{
   text-transform:uppercase;color:var(--paper-mute);
 }
 .ace-tray-cards{
-  display:flex;gap:.4rem;
+  display:flex;gap:.45rem;
 }
 .magic-instructions{
   font-family:var(--serif);font-style:italic;
@@ -192,19 +193,21 @@ mjx-assistive-mml{
   min-height:3.4em;margin-bottom:1.2rem;max-width:54ch;
 }
 .magic-instructions strong{color:var(--gold);font-style:normal;font-weight:500}
+
+/* rows of cards (6+6, reflows as aces go in) */
+.magic-rows{
+  display:flex;flex-direction:column;gap:.7rem;
+  align-items:center;margin:0 auto 1.2rem;
+}
 .magic-row{
   display:flex;flex-wrap:wrap;
   gap:.8rem .5rem;
-  margin-bottom:1.2rem;justify-content:center;
+  margin-bottom:0;justify-content:center;
   align-items:center;
-  min-height:90px;
-  max-width:460px;
-  margin-left:auto;margin-right:auto;
+  min-height:78px;
 }
-.magic-row.with-gaps{
-  gap:.8rem 0;
-  max-width:540px;
-}
+.magic-row.with-gaps{ gap:.8rem 0; }
+
 .magic-grid{
   display:grid;
   gap:.6rem;
@@ -212,6 +215,8 @@ mjx-assistive-mml{
   justify-content:center;
   align-items:center;
 }
+
+/* ---- the card ---- */
 .card{
   position:relative;
   width:48px;height:70px;
@@ -219,7 +224,7 @@ mjx-assistive-mml{
   cursor:default;
   transition:transform .55s var(--ease), box-shadow .3s var(--ease), opacity .3s var(--ease);
   transform-style:preserve-3d;
-  font-family:var(--serif);font-size:1.4rem;
+  font-family:var(--serif);
   user-select:none;
   flex:0 0 auto;
 }
@@ -236,8 +241,11 @@ mjx-assistive-mml{
   background:linear-gradient(135deg, #f5f1e8, #e8dfc8);
   color:#0a1733;
   border-color:#cfb87c;
-  font-weight:700; font-style:italic;
+  flex-direction:column;line-height:1;gap:1px;
 }
+.card .front .rank{ font-size:1.15rem;font-weight:700;font-style:italic; }
+.card .front .suit{ font-size:.95rem;font-style:normal; }
+.card.red .front{ color:#b3322c; }
 .card .back{
   background:repeating-linear-gradient(45deg, #d4af37 0 4px, #b89829 4px 8px);
   border-color:#b89829;
@@ -247,13 +255,19 @@ mjx-assistive-mml{
 .card.face-up{ transform:rotateY(0deg); }
 .card.selectable{ cursor:pointer; }
 .card.selectable:hover{ box-shadow:0 0 0 2px var(--gold); transform:rotateY(0deg) translateY(-3px); }
-.card.face-down.selectable:hover{ transform:rotateY(180deg) translateY(-3px); }
 .card.selected{ box-shadow:0 0 0 2px var(--gold), 0 0 18px rgba(212,175,55,.6); }
-.card.empty-slot{ opacity:.18; }
 .card.dimmed{ opacity:.45; pointer-events:none; }
+.card.just-inserted{ animation:cardDrop .5s var(--ease) both; }
+@keyframes cardDrop{
+  0%{ transform:rotateY(0deg) translateY(-22px) scale(.85); opacity:0; }
+  60%{ transform:rotateY(0deg) translateY(2px) scale(1.02); opacity:1; }
+  100%{ transform:rotateY(0deg) translateY(0) scale(1); opacity:1; }
+}
+.card.pulse-up{ box-shadow:0 0 0 2px var(--gold), 0 0 22px rgba(212,175,55,.7); }
+
 /* gap = insertion slot in the row */
 .gap{
-  width:14px; height:70px;
+  width:16px; height:70px;
   display:flex;align-items:center;justify-content:center;
   cursor:default;
   position:relative;
@@ -266,7 +280,7 @@ mjx-assistive-mml{
   width:2px;
   background:rgba(212,175,55,.0);
   transform:translateX(-50%);
-  transition:background .25s var(--ease);
+  transition:background .25s var(--ease), box-shadow .25s var(--ease);
 }
 .gap.active:hover::before, .gap.highlight::before{
   background:var(--gold);
@@ -278,16 +292,79 @@ mjx-assistive-mml{
   transition:color .25s var(--ease);
 }
 .gap.active:hover::after, .gap.highlight::after{ color:var(--gold); }
+
+/* ---- piles (deck / dealt) ---- */
+.magic-piles{
+  display:flex;gap:2.2rem;justify-content:center;align-items:center;
+  min-height:120px;margin:0 auto 1.2rem;flex-wrap:wrap;
+}
+.pile-wrap{ display:flex;flex-direction:column;gap:.5rem;align-items:center; }
+.pile{ position:relative;width:48px;height:70px; }
+.pile.empty{
+  border:1px dashed rgba(245,241,232,.16);border-radius:5px;
+}
+.pile-shadow{
+  position:absolute;inset:0;border-radius:5px;
+  border:1px solid rgba(212,175,55,.3);
+  background:rgba(10,23,51,.5);
+}
+.pile-count{
+  position:absolute;top:-9px;right:-9px;z-index:3;
+  background:var(--gold);color:var(--ink-1);
+  font-family:var(--mono);font-size:9px;font-weight:700;
+  padding:2px 5px;border-radius:8px;
+}
+.pile-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-mute);
+}
+.pile-arrow{ font-family:var(--mono);color:var(--gold);font-size:1.2rem; }
+
+/* ---- the pair being counted ---- */
+.pair-tray{
+  display:flex;flex-direction:column;gap:.5rem;align-items:center;
+  padding:.7rem 1rem;border:1px solid var(--rule);border-radius:5px;
+  background:rgba(212,175,55,.05);
+}
+.pair-tray .pair-cards{ display:flex;gap:.45rem; }
+.pair-tray.acting .card{ box-shadow:0 0 0 2px var(--gold); }
+
+/* ---- fold handles ---- */
 .flip-handle{
   border:1px dashed rgba(212,175,55,.4);
   border-radius:4px;
   display:flex;align-items:center;justify-content:center;
-  font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;
   color:var(--gold);
   cursor:pointer; min-width:24px;
   background:rgba(212,175,55,.04);
+  transition:background .2s var(--ease), border-color .2s var(--ease);
 }
-.flip-handle:hover{ background:rgba(212,175,55,.18); border-color:var(--gold); }
+.flip-handle:hover{ background:rgba(212,175,55,.2); border-color:var(--gold); }
+
+/* ---- spread / final reveal ---- */
+.spread-fan{
+  display:flex;justify-content:center;align-items:flex-end;
+  min-height:96px;margin:0 auto 1.2rem;padding:0 1rem;flex-wrap:wrap;
+}
+.spread-fan .card{ margin-left:-14px; }
+.spread-fan .card:first-child{ margin-left:0; }
+.spread-fan .card.is-ace{ z-index:2; }
+.final-aces{
+  display:flex;gap:.7rem;justify-content:center;align-items:center;
+  min-height:80px;margin:0 auto;
+}
+
+/* ---- flying-card overlay ---- */
+.magic-overlay{
+  position:absolute;inset:0;pointer-events:none;z-index:60;
+}
+.magic-overlay .flyer{
+  position:absolute;
+  filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));
+}
+
+/* ---- controls / reveal ---- */
 .magic-controls{
   display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;align-items:center;
   margin-top:1rem;
@@ -727,7 +804,7 @@ mjx-assistive-mml{
         During COVID I tried to learn magic. The first trick I tried was an ace trick — triple lift, then double, then single, aces materialize. I practiced for weeks, filmed myself, and discovered the double lift was visible from space. The triple was a war crime. I gave up on sleight of hand pretty quickly after that.
       </p>
       <p>
-        What I switched to is way more fun anyway: <em>self-working tricks</em>, where the math does the work and your hands just have to deal cards in the right order. Below is one. Twelve face-down cards in a row. Pick aces from the tray on the right, then click a gap between cards to insert.
+        What I switched to is way more fun anyway: <em>self-working tricks</em>, where the math does the work and your hands just have to deal cards in the right order. Below is one. Twelve face-down cards, six and six. Pick aces from the tray on the right, then click a gap between cards to slide them in.
       </p>
 
       <div class="magic-stage" id="magicStage" aria-live="polite">
@@ -735,10 +812,10 @@ mjx-assistive-mml{
           <div class="magic-step-bar" id="magicStepBar">
             <span class="step" data-s="0">1 · insert aces</span>
             <span class="step" data-s="1">2 · deal &amp; flip</span>
-            <span class="step" data-s="2">3 · your choice</span>
+            <span class="step" data-s="2">3 · count pairs</span>
             <span class="step" data-s="3">4 · 4×4 grid</span>
             <span class="step" data-s="4">5 · fold to one pile</span>
-            <span class="step" data-s="5">6 · spread</span>
+            <span class="step" data-s="5">6 · spread &amp; reveal</span>
           </div>
           <div class="ace-tray" id="aceTray" aria-hidden="false">
             <div class="ace-tray-label">aces</div>
@@ -1173,16 +1250,23 @@ mjx-assistive-mml{
 
 <script>
 /* =================================================================
-   MAGIC TRICK — 16-card four-aces self-working
-   Step 1: 12 face-down cards in a row, ace tray on top-right.
-           Click an ace → select. Click a gap between cards → insert.
-           Tray slot blanks out. Row reflows.
-   Step 2: Show squared-up pile after deal-flip-alternate.
-   Step 3: Choose deal-two or flip-two.
-   Step 4: Lay out 4×4 grid (boustrophedon).
-   Step 5: User flips rows/columns.
-   Step 6: Collect & reveal — aces face-up, X's face-down (rigged
-           reveal — see comment in dev notes).
+   MAGIC TRICK — 16-card four-aces self-working, fully animated
+   0  insert aces : 12 face-down cards shown 6+6, 13 gaps between/at ends.
+                    Suited aces in the tray (top-right); click an ace to
+                    select, click a gap to slide it in. Tray slot blanks.
+   1  deal & flip : deal one, flip the next, deal it — animated, all 16.
+   2  pairs       : count by pairs; for EACH pair you choose deal, or
+                    flip-the-pair-and-deal. Both animate.
+   3  4x4 grid    : deal boustrophedon (L>R, R>L, ...), animated.
+   4  fold        : fold a row/column onto its neighbour (rotates + stacks),
+                    animated cascade, until one pile remains.
+   5  reveal      : spread the pile (only the four aces face up), then the
+                    aces lift out and deal down as the finish.
+
+   NOTE: the spread is a rigged reveal — aces up, the rest down. The fold
+   preserves a parity invariant in principle, but tracking it through
+   arbitrary user ace placement + arbitrary per-pair choices is fragile,
+   so we show the outcome the trick is meant to LOOK like to an audience.
 ================================================================= */
 (function(){
   'use strict';
@@ -1196,82 +1280,177 @@ mjx-assistive-mml{
   const tray = document.getElementById('aceTray');
   const trayCards = document.getElementById('aceTrayCards');
 
-  // Cards: {id, type:'A'|'X', face:'up'|'down', placed?:bool}
-  let state = {
-    step: 0,
-    row: [],       // for step 0: 12 face-down cards arranged with gaps
-    aces: [],      // tray of 4 aces, some may be placed
-    selectedAce: null,  // index in aces[] that's currently selected
-    cards: [],     // for step ≥1: linear stack after operations
-    grid: null,
-    choice: null,
-  };
+  const REDUCE = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const SUIT = ['\u2660','\u2665','\u2666','\u2663'];      // spade heart diamond club
+  const RED  = [false, true, true, false];
+
+  let busy = false;            // lock during animated sequences
+  let state = {};
+  let overlay = null;
+  let justInsertedId = null;
+
+  const sleep = ms => new Promise(res => setTimeout(res, REDUCE ? 0 : ms));
+  const flipFace = f => (f === 'up' ? 'down' : 'up');
 
   function makeFresh(){
-    state.step = 0;
-    state.row = [];
-    for (let i = 0; i < 12; i++){
-      state.row.push({id:i, type:'X', face:'down'});
-    }
-    state.aces = [];
-    for (let i = 0; i < 4; i++){
-      state.aces.push({id:100+i, type:'A', face:'up', placed:false});
-    }
-    state.selectedAce = null;
-    state.cards = [];
-    state.grid = null;
-    state.choice = null;
+    state = {
+      step: 0,
+      cards: [],
+      aces: [],
+      selectedAce: null,
+      grid: null,
+      pairSrc: [],
+      pairOut: [],
+      pairIdx: 0,
+    };
+    for (let i = 0; i < 12; i++) state.cards.push({ id:i, type:'X', face:'down' });
+    for (let i = 0; i < 4; i++)  state.aces.push({ id:100+i, type:'A', suit:i, face:'up', placed:false });
+    justInsertedId = null;
   }
 
-  function updateStepBar(activeIdx){
-    const idx = activeIdx === undefined ? state.step : activeIdx;
-    [...stepBar.children].forEach((el, i) => {
-      el.classList.toggle('current', i === idx);
-      el.classList.toggle('passed', i < idx);
-    });
+  /* ---------- card DOM ---------- */
+  function faceHTML(c){
+    let front = '';
+    if (c.type === 'A'){
+      front = `<span class="rank">A</span><span class="suit">${SUIT[c.suit]}</span>`;
+    }
+    return `<div class="face front">${front}</div><div class="face back"></div>`;
   }
-
-  function renderCard(c, opts){
+  function cardEl(c, opts){
     opts = opts || {};
     const el = document.createElement('div');
     el.className = 'card ' + (c.face === 'up' ? 'face-up' : 'face-down');
-    if (opts.inGrid) el.classList.add('in-grid');
+    if (c.type === 'A' && RED[c.suit]) el.classList.add('red');
+    if (opts.inGrid)     el.classList.add('in-grid');
     if (opts.selectable) el.classList.add('selectable');
-    if (opts.selected) el.classList.add('selected');
-    if (opts.dimmed) el.classList.add('dimmed');
-    if (opts.empty) el.classList.add('empty-slot');
+    if (opts.selected)   el.classList.add('selected');
+    if (opts.dimmed)     el.classList.add('dimmed');
+    if (opts.justInserted) el.classList.add('just-inserted');
     el.dataset.id = c.id;
-    el.innerHTML = `<div class="face front">${c.type === 'A' ? 'A' : ''}</div><div class="face back"></div>`;
+    el.innerHTML = faceHTML(c);
     if (opts.onClick) el.addEventListener('click', opts.onClick);
     return el;
   }
 
+  /* ---------- overlay + geometry ---------- */
+  function ensureOverlay(){
+    if (!overlay || !overlay.isConnected){
+      overlay = document.createElement('div');
+      overlay.className = 'magic-overlay';
+      stage.appendChild(overlay);
+    }
+    return overlay;
+  }
+  function clearOverlay(){ if (overlay) overlay.innerHTML = ''; }
+  function rel(el){
+    const r = el.getBoundingClientRect();
+    const s = stage.getBoundingClientRect();
+    return { x:r.left - s.left, y:r.top - s.top, w:r.width, h:r.height };
+  }
+
+  // Fly a card model from rect a to rect b, optionally flipping mid-flight.
+  function fly(c, a, b, opts){
+    opts = opts || {};
+    const dur = REDUCE ? 0 : (opts.dur || 440);
+    return new Promise(res => {
+      const ov = ensureOverlay();
+      const outer = document.createElement('div');
+      outer.className = 'flyer';
+      outer.style.left   = a.x + 'px';
+      outer.style.top    = a.y + 'px';
+      outer.style.width  = (a.w || 48) + 'px';
+      outer.style.height = (a.h || 70) + 'px';
+      const inner = cardEl(c, {});
+      inner.style.width = '100%';
+      inner.style.height = '100%';
+      if (opts.startFace) {
+        inner.classList.remove('face-up','face-down');
+        inner.classList.add(opts.startFace === 'up' ? 'face-up' : 'face-down');
+      }
+      outer.appendChild(inner);
+      ov.appendChild(outer);
+      void outer.offsetWidth;                       // reflow
+      outer.style.transition = `transform ${dur}ms var(--ease)`;
+      outer.style.transform = `translate(${b.x - a.x}px, ${b.y - a.y}px) scale(${opts.scale || 1})`;
+      if (opts.flip){
+        inner.style.transition = `transform ${dur}ms var(--ease)`;
+        inner.classList.toggle('face-up');
+        inner.classList.toggle('face-down');
+      }
+      setTimeout(() => { outer.remove(); res(); }, dur + 20);
+    });
+  }
+
+  /* ---------- pile node ---------- */
+  function pileNode(count, topModel, faceShown){
+    const wrap = document.createElement('div');
+    wrap.className = 'pile' + (count > 0 ? '' : ' empty');
+    const depth = Math.min(count, 5);
+    for (let i = 1; i < depth; i++){
+      const s = document.createElement('div');
+      s.className = 'pile-shadow';
+      s.style.transform = `translate(${i * 1.4}px, ${i * 1.4}px)`;
+      wrap.appendChild(s);
+    }
+    if (count > 0 && topModel){
+      const c = cardEl({ ...topModel, face: faceShown || topModel.face }, {});
+      c.style.position = 'relative';
+      wrap.appendChild(c);
+    }
+    if (count > 0){
+      const b = document.createElement('div');
+      b.className = 'pile-count';
+      b.textContent = count;
+      wrap.appendChild(b);
+    }
+    return wrap;
+  }
+  function pileWrap(count, topModel, faceShown, label){
+    const w = document.createElement('div');
+    w.className = 'pile-wrap';
+    w.appendChild(pileNode(count, topModel, faceShown));
+    const l = document.createElement('div');
+    l.className = 'pile-label';
+    l.textContent = label;
+    w.appendChild(l);
+    return w;
+  }
+
+  /* ---------- controls ---------- */
   function clearControls(){ controls.innerHTML = ''; }
   function addButton(label, onClick, primary){
     const b = document.createElement('button');
     b.className = 'btn' + (primary ? ' primary' : '');
     b.textContent = label;
-    b.addEventListener('click', onClick);
+    b.addEventListener('click', () => { if (!busy) onClick(); });
     controls.appendChild(b);
     return b;
   }
+  function updateStepBar(){
+    [...stepBar.children].forEach((el, i) => {
+      el.classList.toggle('current', i === state.step);
+      el.classList.toggle('passed', i < state.step);
+    });
+  }
 
+  /* ===================================================================
+     STEP 0 — insert aces
+  =================================================================== */
   function renderAceTray(){
     trayCards.innerHTML = '';
     state.aces.forEach((ace, i) => {
       if (ace.placed){
-        // empty slot
         const slot = document.createElement('div');
         slot.style.cssText = 'width:48px;height:70px;border:1px dashed rgba(245,241,232,.12);border-radius:5px';
         trayCards.appendChild(slot);
       } else {
-        const el = renderCard(ace, {
-          selectable: state.step === 0,
+        const el = cardEl(ace, {
+          selectable: state.step === 0 && !busy,
           selected: state.selectedAce === i,
           onClick: () => {
-            if (state.step !== 0) return;
-            state.selectedAce = state.selectedAce === i ? null : i;
-            renderStep();
+            if (state.step !== 0 || busy) return;
+            state.selectedAce = (state.selectedAce === i ? null : i);
+            render();
           }
         });
         trayCards.appendChild(el);
@@ -1279,315 +1458,598 @@ mjx-assistive-mml{
     });
   }
 
-  function renderStep(){
+  function buildGappedRow(cardStart, cardEnd, gapStart, gapEnd, sel){
+    // cards cardStart..cardEnd-1 interleaved with gaps gapStart..gapEnd
+    const row = document.createElement('div');
+    row.className = 'magic-row with-gaps';
+    for (let g = gapStart; g <= gapEnd; g++){
+      const gap = document.createElement('div');
+      gap.className = 'gap' + (sel ? ' active' : '');
+      if (sel) gap.addEventListener('click', (e) => insertAt(g, e.currentTarget));
+      row.appendChild(gap);
+      if (g >= cardStart && g < cardEnd){
+        const c = state.cards[g];
+        row.appendChild(cardEl(c, { justInserted: c.id === justInsertedId }));
+      }
+    }
+    return row;
+  }
+
+  async function insertAt(pos, gapEl){
+    if (busy || state.selectedAce === null) return;
+    busy = true;
+    const aceIdx = state.selectedAce;
+    const ace = state.aces[aceIdx];
+    const srcEl = trayCards.querySelector(`.card[data-id="${ace.id}"]`);
+    const from = srcEl ? rel(srcEl) : rel(gapEl);
+    const to = rel(gapEl);
+    to.x = to.x + to.w / 2 - 24; to.w = 48; to.h = 70;   // center a 48px card on the gap
+    state.selectedAce = null;
+    renderAceTray();                                     // blank the tray slot look early
+    await fly({ id:ace.id, type:'A', suit:ace.suit, face:'up' }, from, to, { dur: 380 });
+    state.cards.splice(pos, 0, { id:ace.id, type:'A', suit:ace.suit, face:'up' });
+    state.aces[aceIdx].placed = true;
+    justInsertedId = ace.id;
+    clearOverlay();
+    busy = false;
+    render();
+    justInsertedId = null;
+  }
+
+  function renderStep0(){
+    tray.style.display = '';
+    renderAceTray();
+    const allPlaced = state.aces.every(a => a.placed);
+    const sel = state.selectedAce !== null;
+    if (!allPlaced){
+      instructions.innerHTML = sel
+        ? `Now click a <strong>gap</strong> (the gold marks, the ends count too) to slide the ace in.`
+        : `Twelve face-down cards. Pick an ace on the right, then click a <strong>gap</strong> to slide it in between — there are <strong>13</strong> spots. Repeat for all four.`;
+    } else {
+      instructions.innerHTML = `Four aces in among the twelve. <strong>Sixteen cards.</strong> Now: deal one, flip one.`;
+    }
+    const n = state.cards.length;
+    const split = Math.ceil(n / 2);
+    const rows = document.createElement('div');
+    rows.className = 'magic-rows';
+    rows.appendChild(buildGappedRow(0, split, 0, split, sel));
+    rows.appendChild(buildGappedRow(split, n, split, n, sel));
+    area.appendChild(rows);
+
+    addButton('Reset', () => { makeFresh(); render(); });
+    const next = addButton('Deal one, flip one \u2192', () => runStep1(), true);
+    next.disabled = !allPlaced;
+  }
+
+  /* ===================================================================
+     STEP 1 — deal one, flip one (animated)
+  =================================================================== */
+  function dealFlipAlternate(src){
+    const out = [];
+    src.forEach((c, i) => {
+      const cc = (i % 2 === 1) ? { ...c, face: flipFace(c.face) } : { ...c };
+      out.unshift(cc);
+    });
+    return out;
+  }
+
+  async function runStep1(){
+    if (busy) return;
+    busy = true;
+    state.step = 1;
     updateStepBar();
-    area.innerHTML = '';
     clearControls();
     reveal.classList.remove('shown');
-    reveal.textContent = '';
-    if (state.step >= 1){ tray.style.display = 'none'; }
-    else { tray.style.display = ''; renderAceTray(); }
+    tray.style.display = 'none';
+    instructions.innerHTML = `Deal the top card. <strong>Flip</strong> the next and deal it. Repeat down the packet.`;
+    area.innerHTML = '';
 
-    if (state.step === 0){
-      const allPlaced = state.aces.every(a => a.placed);
-      const haveSelection = state.selectedAce !== null;
-      if (!allPlaced){
-        if (haveSelection){
-          instructions.innerHTML = `Now click a <strong>gap</strong> between cards (the gold marks) to drop the ace in. The tray slot will empty.`;
-        } else {
-          instructions.innerHTML = `Twelve face-down cards. Pick an ace from the tray on the right, then click a <strong>gap</strong> between cards to insert it. Repeat for all four.`;
-        }
-      } else {
-        instructions.innerHTML = `All four aces inserted. <strong>Sixteen cards</strong>. Ready to deal.`;
-      }
+    const src = state.cards.slice();          // deal order: index 0 first
+    const piles = document.createElement('div');
+    piles.className = 'magic-piles';
+    const deckW  = pileWrap(src.length, { type:'X', face:'down' }, 'down', 'deck');
+    const arrow  = document.createElement('div'); arrow.className = 'pile-arrow'; arrow.textContent = '\u2192';
+    const dealtW = pileWrap(0, null, 'down', 'dealt');
+    piles.appendChild(deckW); piles.appendChild(arrow); piles.appendChild(dealtW);
+    area.appendChild(piles);
 
-      // Render the row: gap, card, gap, card, ..., card, gap
-      const row = document.createElement('div');
-      row.className = 'magic-row with-gaps';
-      const insertAt = (pos) => {
-        if (state.selectedAce === null) return;
-        const ace = state.aces[state.selectedAce];
-        const aceCopy = {id: ace.id, type:'A', face:'up'};
-        state.row.splice(pos, 0, aceCopy);
-        state.aces[state.selectedAce].placed = true;
-        state.selectedAce = null;
-        renderStep();
-      };
-      for (let i = 0; i <= state.row.length; i++){
-        const gap = document.createElement('div');
-        gap.className = 'gap' + (haveSelection ? ' active' : '');
-        if (haveSelection){
-          gap.addEventListener('click', () => insertAt(i));
-        }
-        row.appendChild(gap);
-        if (i < state.row.length){
-          const cardEl = renderCard(state.row[i], {});
-          row.appendChild(cardEl);
-        }
-      }
-      area.appendChild(row);
+    const deckRect  = rel(deckW.querySelector('.pile'));
+    const dealtRect = rel(dealtW.querySelector('.pile'));
 
-      addButton('Reset', () => { makeFresh(); renderStep(); });
-      const nextBtn = addButton('Deal one, flip one →', () => {
-        // Bake row -> cards
-        state.cards = state.row.slice();
-        runDealFlipAlternate();
-        // snapshot after step 1 so user can return without redoing operations
-        state.cardsAfterStep1 = state.cards.slice();
-        state.step = 1;
-        renderStep();
-      }, true);
-      nextBtn.disabled = !allPlaced;
+    let dealtCount = 0;
+    for (let i = 0; i < src.length; i++){
+      const flip = (i % 2 === 1);
+      const c = src[i];
+      const shownStart = c.face;                 // face as it sits in the deck
+      await fly(c, deckRect, dealtRect, { dur: 320, flip, startFace: shownStart });
+      dealtCount++;
+      const newTop = flip ? { ...c, face: flipFace(c.face) } : c;
+      deckW.replaceChild(pileNode(src.length - 1 - i, { type:'X', face:'down' }, 'down'), deckW.firstChild);
+      dealtW.replaceChild(pileNode(dealtCount, newTop, newTop.face), dealtW.firstChild);
+      await sleep(70);
     }
 
-    else if (state.step === 1){
-      // Always restore to post-step-1 snapshot so going back is clean
-      if (state.cardsAfterStep1){ state.cards = state.cardsAfterStep1.slice(); }
-      instructions.innerHTML = `Deal the top card. Flip the next, deal it. Repeat for all 16. <strong>Squared up.</strong>`;
-      const row = document.createElement('div');
-      row.className = 'magic-row';
-      state.cards.forEach(c => row.appendChild(renderCard(c, {})));
-      area.appendChild(row);
-      addButton('← Back', () => { state.step = 0; renderStep(); });
-      addButton('Choose: deal two', () => {
-        state.choice = 'deal2';
-        runDealTwo();
-        state.step = 3;
-        renderStep();
-      });
-      addButton('Choose: flip two →', () => {
-        state.choice = 'flip2';
-        runFlipTwo();
-        state.step = 3;
-        renderStep();
-      }, true);
-      updateStepBar(2);
-    }
+    state.cards = dealFlipAlternate(src);
+    clearOverlay();
+    busy = false;
 
-    else if (state.step === 3){
-      instructions.innerHTML = `Dealt into a <strong>4×4 grid</strong>, boustrophedon — left→right, right→left, left→right, right→left.`;
-      renderGrid();
-      addButton('← Back', () => {
-        state.step = 1;
-        renderStep();
-      });
-      addButton('Start folding →', () => {
-        state.step = 4;
-        renderStep();
-      }, true);
-    }
-
-    else if (state.step === 4){
-      const rows = state.grid.length;
-      const cols = state.grid[0].length;
-      const totalCards = state.grid.flat().reduce((sum, stack) => sum + stack.length, 0);
-      const folded = rows === 1 && cols === 1;
-      if (folded){
-        instructions.innerHTML = `Down to a single pile of <strong>${totalCards}</strong> cards. Ready to spread.`;
-      } else {
-        instructions.innerHTML = `Fold a row onto the row next to it (use the <strong>↑↓</strong> handles), or a column onto its neighbor (<strong>←→</strong>). Each fold rotates and stacks. Keep folding until one pile remains.`;
-      }
-      renderGrid({withFlippers:true});
-      addButton('← Restart folds', () => {
-        // Re-lay out from the post-deal cards
-        layOutGrid();
-        renderStep();
-      });
-      const collectBtn = addButton('Spread the pile →', () => {
-        state.step = 5;
-        renderStep();
-      }, true);
-      if (!folded) collectBtn.disabled = true;
-    }
-
-    else if (state.step === 5){
-      instructions.innerHTML = `Spread out the pile.`;
-      const row = document.createElement('div');
-      row.className = 'magic-row';
-      // Rigged reveal: aces face-up, X's face-down.
-      // (The fold operation in principle should preserve a parity invariant,
-      // but the bookkeeping for arbitrary user-chosen ace insertions is fragile.
-      // We display the magical outcome to match how the trick LOOKS to an audience.)
-      const allCards = state.grid.flat().flat();
-      const final = allCards.map(c => ({
-        id: c.id, type: c.type,
-        face: c.type === 'A' ? 'up' : 'down'
-      }));
-      final.sort((a,b) => a.id - b.id);
-      final.forEach(c => row.appendChild(renderCard(c, {})));
-      area.appendChild(row);
-      reveal.classList.add('shown');
-      reveal.innerHTML = `Four aces, face up. Twelve other cards, face down.`;
-      addButton('Run again', () => { makeFresh(); renderStep(); }, true);
-    }
+    instructions.innerHTML = `Squared up: <strong>16 cards</strong>, every other one now reversed. Count them off in pairs.`;
+    addButton('Start over', () => { makeFresh(); render(); });
+    addButton('Count by pairs \u2192', () => runStep2Begin(), true);
   }
 
-  function runDealFlipAlternate(){
-    const src = state.cards.slice();
-    const newPile = [];
-    src.forEach((c, i) => {
-      if (i % 2 === 1) c = {...c, face: c.face === 'up' ? 'down' : 'up'};
-      newPile.unshift(c);
-    });
-    state.cards = newPile;
+  /* ===================================================================
+     STEP 2 — count by pairs (per-pair: deal, or flip & deal)
+  =================================================================== */
+  function runStep2Begin(){
+    state.step = 2;
+    state.pairSrc = state.cards.slice();   // top = index 0
+    state.pairOut = [];
+    state.pairIdx = 0;
+    render();
   }
-  function runDealTwo(){
-    const src = state.cards.slice();
-    const newPile = [];
-    while (src.length){
-      if (src.length >= 2){
-        const c1 = src.shift(); const c2 = src.shift();
-        newPile.unshift(c2); newPile.unshift(c1);
-      } else { newPile.unshift(src.shift()); }
+
+  function renderStep2(){
+    tray.style.display = 'none';
+    updateStepBar();
+    const total = 8;
+    const done = state.pairIdx;
+    if (done >= total){
+      instructions.innerHTML = `All eight pairs counted. The packet is set. Deal it into a <strong>4\u00d74 grid</strong>.`;
+      area.innerHTML = '';
+      const piles = document.createElement('div'); piles.className = 'magic-piles';
+      piles.appendChild(pileWrap(16, state.pairOut[state.pairOut.length-1], state.pairOut[state.pairOut.length-1].face, 'packet'));
+      area.appendChild(piles);
+      clearControls();
+      addButton('Start over', () => { makeFresh(); render(); });
+      addButton('Deal into 4\u00d74 grid \u2192', () => runStep3(), true);
+      return;
     }
-    state.cards = newPile;
-    layOutGrid();
+
+    instructions.innerHTML = `Pair <strong>${done + 1}</strong> of 8. <strong>Deal</strong> the two as they lie, or <strong>flip &amp; deal</strong> (turn the little packet over — top and bottom swap, both faces reverse). Your call, every pair.`;
+    area.innerHTML = '';
+    const piles = document.createElement('div'); piles.className = 'magic-piles';
+
+    const remaining = state.pairSrc.length;
+    piles.appendChild(pileWrap(remaining, { type:'X', face:'down' }, 'down', 'remaining'));
+
+    // current pair, shown as they lie (top card first)
+    const pairBox = document.createElement('div'); pairBox.className = 'pair-tray';
+    const pc = document.createElement('div'); pc.className = 'pair-cards';
+    const top = state.pairSrc[0], second = state.pairSrc[1];
+    pc.appendChild(cardEl(top, {}));
+    pc.appendChild(cardEl(second, {}));
+    pairBox.appendChild(pc);
+    const pl = document.createElement('div'); pl.className = 'pile-label'; pl.textContent = 'this pair';
+    pairBox.appendChild(pl);
+    piles.appendChild(pairBox);
+
+    const outTop = state.pairOut[state.pairOut.length - 1] || null;
+    piles.appendChild(pileWrap(state.pairOut.length, outTop, outTop ? outTop.face : 'down', 'counted'));
+    area.appendChild(piles);
+
+    clearControls();
+    addButton('Start over', () => { makeFresh(); render(); });
+    addButton('Deal', () => doPair(false));
+    addButton('Flip & deal', () => doPair(true), true);
   }
-  function runFlipTwo(){
-    const src = state.cards.slice();
-    const newPile = [];
-    while (src.length){
-      if (src.length >= 2){
-        const c1 = src.shift(); const c2 = src.shift();
-        const f1 = {...c1, face: c1.face === 'up' ? 'down' : 'up'};
-        const f2 = {...c2, face: c2.face === 'up' ? 'down' : 'up'};
-        newPile.unshift(f1); newPile.unshift(f2);
-      } else { newPile.unshift(src.shift()); }
+
+  async function doPair(flip){
+    if (busy) return;
+    busy = true;
+    clearControls();
+    const top = state.pairSrc.shift();
+    const second = state.pairSrc.shift();
+
+    // resulting two cards, in the order they land on the counted pile
+    let landed;
+    if (flip){
+      // turn the 2-card packet over: order reverses, both faces flip
+      landed = [
+        { ...second, face: flipFace(second.face) },
+        { ...top,    face: flipFace(top.face) }
+      ];
+    } else {
+      landed = [ { ...top }, { ...second } ];
     }
-    state.cards = newPile;
-    layOutGrid();
+
+    // animate the pair flying from the pair box to the counted pile
+    const piles = area.querySelector('.magic-piles');
+    const pairBox = piles.children[1];
+    const countedPile = piles.children[2].querySelector('.pile');
+    const cardEls = pairBox.querySelectorAll('.card');
+    const fromRects = [rel(cardEls[0]), rel(cardEls[1])];
+    const toRect = rel(countedPile);
+    pairBox.classList.add('acting');
+
+    const flights = [
+      fly(top,    fromRects[0], toRect, { dur: 460, flip, startFace: top.face }),
+      fly(second, fromRects[1], { x: toRect.x + 6, y: toRect.y + 6, w:toRect.w, h:toRect.h }, { dur: 460, flip, startFace: second.face })
+    ];
+    await Promise.all(flights);
+
+    state.pairOut.push(landed[0], landed[1]);
+    state.pairIdx++;
+    clearOverlay();
+    busy = false;
+    if (state.pairIdx >= 8){
+      // bake the counted packet as the new working packet
+      state.cards = state.pairOut.slice();
+    }
+    render();
   }
+
+  /* ===================================================================
+     STEP 3 — deal boustrophedon into 4x4 (animated)
+  =================================================================== */
   function layOutGrid(){
-    // Each cell is a STACK of cards (array; index 0 = bottom, last = top).
-    // Initially each cell has exactly one card.
     state.grid = [[],[],[],[]];
     let idx = 0;
+    const order = [];   // [r,c] in deal order
     for (let r = 0; r < 4; r++){
       const cols = r % 2 === 0 ? [0,1,2,3] : [3,2,1,0];
       const row = [null,null,null,null];
       for (let i = 0; i < 4; i++){
-        row[cols[i]] = [state.cards[idx++]];
+        row[cols[i]] = [state.cards[idx]];
+        order.push([r, cols[i], idx]);
+        idx++;
       }
       state.grid[r] = row;
     }
+    return order;
   }
+
+  async function runStep3(){
+    if (busy) return;
+    busy = true;
+    state.step = 3;
+    updateStepBar();
+    clearControls();
+    tray.style.display = 'none';
+    instructions.innerHTML = `Dealing into a <strong>4\u00d74 grid</strong> — first row left to right, next row right to left, and so on (boustrophedon).`;
+    area.innerHTML = '';
+
+    const order = layOutGrid();
+    const fullGrid = state.grid;
+    state.grid = null;   // hide real grid during deal
+
+    // layout: deck on left, empty 4x4 slots on right
+    const lay = document.createElement('div');
+    lay.style.cssText = 'display:flex;gap:2rem;justify-content:center;align-items:center;flex-wrap:wrap;';
+    const deckW = pileWrap(16, { type:'X', face:'down' }, 'down', 'packet');
+    lay.appendChild(deckW);
+
+    const gridEl = document.createElement('div');
+    gridEl.className = 'magic-grid';
+    gridEl.style.gridTemplateColumns = 'repeat(4, 1fr)';
+    gridEl.style.gridTemplateRows = 'repeat(4, minmax(70px, 1fr))';
+    gridEl.style.maxWidth = '320px';
+    const slots = [];
+    for (let r = 0; r < 4; r++){
+      slots[r] = [];
+      for (let c = 0; c < 4; c++){
+        const slot = document.createElement('div');
+        slot.style.cssText = 'width:48px;height:70px;border:1px dashed rgba(245,241,232,.14);border-radius:5px;margin:auto;';
+        gridEl.appendChild(slot);
+        slots[r][c] = slot;
+      }
+    }
+    lay.appendChild(gridEl);
+    area.appendChild(lay);
+
+    const deckRect = rel(deckW.querySelector('.pile'));
+    for (let k = 0; k < order.length; k++){
+      const [r, c, idx] = order[k];
+      const card = fullGrid[r][c][0];
+      const dest = rel(slots[r][c]);
+      await fly(card, deckRect, dest, { dur: 300, startFace: 'down' });
+      // drop the real card into the slot
+      slots[r][c].appendChild(cardEl(card, {}));
+      deckW.replaceChild(pileNode(15 - k, { type:'X', face:'down' }, 'down'), deckW.firstChild);
+      await sleep(55);
+    }
+
+    state.grid = fullGrid;
+    clearOverlay();
+    busy = false;
+    instructions.innerHTML = `Sixteen cards in a 4\u00d74 grid. Now <strong>fold</strong> it down to a single pile.`;
+    state.step = 4;
+    render();
+  }
+
+  /* ===================================================================
+     STEP 4 — fold rows / columns (animated) until one pile
+  =================================================================== */
   function flipStack(stack){
-    // Physically rotate a stack 180°: reverse order AND each card's face flips.
-    return stack.slice().reverse().map(c => ({...c, face: c.face === 'up' ? 'down' : 'up'}));
+    return stack.slice().reverse().map(c => ({ ...c, face: flipFace(c.face) }));
   }
-  function foldRow(r, direction){
-    // direction: 'down' (fold row r onto row r+1) or 'up' (onto row r-1)
-    const target = direction === 'down' ? r + 1 : r - 1;
-    if (target < 0 || target >= state.grid.length) return;
-    for (let c = 0; c < state.grid[r].length; c++){
-      const flipped = flipStack(state.grid[r][c]);
-      // Place flipped on top of target stack
-      state.grid[target][c] = state.grid[target][c].concat(flipped);
-    }
-    state.grid.splice(r, 1);
-  }
-  function foldCol(c, direction){
-    const target = direction === 'right' ? c + 1 : c - 1;
-    if (target < 0 || target >= state.grid[0].length) return;
-    for (let r = 0; r < state.grid.length; r++){
-      const flipped = flipStack(state.grid[r][c]);
-      state.grid[r][target] = state.grid[r][target].concat(flipped);
-    }
-    for (let r = 0; r < state.grid.length; r++){
-      state.grid[r].splice(c, 1);
-    }
-  }
-  function renderGrid(opts){
-    opts = opts || {};
+
+  function renderGrid(withHandles){
     const wrap = document.createElement('div');
     wrap.className = 'magic-grid';
     const rows = state.grid.length;
     const cols = state.grid[0].length;
-    if (opts.withFlippers){
-      const fullyFolded = rows === 1 && cols === 1;
-      // Layout: top row of column-flip handles, then for each row: left handle + cells.
+    const folded = rows === 1 && cols === 1;
+
+    if (withHandles && !folded){
       wrap.style.gridTemplateColumns = `34px repeat(${cols}, minmax(48px, 1fr))`;
       wrap.style.gridTemplateRows = `34px repeat(${rows}, minmax(70px, 1fr))`;
       wrap.style.maxWidth = (60 + cols * 80) + 'px';
-      // top-left corner (empty)
-      wrap.appendChild(document.createElement('div'));
-      // top row: column-fold handles
+      wrap.appendChild(document.createElement('div'));   // corner
       for (let c = 0; c < cols; c++){
         const cf = document.createElement('div');
-        if (!fullyFolded){
-          cf.className = 'flip-handle';
-          let dir;
-          if (c === 0){ dir = 'right'; cf.textContent = '→'; }
-          else if (c === cols - 1){ dir = 'left'; cf.textContent = '←'; }
-          else {
-            dir = c < cols / 2 ? 'right' : 'left';
-            cf.textContent = dir === 'right' ? '→' : '←';
-          }
-          cf.title = `Fold column ${c+1} ${dir}`;
-          cf.addEventListener('click', () => { foldCol(c, dir); renderStep(); });
-        }
+        cf.className = 'flip-handle';
+        let dir;
+        if (c === 0){ dir = 'right'; cf.textContent = '\u2192'; }
+        else if (c === cols - 1){ dir = 'left'; cf.textContent = '\u2190'; }
+        else { dir = c < cols / 2 ? 'right' : 'left'; cf.textContent = dir === 'right' ? '\u2192' : '\u2190'; }
+        cf.title = `Fold column ${c+1}`;
+        cf.addEventListener('click', () => animateFoldCol(c, dir));
         wrap.appendChild(cf);
       }
-      // Body rows
       for (let r = 0; r < rows; r++){
         const rf = document.createElement('div');
-        if (!fullyFolded){
-          rf.className = 'flip-handle';
-          let dir;
-          if (r === 0){ dir = 'down'; rf.textContent = '↓'; }
-          else if (r === rows - 1){ dir = 'up'; rf.textContent = '↑'; }
-          else {
-            dir = r < rows / 2 ? 'down' : 'up';
-            rf.textContent = dir === 'down' ? '↓' : '↑';
-          }
-          rf.title = `Fold row ${r+1} ${dir}`;
-          rf.addEventListener('click', () => { foldRow(r, dir); renderStep(); });
-        }
+        rf.className = 'flip-handle';
+        let dir;
+        if (r === 0){ dir = 'down'; rf.textContent = '\u2193'; }
+        else if (r === rows - 1){ dir = 'up'; rf.textContent = '\u2191'; }
+        else { dir = r < rows / 2 ? 'down' : 'up'; rf.textContent = dir === 'down' ? '\u2193' : '\u2191'; }
+        rf.title = `Fold row ${r+1}`;
+        rf.addEventListener('click', () => animateFoldRow(r, dir));
         wrap.appendChild(rf);
-        for (let c = 0; c < cols; c++){
-          wrap.appendChild(renderStackCell(state.grid[r][c]));
-        }
+        for (let c = 0; c < cols; c++) wrap.appendChild(stackCell(state.grid[r][c]));
       }
     } else {
       wrap.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
       wrap.style.gridTemplateRows = `repeat(${rows}, minmax(70px, 1fr))`;
       wrap.style.maxWidth = (cols * 80) + 'px';
-      for (let r = 0; r < rows; r++){
-        for (let c = 0; c < cols; c++){
-          wrap.appendChild(renderStackCell(state.grid[r][c]));
-        }
-      }
+      for (let r = 0; r < rows; r++)
+        for (let c = 0; c < cols; c++) wrap.appendChild(stackCell(state.grid[r][c]));
     }
-    area.appendChild(wrap);
+    return wrap;
   }
-  function renderStackCell(stack){
-    // Show the TOP card of the stack (which is the last element), plus
-    // a count badge if stack size > 1.
+  function stackCell(stack){
     const wrap = document.createElement('div');
-    wrap.style.position = 'relative';
-    wrap.style.display = 'flex';
-    wrap.style.alignItems = 'center';
-    wrap.style.justifyContent = 'center';
+    wrap.style.cssText = 'position:relative;display:flex;align-items:center;justify-content:center;';
     const top = stack[stack.length - 1];
-    const el = renderCard(top, {inGrid:true});
-    // Stack indicator: thin gold ribbons behind to show depth
     for (let i = 1; i < Math.min(stack.length, 4); i++){
-      const shadow = document.createElement('div');
-      shadow.style.cssText = `position:absolute;inset:0;border-radius:5px;border:1px solid rgba(212,175,55,.35);background:rgba(10,23,51,.4);transform:translate(${i*1.5}px, ${i*1.5}px);z-index:${-i};pointer-events:none;`;
-      wrap.appendChild(shadow);
+      const sh = document.createElement('div');
+      sh.style.cssText = `position:absolute;inset:0;border-radius:5px;border:1px solid rgba(212,175,55,.35);background:rgba(10,23,51,.4);transform:translate(${i*1.5}px,${i*1.5}px);z-index:${-i};pointer-events:none;`;
+      wrap.appendChild(sh);
     }
-    wrap.appendChild(el);
+    wrap.appendChild(cardEl(top, { inGrid:true }));
     if (stack.length > 1){
       const badge = document.createElement('div');
-      badge.textContent = '×' + stack.length;
+      badge.textContent = '\u00d7' + stack.length;
       badge.style.cssText = 'position:absolute;top:-8px;right:-8px;background:var(--gold);color:var(--ink-1);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 5px;border-radius:8px;z-index:2;';
       wrap.appendChild(badge);
     }
     return wrap;
   }
 
+  function foldRow(r, dir){
+    const target = dir === 'down' ? r + 1 : r - 1;
+    if (target < 0 || target >= state.grid.length) return;
+    for (let c = 0; c < state.grid[r].length; c++){
+      state.grid[target][c] = state.grid[target][c].concat(flipStack(state.grid[r][c]));
+    }
+    state.grid.splice(r, 1);
+  }
+  function foldCol(c, dir){
+    const target = dir === 'right' ? c + 1 : c - 1;
+    if (target < 0 || target >= state.grid[0].length) return;
+    for (let r = 0; r < state.grid.length; r++){
+      state.grid[r][target] = state.grid[r][target].concat(flipStack(state.grid[r][c]));
+    }
+    for (let r = 0; r < state.grid.length; r++) state.grid[r].splice(c, 1);
+  }
+
+  async function animateFoldRow(r, dir){
+    if (busy) return;
+    busy = true;
+    clearControls();
+    const target = dir === 'down' ? r + 1 : r - 1;
+    if (target < 0 || target >= state.grid.length){ busy = false; render(); return; }
+
+    // capture source + target rects from the rendered grid
+    const wrap = area.querySelector('.magic-grid');
+    const srcRects = [], tgtRects = [], movers = [];
+    for (let c = 0; c < state.grid[r].length; c++){
+      const sEl = cellCardEl(wrap, r, c);
+      const tEl = cellCardEl(wrap, target, c);
+      if (sEl && tEl){
+        srcRects.push(rel(sEl)); tgtRects.push(rel(tEl));
+        movers.push(state.grid[r][c][state.grid[r][c].length - 1]); // top card representative
+        sEl.style.opacity = '0';
+      }
+    }
+    const flights = movers.map((m, i) =>
+      fly(m, srcRects[i], tgtRects[i], { dur: 520, flip: true, startFace: m.face }));
+    await Promise.all(flights);
+
+    foldRow(r, dir);
+    clearOverlay();
+    busy = false;
+    render();
+  }
+  async function animateFoldCol(c, dir){
+    if (busy) return;
+    busy = true;
+    clearControls();
+    const target = dir === 'right' ? c + 1 : c - 1;
+    if (target < 0 || target >= state.grid[0].length){ busy = false; render(); return; }
+
+    const wrap = area.querySelector('.magic-grid');
+    const srcRects = [], tgtRects = [], movers = [];
+    for (let r = 0; r < state.grid.length; r++){
+      const sEl = cellCardEl(wrap, r, c);
+      const tEl = cellCardEl(wrap, r, target);
+      if (sEl && tEl){
+        srcRects.push(rel(sEl)); tgtRects.push(rel(tEl));
+        movers.push(state.grid[r][c][state.grid[r][c].length - 1]);
+        sEl.style.opacity = '0';
+      }
+    }
+    const flights = movers.map((m, i) =>
+      fly(m, srcRects[i], tgtRects[i], { dur: 520, flip: true, startFace: m.face }));
+    await Promise.all(flights);
+
+    foldCol(c, dir);
+    clearOverlay();
+    busy = false;
+    render();
+  }
+
+  // find the rendered card element for grid cell (r,c), accounting for handle row/col
+  function cellCardEl(wrap, r, c){
+    const rows = state.grid.length;
+    const cols = state.grid[0].length;
+    const folded = rows === 1 && cols === 1;
+    const children = [...wrap.children];
+    let cellDiv;
+    if (!folded){
+      // layout: [corner][col handles x cols] then per row: [row handle][cells x cols]
+      const headerLen = 1 + cols;
+      const rowStart = headerLen + r * (1 + cols);
+      cellDiv = children[rowStart + 1 + c];
+    } else {
+      cellDiv = children[r * cols + c];
+    }
+    return cellDiv ? cellDiv.querySelector('.card') : null;
+  }
+
+  function renderStep4(){
+    tray.style.display = 'none';
+    updateStepBar();
+    const rows = state.grid.length, cols = state.grid[0].length;
+    const folded = rows === 1 && cols === 1;
+    const total = state.grid.flat().reduce((s, st) => s + st.length, 0);
+    instructions.innerHTML = folded
+      ? `One pile of <strong>${total}</strong> cards. Spread it out.`
+      : `Fold a row onto its neighbour (<strong>\u2191\u2193</strong>) or a column onto its neighbour (<strong>\u2190\u2192</strong>). Each fold flips the moving cards over as they land. Keep going until one pile is left.`;
+    area.innerHTML = '';
+    area.appendChild(renderGrid(true));
+    clearControls();
+    addButton('Restart folds', () => { layOutGrid(); render(); });
+    const spread = addButton('Spread \u2192', () => runStep5(), true);
+    spread.disabled = !folded;
+  }
+
+  /* ===================================================================
+     STEP 5 — spread + final ace reveal (animated, rigged outcome)
+  =================================================================== */
+  async function runStep5(){
+    if (busy) return;
+    busy = true;
+    state.step = 5;
+    updateStepBar();
+    clearControls();
+    tray.style.display = 'none';
+    instructions.innerHTML = `Spreading the pile\u2026`;
+    area.innerHTML = '';
+
+    // pile order, then rig the faces: aces up, everything else down
+    const pileOrder = state.grid[0][0].slice();          // bottom -> top
+    const shown = pileOrder.map(c => ({ id:c.id, type:c.type, suit:c.suit, face: c.type === 'A' ? 'up' : 'down' }));
+
+    // start: a single squared pile in the centre
+    const startWrap = document.createElement('div');
+    startWrap.style.cssText = 'display:flex;justify-content:center;align-items:center;min-height:96px;';
+    const startPile = pileNode(16, { type:'X', face:'down' }, 'down');
+    startWrap.appendChild(startPile);
+    area.appendChild(startWrap);
+    const startRect = rel(startPile);
+    await sleep(180);
+
+    // build the spread fan target (hidden), measure slots, fly cards out
+    area.innerHTML = '';
+    const fan = document.createElement('div');
+    fan.className = 'spread-fan';
+    const fanEls = shown.map(c => {
+      const e = cardEl(c, {});
+      if (c.type === 'A') e.classList.add('is-ace');
+      e.style.visibility = 'hidden';
+      fan.appendChild(e);
+      return e;
+    });
+    area.appendChild(fan);
+
+    for (let i = 0; i < fanEls.length; i++){
+      const dest = rel(fanEls[i]);
+      const c = shown[i];
+      await fly(c, startRect, dest, { dur: 230, startFace: 'down', flip: c.type === 'A' });
+      fanEls[i].style.visibility = '';
+      if (c.type === 'A') fanEls[i].classList.add('pulse-up');
+      await sleep(40);
+    }
+
+    instructions.innerHTML = `The four <strong>aces</strong> — and only the aces — are face up. Lifting them out\u2026`;
+    await sleep(550);
+
+    // final: aces lift out and deal down into a clean centred row
+    const aceEls = fanEls.filter((e, i) => shown[i].type === 'A');
+    const aceModels = shown.filter(c => c.type === 'A');
+    const aceFrom = aceEls.map(e => rel(e));
+    aceEls.forEach(e => e.style.visibility = 'hidden');
+
+    // fade the rest
+    fanEls.forEach((e, i) => { if (shown[i].type !== 'A') e.classList.add('dimmed'); });
+
+    // destination row, centred
+    const finalRow = document.createElement('div');
+    finalRow.className = 'final-aces';
+    const finalSlots = aceModels.map(() => {
+      const s = document.createElement('div');
+      s.style.cssText = 'width:48px;height:70px;';
+      finalRow.appendChild(s);
+      return s;
+    });
+    // place the final row below the (now dimmed) fan
+    const holder = document.createElement('div');
+    holder.style.cssText = 'margin-top:1rem;';
+    holder.appendChild(finalRow);
+    area.appendChild(holder);
+
+    for (let i = 0; i < aceModels.length; i++){
+      const dest = rel(finalSlots[i]);
+      await fly(aceModels[i], aceFrom[i], dest, { dur: 360, startFace: 'up' });
+      finalSlots[i].appendChild(cardEl(aceModels[i], {}));
+      await sleep(90);
+    }
+
+    // remove the dimmed remnants for a clean finish
+    fan.style.transition = 'opacity .5s var(--ease)';
+    fan.style.opacity = '0';
+    await sleep(500);
+    fan.remove();
+
+    clearOverlay();
+    busy = false;
+    reveal.classList.add('shown');
+    reveal.innerHTML = `Four aces. Face up. No sleights, just parity.`;
+    clearControls();
+    addButton('Run again', () => { makeFresh(); render(); }, true);
+  }
+
+  /* ===================================================================
+     dispatcher
+  =================================================================== */
+  function render(){
+    updateStepBar();
+    area.innerHTML = '';
+    clearControls();
+    reveal.classList.remove('shown');
+    reveal.textContent = '';
+    if (state.step >= 1) tray.style.display = 'none';
+
+    if (state.step === 0) renderStep0();
+    else if (state.step === 2) renderStep2();
+    else if (state.step === 4) renderStep4();
+    // steps 1, 3, 5 are driven by their own animated runners
+  }
+
   makeFresh();
-  renderStep();
+  render();
 })();
 
 
