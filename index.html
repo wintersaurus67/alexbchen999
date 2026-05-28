@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Alexander B. Chen</title>
-<meta name="description" content="Personal site of Alexander B. Chen — competition math, research, swimming, piano, ski. Heading to the Ross Mathematics Program, 2026." />
+<meta name="description" content="Personal site of Alexander B. Chen — math, swimming, piano. Heading to the Ross Mathematics Program, summer 2026." />
 <meta name="theme-color" content="#0a1733" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,7 +26,6 @@
 }
 .hero-meta .left{max-width:24ch;line-height:1.6}
 .hero-meta .right{text-align:right}
-
 .hero-name{
   font-family:var(--serif);
   font-weight:300;
@@ -48,7 +47,6 @@
   0%{transform:translateY(110%);opacity:0}
   100%{transform:translateY(0);opacity:1}
 }
-
 .hero-tag{
   display:flex;align-items:baseline;flex-wrap:wrap;gap:.6em;
   font-family:var(--serif);font-style:italic;font-weight:300;
@@ -83,7 +81,6 @@
   0%{opacity:0;transform:translateY(20px)}
   100%{opacity:1;transform:none}
 }
-
 .hero-line{
   display:flex;justify-content:space-between;align-items:flex-end;
   gap:2rem;flex-wrap:wrap;
@@ -94,7 +91,7 @@
   font-family:var(--serif);
   font-size:clamp(1.05rem, 1.5vw, 1.3rem);
   font-style:italic;color:var(--paper-dim);
-  max-width:42ch;line-height:1.55;margin:0;
+  max-width:46ch;line-height:1.55;margin:0;
 }
 .hero-positioning::first-letter{
   font-size:1.6em;font-style:normal;color:var(--gold);margin-right:.05em;
@@ -118,7 +115,6 @@
   50%{transform:translateX(0)}
   100%{transform:translateX(100%)}
 }
-
 .index{
   padding:var(--pad-y) var(--pad-x);
   border-top:1px solid var(--rule);position:relative;
@@ -165,12 +161,10 @@
 </style>
 </head>
 <body>
-
 <div class="bg-symbols" aria-hidden="true"></div>
 <div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
 <div class="cursor-ring" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
-
 <header class="site-header">
   <a class="brand" href="index.html" data-cursor="hover">
     <span class="brand-mark" aria-hidden="true"></span>
@@ -188,14 +182,12 @@
     </ul>
   </nav>
 </header>
-
 <main>
 <section class="hero">
   <div class="hero-meta">
-    <span class="left">Math, swimming, piano,<br/>and the long-distance pursuit of <em>why</em>.</span>
+    <span class="left">Math, swim, piano, ski.<br/>In roughly that order.</span>
     <span class="right">Pittsburgh, PA<br/>est. 2009</span>
   </div>
-
   <h1 class="hero-name" aria-label="Alexander B. Chen">
     <span class="ln">
       <span class="letter" style="--i:0">A</span><span class="letter" style="--i:1">l</span><span class="letter" style="--i:2">e</span><span class="letter" style="--i:3">x</span><span class="letter" style="--i:4">a</span><span class="letter" style="--i:5">n</span><span class="letter" style="--i:6">d</span><span class="letter" style="--i:7">e</span><span class="letter" style="--i:8">r</span>
@@ -204,80 +196,75 @@
       <span class="letter italic" style="--i:9">B</span><span class="letter italic" style="--i:10">.</span><span class="space"></span><span class="letter" style="--i:11">C</span><span class="letter" style="--i:12">h</span><span class="letter" style="--i:13">e</span><span class="letter" style="--i:14">n</span>
     </span>
   </h1>
-
   <p class="hero-tag">
     <span class="em">I am a</span>
     <span class="role-slot" aria-live="polite">
-      <span class="role">mathematician<br/>swimmer<br/>pianist<br/>researcher<br/>problem-setter<br/>author<br/>competitor<br/>skier<br/>mathematician</span>
+      <span class="role">mathematician<br/>swimmer<br/>pianist<br/>skier<br/>writer<br/>problem-solver<br/>kid trying<br/>mathematician</span>
     </span>
   </p>
-
   <div class="hero-line">
     <p class="hero-positioning">
-      Math, structure, and the long-distance pursuit of <em>why</em>. The black line at the bottom of a pool and a stubborn proof are the same object — I'm interested in both.
+      This is the homepage of Alex Chen, a current junior at Shady Side Academy, in Pittsburgh. I do competition math, swim varsity, play piano, and occasionally ski twice a year (well, particularly after COVID). I especially enjoy working on projects i.e. writing textbooks, doing casual research findings, and solving problem sets with my best friend. I will be heading to <em>Ross</em> this summer for six (I'd say pretty intense) weeks of number theory.
     </p>
     <div class="hero-scroll-hint">
-      <span>Scroll for the index</span>
+      <span>Scroll down</span>
       <span class="line" aria-hidden="true"></span>
     </div>
   </div>
 </section>
-
 <section class="index">
-  <h2>The site, in seven rooms</h2>
+  <h2>What's here</h2>
   <div class="index-grid">
     <a href="about.html" class="index-card" data-reveal data-cursor="hover">
       <span class="num">01 · About</span>
-      <h3>From sprinter to <span class="italic">architect</span>.</h3>
-      <p>Swimming, persistence, the arc from middle school to USAMO and Ross. The longer story.</p>
+      <h3>The <span class="italic">longer story</span>.</h3>
+      <p>Six years of competition math, swim mornings, what changed junior year, and how I almost quit twice.</p>
       <span class="arrow">read &rarr;</span>
     </a>
     <a href="math.html" class="index-card" data-reveal data-delay="1" data-cursor="hover">
       <span class="num">02 · Math</span>
-      <h3>Three proofs, <span class="italic">one journey</span>.</h3>
-      <p>USAMO 2021 P1 with circumcircles drawn live, IMO 1988 P6 by Vieta jumping, the long arc of how I got here, and a Nesbitt generalization at the end as a treat.</p>
+      <h3>Three proofs, one <span class="italic">journey</span>.</h3>
+      <p>USAMO 2021 P1, IMO 1988 P6 by Vieta jumping, the long arc that got me here, and a Nesbitt generalization at the end.</p>
       <span class="arrow">scroll through &rarr;</span>
     </a>
     <a href="projects.html" class="index-card" data-reveal data-delay="2" data-cursor="hover">
       <span class="num">03 · Projects</span>
-      <h3>Things I'm <span class="italic">making</span>.</h3>
-      <p>SSAMO, the ARC textbook (A · NT · C · G), the 360-page Calc 3 book, the Markov-frog mock AMC.</p>
+      <h3>What I've been <span class="italic">building</span>.</h3>
+      <p>SSAMO, the ARC textbook with Ryan Gong, a 360-page Calc 3 book I wrote sophomore year, the AMC mock that predicted a real problem.</p>
       <span class="arrow">browse &rarr;</span>
     </a>
     <a href="competitions.html" class="index-card" data-reveal data-delay="3" data-cursor="hover">
       <span class="num">04 · Competitions</span>
-      <h3>The <span class="italic">reel</span>.</h3>
-      <p>MathLeague Nationals, USAMO, USAMTS, AIME, AMC, swimming States, DECA, piano.</p>
+      <h3>The <span class="italic">scores</span>.</h3>
+      <p>USAMO, USAMTS, AIME, AMC, MathLeague, swim States, piano, DECA. Just things I'm (I mean things my parents are) proud of.</p>
       <span class="arrow">see the record &rarr;</span>
     </a>
     <a href="beyond.html" class="index-card" data-reveal data-delay="4" data-cursor="hover">
       <span class="num">05 · Beyond</span>
-      <h3>Outside <span class="italic">the room</span>.</h3>
-      <p>Swimming, piano, skiing, card magic. Each one a small essay, not a hobby grid.</p>
+      <h3>The other <span class="italic">half</span>.</h3>
+      <p>Swimming sixteen hours a week, ten years at the piano, two weeks a year skiing, card tricks rooted in modular arithmetic.</p>
       <span class="arrow">read &rarr;</span>
     </a>
     <a href="writing.html" class="index-card" data-reveal data-delay="5" data-cursor="hover">
       <span class="num">06 · Writing</span>
       <h3>Substack &amp; <span class="italic">notes</span>.</h3>
-      <p>Long-form posts on USAMO prep, school, parents, and a 5 that taught me more than a medal would have.</p>
+      <p>Long-form posts on USAMO prep, school, parents, and the year a 5 taught me more than a medal would have.</p>
       <span class="arrow">read &rarr;</span>
     </a>
     <a href="reach.html" class="index-card" data-reveal data-cursor="hover">
       <span class="num">07 · Reach</span>
-      <h3>Prove a <span class="italic">card trick</span>, then write to me.</h3>
-      <p>A working Gilbreath shuffle, a four-way booking calendar, an email. The unusual front door.</p>
+      <h3>A <span class="italic">card trick</span>, then an email.</h3>
+      <p>A working Gilbreath shuffle to play with, four ways to book a call, plus my email.</p>
       <span class="arrow">come in &rarr;</span>
     </a>
   </div>
 </section>
 </main>
-
 <footer>
   <div>Alexander B. Chen · 2026</div>
   <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
   <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
 </footer>
-
 <script defer src="site.js"></script>
 </body>
 </html>

@@ -4,16 +4,51 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>About — Alexander B. Chen</title>
-<meta name="description" content="From sprinter to architect: swimming, persistence, and the long-distance pursuit of why." />
+<meta name="description" content="Five things I do, in roughly the order they bleed into each other: magic, math, swim, piano, ski." />
 <meta name="theme-color" content="#0a1733" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<!-- MathJax for the geometry modal -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.05 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'], enableMenu: false },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        document.documentElement.classList.add('mathjax-loaded');
+      });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
 <style>
+html:not(.mathjax-loaded) mjx-container { visibility:hidden; }
+mjx-container[jax="SVG"]:not([display="true"]){
+  display:inline-block !important;
+  vertical-align:-0.22em; line-height:normal;
+  margin:0 0.1em; color:inherit; word-spacing:normal;
+}
+mjx-container[jax="SVG"]:not([display="true"]) svg{
+  display:inline-block; vertical-align:baseline; color:inherit; overflow:visible;
+}
+mjx-assistive-mml{
+  position:absolute !important; top:0;left:0;
+  clip:rect(1px,1px,1px,1px);
+  padding:0 !important;border:0 !important;
+  width:1px !important;height:1px !important;overflow:hidden !important;
+}
+
+/* ============ HERO ============ */
 .about-hero{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1fr 1.1fr;
   gap:clamp(2rem, 6vw, 6rem);
   align-items:center;
   padding:clamp(3rem, 8vh, 6rem) var(--pad-x) 4rem;
@@ -30,9 +65,7 @@
   width:100%;height:100%;
   object-fit:cover;
   filter:grayscale(.15) contrast(1.05) brightness(.95);
-  transition:filter .8s var(--ease);
 }
-.about-photo:hover img{filter:grayscale(0) contrast(1) brightness(1)}
 .about-photo .caption{
   position:absolute;bottom:0;left:0;right:0;
   padding:1rem 1.2rem;
@@ -48,67 +81,567 @@
   background:rgba(10,23,51,0.7);
   padding:.3rem .6rem;
 }
-
 .about-intro h1{
   font-family:var(--serif);font-weight:300;
-  font-size:clamp(2.8rem, 7vw, 5.6rem);
+  font-size:clamp(2.6rem, 6.5vw, 5.2rem);
   line-height:1.02;letter-spacing:-.03em;
   margin:0 0 1.5rem;
 }
 .about-intro h1 .italic{font-style:italic;color:var(--gold);font-weight:500}
 .about-intro .lead{
   font-family:var(--serif);font-style:italic;
-  font-size:clamp(1.05rem, 1.5vw, 1.3rem);
-  color:var(--paper-dim);max-width:36ch;margin:0;line-height:1.55;
+  font-size:clamp(1.05rem, 1.5vw, 1.25rem);
+  color:var(--paper-dim);max-width:42ch;margin:0 0 2rem;line-height:1.55;
 }
+.about-toc{
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.about-toc a{
+  color:var(--paper-dim);
+  border-bottom:1px solid var(--rule);padding-bottom:.4rem;
+}
+.about-toc a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.about-toc a .n{color:var(--gold);margin-right:.4em}
 
-.about-body{
+/* ============ STANDARD SECTION (intro text) ============ */
+.sec{
+  padding:clamp(3rem,6vw,5rem) var(--pad-x);
+  border-top:1px solid var(--rule);
+  max-width:1280px;margin:0 auto;
+}
+.sec-grid{
   display:grid;
-  grid-template-columns:minmax(0, 1fr) minmax(0, 2fr);
-  gap:clamp(2rem, 6vw, 6rem);
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1.7fr);
+  gap:clamp(2rem, 5vw, 5rem);
   align-items:start;
-  padding:var(--pad-y) var(--pad-x);
+}
+@media (max-width:980px){.sec-grid{grid-template-columns:1fr}}
+.sec-aside{ position:sticky; top:6rem; }
+@media (max-width:980px){.sec-aside{position:static}}
+.sec-num{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:5rem;line-height:1;color:var(--gold);
+  letter-spacing:-.04em;margin:0 0 .8rem;
+}
+.sec-aside .label{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);max-width:22ch;line-height:1.6;
+}
+.sec-body h2{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2rem, 4.5vw, 3.4rem);
+  line-height:1.04;letter-spacing:-.03em;
+  margin:0 0 1.8rem;max-width:24ch;
+}
+.sec-body h2 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.sec-body p{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.05rem, 1.35vw, 1.18rem);
+  line-height:1.7;color:var(--paper);
+  margin:0 0 1.3em;max-width:60ch;
+}
+.sec-body p em{color:var(--gold);font-style:italic}
+.sec-body p strong{color:var(--paper);font-weight:500}
+.sec-body mjx-container{font-style:normal}
+
+/* ============ MAGIC TRICK ============ */
+.magic-stage{
+  background:linear-gradient(135deg, rgba(212,175,55,0.04), rgba(245,241,232,0.015));
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:1.8rem 1.4rem 1.6rem;
+  position:relative;min-height:520px;
+}
+.magic-top{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:1.5rem;
+  align-items:start;
+  margin-bottom:1.4rem;
+}
+@media (max-width:680px){.magic-top{grid-template-columns:1fr}}
+.magic-step-bar{
+  display:flex;gap:.4rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.magic-step-bar .step{
+  padding:.35rem .6rem;
+  border:1px solid var(--rule);border-radius:3px;
+  color:var(--paper-mute);
+}
+.magic-step-bar .step.current{ color:var(--ink-1);background:var(--gold);border-color:var(--gold); }
+.magic-step-bar .step.passed{ color:var(--gold);border-color:var(--gold); }
+.ace-tray{
+  display:flex;flex-direction:column;gap:.4rem;
+  align-items:center;
+}
+.ace-tray-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-mute);
+}
+.ace-tray-cards{
+  display:flex;gap:.4rem;
+}
+.magic-instructions{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper);font-size:1.05rem;line-height:1.5;
+  min-height:3.4em;margin-bottom:1.2rem;max-width:54ch;
+}
+.magic-instructions strong{color:var(--gold);font-style:normal;font-weight:500}
+.magic-row{
+  display:flex;flex-wrap:wrap;
+  gap:.8rem .5rem;
+  margin-bottom:1.2rem;justify-content:center;
+  align-items:center;
+  min-height:90px;
+  max-width:460px;
+  margin-left:auto;margin-right:auto;
+}
+.magic-row.with-gaps{
+  gap:.8rem 0;
+  max-width:540px;
+}
+.magic-grid{
+  display:grid;
+  gap:.6rem;
+  margin:0 auto 1.2rem;
+  justify-content:center;
+  align-items:center;
+}
+.card{
+  position:relative;
+  width:48px;height:70px;
+  border-radius:5px;
+  cursor:default;
+  transition:transform .55s var(--ease), box-shadow .3s var(--ease), opacity .3s var(--ease);
+  transform-style:preserve-3d;
+  font-family:var(--serif);font-size:1.4rem;
+  user-select:none;
+  flex:0 0 auto;
+}
+.card.in-grid{ width:100%; aspect-ratio:7/10; height:auto; }
+.card .face{
+  position:absolute;inset:0;
+  border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  backface-visibility:hidden;
+  border:1px solid;
+  box-sizing:border-box;
+}
+.card .front{
+  background:linear-gradient(135deg, #f5f1e8, #e8dfc8);
+  color:#0a1733;
+  border-color:#cfb87c;
+  font-weight:700; font-style:italic;
+}
+.card .back{
+  background:repeating-linear-gradient(45deg, #d4af37 0 4px, #b89829 4px 8px);
+  border-color:#b89829;
+  transform:rotateY(180deg);
+}
+.card.face-down{ transform:rotateY(180deg); }
+.card.face-up{ transform:rotateY(0deg); }
+.card.selectable{ cursor:pointer; }
+.card.selectable:hover{ box-shadow:0 0 0 2px var(--gold); transform:rotateY(0deg) translateY(-3px); }
+.card.face-down.selectable:hover{ transform:rotateY(180deg) translateY(-3px); }
+.card.selected{ box-shadow:0 0 0 2px var(--gold), 0 0 18px rgba(212,175,55,.6); }
+.card.empty-slot{ opacity:.18; }
+.card.dimmed{ opacity:.45; pointer-events:none; }
+/* gap = insertion slot in the row */
+.gap{
+  width:14px; height:70px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:default;
+  position:relative;
+  flex:0 0 auto;
+}
+.gap.active{ cursor:pointer; }
+.gap.active::before{
+  content:"";
+  position:absolute;left:50%;top:0;bottom:0;
+  width:2px;
+  background:rgba(212,175,55,.0);
+  transform:translateX(-50%);
+  transition:background .25s var(--ease);
+}
+.gap.active:hover::before, .gap.highlight::before{
+  background:var(--gold);
+  box-shadow:0 0 12px rgba(212,175,55,.6);
+}
+.gap.active::after{
+  content:"+";
+  font-family:var(--mono);font-size:14px;color:rgba(212,175,55,.0);
+  transition:color .25s var(--ease);
+}
+.gap.active:hover::after, .gap.highlight::after{ color:var(--gold); }
+.flip-handle{
+  border:1px dashed rgba(212,175,55,.4);
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;
+  color:var(--gold);
+  cursor:pointer; min-width:24px;
+  background:rgba(212,175,55,.04);
+}
+.flip-handle:hover{ background:rgba(212,175,55,.18); border-color:var(--gold); }
+.magic-controls{
+  display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center;align-items:center;
+  margin-top:1rem;
+}
+.magic-controls .btn{
+  background:transparent;border:1px solid var(--gold);
+  color:var(--gold);
+  padding:.55rem 1rem;
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;cursor:pointer;border-radius:3px;
+}
+.magic-controls .btn:hover:not(:disabled){ background:var(--gold);color:var(--ink-1); }
+.magic-controls .btn:disabled{ opacity:.3;cursor:not-allowed; }
+.magic-controls .btn.primary{ background:var(--gold);color:var(--ink-1); }
+.magic-reveal{
+  font-family:var(--serif);font-style:italic;color:var(--gold);
+  text-align:center;margin-top:1rem;font-size:1.1rem;
+  opacity:0;transition:opacity .8s var(--ease);
+}
+.magic-reveal.shown{opacity:1}
+
+/* ============ MATH MODAL (USAMTS R3 P4) ============ */
+.geo-modal-trigger{
+  display:flex;flex-direction:column;gap:1rem;
+  padding:1.6rem;
+  background:linear-gradient(135deg, rgba(212,175,55,0.04), rgba(245,241,232,0.015));
+  border:1px solid var(--rule);
+  border-radius:6px;
+  cursor:pointer;
+  transition:background .3s var(--ease), border-color .3s var(--ease);
+}
+.geo-modal-trigger:hover{ background:rgba(212,175,55,.08); border-color:var(--gold); }
+.geo-modal-trigger .label{
+  font-family:var(--mono);font-size:10px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--gold);
+}
+.geo-modal-trigger .title{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:1.6rem;color:var(--paper);line-height:1.2;
+  letter-spacing:-.01em;
+}
+.geo-modal-trigger .cta{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--paper-dim);
+}
+.geo-modal-trigger .cta span{color:var(--gold)}
+.geo-modal{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(10,23,51,.92);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:stretch;
+  padding:2rem;
+}
+.geo-modal.open{ display:flex; }
+.geo-modal-inner{
+  background:var(--ink-1);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  width:100%;max-width:1400px;margin:auto;
+  height:calc(100vh - 4rem);
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,1.4fr);
+  gap:1px;background:var(--rule);
+  position:relative;overflow:hidden;
+}
+@media (max-width:980px){
+  .geo-modal{padding:1rem}
+  .geo-modal-inner{grid-template-columns:1fr; height:calc(100vh - 2rem); overflow-y:auto;}
+}
+.geo-modal-close{
+  position:absolute;top:.6rem;right:.6rem;z-index:5;
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(10,23,51,.7);
+  border:1px solid var(--rule);
+  color:var(--paper);
+  font-family:var(--mono);font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.geo-modal-close:hover{ background:var(--gold);color:var(--ink-1);border-color:var(--gold); }
+.geo-side{
+  background:var(--ink-1);
+  padding:clamp(1.2rem,2.5vw,2rem);
+  position:relative;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--rule) transparent;
+}
+.geo-side.left{ display:flex;flex-direction:column; }
+.geo-side.right{ display:flex;flex-direction:column; padding:1rem; }
+.geo-modal-title{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.6rem;
+}
+.geo-modal-h{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.5rem,2.6vw,2.2rem);
+  line-height:1.1;letter-spacing:-.02em;
+  margin:0 0 .9rem;
+}
+.geo-modal-h .italic{font-style:italic;color:var(--gold)}
+.geo-modal-claim{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(.95rem,1.15vw,1.05rem);
+  color:var(--paper-dim);line-height:1.55;
+  margin:0 0 1.4rem;
+}
+.geo-modal-claim mjx-container{font-style:normal}
+.geo-steps{
+  list-style:none;margin:0 0 1rem;padding:0;
+  display:flex;flex-direction:column;gap:.85rem;
+  font-family:var(--serif);font-size:.98rem;line-height:1.55;
+  color:var(--paper);flex:1;
+}
+.geo-steps li{
+  opacity:.45;padding:.3rem 0 .3rem 2.2rem;position:relative;
+  cursor:pointer;
+  transition:opacity .3s var(--ease), border-color .3s var(--ease), transform .3s var(--ease);
+  border-left:1px solid transparent;
+}
+.geo-steps li.passed{opacity:.65}
+.geo-steps li.active{
+  opacity:1;border-left-color:var(--gold);transform:translateX(2px);
+}
+.geo-steps li::before{
+  content:attr(data-n);
+  position:absolute;left:0;top:.35em;
+  font-family:var(--mono);font-size:9px;letter-spacing:.05em;
+  color:var(--paper-mute);
+  border:1px solid var(--rule);border-radius:50%;
+  width:1.5em;height:1.5em;
+  display:flex;align-items:center;justify-content:center;background:var(--ink-1);
+}
+.geo-steps li.active::before{background:var(--gold);color:var(--ink-1);border-color:var(--gold)}
+.geo-steps li.passed::before{background:rgba(212,175,55,.25);color:var(--gold);border-color:var(--gold)}
+.geo-steps li em{color:var(--gold);font-style:italic}
+.geo-modal-controls{
+  display:flex;gap:.5rem;justify-content:flex-start;align-items:center;
+  padding-top:.8rem;border-top:1px solid var(--rule);
+}
+.geo-modal-controls .btn{
+  background:transparent;border:1px solid var(--gold);color:var(--gold);
+  padding:.45rem 1rem;font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;cursor:pointer;border-radius:3px;
+}
+.geo-modal-controls .btn:hover:not(:disabled){background:var(--gold);color:var(--ink-1)}
+.geo-modal-controls .btn:disabled{opacity:.3;cursor:not-allowed}
+.geo-modal-controls .progress{
+  margin-left:auto;
+  font-family:var(--serif);font-style:italic;color:var(--gold);font-size:.85rem;
+}
+.geo-svg-wrap{
+  flex:1;
+  background:rgba(245,241,232,0.015);
+  border:1px solid var(--rule);
+  border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  min-height:0;overflow:hidden;
+}
+.geo-svg-wrap svg{
+  width:100%;height:100%;
+  overflow:visible;
+  max-height:100%;
+}
+.geo-svg-wrap .layer{opacity:0;transition:opacity .6s var(--ease)}
+.geo-svg-wrap .layer.shown{opacity:1}
+.geo-svg-wrap .draw{
+  stroke-dasharray:1800;stroke-dashoffset:1800;
+  transition:stroke-dashoffset 1.4s var(--ease);
+}
+.geo-svg-wrap .draw.shown{stroke-dashoffset:0}
+.geo-svg-wrap text{
+  fill:var(--paper);font-family:'Fraunces',serif;font-style:italic;font-size:14px;
+}
+.geo-svg-wrap text.gold{fill:var(--gold);font-weight:500}
+.geo-svg-wrap text.muted{fill:var(--paper-mute);font-size:11px}
+.geo-svg-wrap .tri-abc{fill:rgba(212,175,55,.06);stroke:var(--paper);stroke-width:2}
+.geo-svg-wrap .circumcircle{fill:none;stroke:rgba(212,175,55,.45);stroke-width:1.3;stroke-dasharray:4 4}
+.geo-svg-wrap .small-circ{fill:none;stroke:rgba(158,197,255,.55);stroke-width:1;stroke-dasharray:3 3}
+.geo-svg-wrap .perp-line{stroke:rgba(158,197,255,.65);stroke-width:1.3}
+.geo-svg-wrap .tri-h{fill:none;stroke:var(--gold);stroke-width:1.8}
+.geo-svg-wrap .euler-line{stroke:var(--gold);stroke-width:2;stroke-linecap:round}
+.geo-svg-wrap .concur-line{stroke:var(--gold);stroke-width:1.4;opacity:.75}
+.geo-svg-wrap .pt{fill:var(--paper)}
+.geo-svg-wrap .pt.gold{fill:var(--gold)}
+.geo-svg-wrap .pt-P{fill:var(--gold);filter:drop-shadow(0 0 6px rgba(212,175,55,.7))}
+
+/* ============ PINNED SCROLL-DRIVEN SECTIONS ============ */
+.pinned{
+  position:relative;
+  height:300vh;
   border-top:1px solid var(--rule);
 }
-@media (max-width:880px){.about-body{grid-template-columns:1fr}}
-.about-aside{
-  position:sticky;top:8rem;
-  font-family:var(--mono);font-size:11px;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--paper-mute);
+.pinned .pin-inner{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:#0a1733;
 }
-.about-aside .num{
-  font-family:var(--serif);font-style:italic;
-  font-size:6rem;line-height:1;color:var(--gold);
-  letter-spacing:-.04em;display:block;margin-bottom:1rem;font-weight:300;
-}
-@media (max-width:880px){
-  .about-aside{position:static}
-  .about-aside .num{font-size:4rem}
-}
-
-.about-prose{
-  font-family:var(--serif);font-weight:300;
-  font-size:clamp(1.15rem, 1.6vw, 1.4rem);
-  line-height:1.6;color:var(--paper);
-  max-width:36em;
-}
-.about-prose p{margin:0 0 1.8em}
-.about-prose em{color:var(--gold);font-style:italic}
-.about-prose strong{color:var(--paper);font-weight:500}
-
-.pullquote-block{
-  margin:3rem 0;
-  padding-left:2rem;
-  border-left:2px solid var(--gold);
-}
-.pullquote-big{
+.pinned .pin-caption{
+  position:absolute;
+  left:0;right:0;top:1.5rem;
+  text-align:center;
   font-family:var(--serif);font-style:italic;font-weight:300;
-  font-size:clamp(2rem, 5vw, 3.8rem);
-  line-height:1.05;letter-spacing:-.02em;
-  color:var(--paper);margin:0;
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  color:var(--paper-dim);
+  pointer-events:none;
+  padding:0 1rem;
 }
-.pullquote-big .em{color:var(--gold);font-style:normal}
+.pinned .pin-caption .num{
+  display:block;
+  font-family:var(--mono);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:.4rem;font-style:normal;font-weight:400;
+}
+.pinned .pin-caption em{color:var(--gold);font-style:normal}
+.pinned .pin-progress{
+  position:absolute;
+  bottom:1.5rem;left:1.5rem;right:1.5rem;
+  display:flex;justify-content:space-between;
+  font-family:var(--mono);font-size:10px;letter-spacing:.25em;
+  text-transform:uppercase;color:var(--paper-mute);
+}
+.pinned .pin-progress .now{color:var(--gold)}
+.pinned .pin-hint{
+  position:absolute;
+  bottom:3rem;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--paper-mute);
+  opacity:.6;
+  display:flex;align-items:center;gap:.6rem;
+  pointer-events:none;
+  transition:opacity .4s var(--ease);
+}
+.pinned.complete .pin-hint{opacity:0}
+.pinned .pin-hint::after{content:"↓";color:var(--gold)}
 
+/* ============ SWIM PINNED ============ */
+.swim-pin{
+  background:
+    linear-gradient(to bottom, #0a1733 0%, #0f2245 40%, #102a55 60%, #0a1733 100%);
+}
+.swim-pin .water-ripple{
+  position:absolute;left:-100px;right:-100px;height:6px;
+  border-bottom:1px solid rgba(212,175,55,.1);
+  border-top:1px solid rgba(212,175,55,.05);
+  background:linear-gradient(90deg, transparent, rgba(212,175,55,.08), transparent);
+  animation:ripple-drift 8s linear infinite;
+}
+@keyframes ripple-drift{
+  0%{transform:translateX(-50px)}
+  100%{transform:translateX(50px)}
+}
+.swim-pin .pool-lane{
+  position:absolute;left:0;right:0;height:1px;
+  background:rgba(212,175,55,.18);
+}
+.swim-pin .black-line{
+  position:absolute;left:0;right:0;top:50%;
+  height:5px;background:rgba(10,23,51,.85);
+  transform:translateY(-50%);
+}
+.swim-pin .black-line::before{
+  content:"";position:absolute;left:0;right:0;top:50%;
+  height:1px;background:rgba(212,175,55,.15);
+}
+.swim-pin .swimmer{
+  position:absolute;
+  top:50%; left:0;
+  transform:translateY(-50%);
+  width:200px;height:140px;
+  pointer-events:none;
+}
+.swim-pin .swimmer svg{width:100%;height:100%;overflow:visible}
+
+/* ============ PIANO PINNED ============ */
+.piano-pin{
+  background:
+    radial-gradient(ellipse at center bottom, #1a2746 0%, #0a1733 60%);
+}
+.piano-pin .piano-wrap{
+  position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+  width:min(70vw, 600px);
+}
+.piano-pin .piano-wrap svg{width:100%;height:auto;overflow:visible;display:block}
+.piano-pin .piano-key{fill:#f5f1e8;stroke:#0a1733;stroke-width:.8;transition:fill .2s}
+.piano-pin .piano-key.pressed{fill:rgba(212,175,55,.7)}
+.piano-pin .piano-key.black{fill:#0a1733;stroke:#0a1733}
+.piano-pin .piano-key.black.pressed{fill:var(--gold)}
+.piano-pin .piano-body{fill:#1a2746;stroke:var(--gold);stroke-width:1.4}
+.piano-pin .piano-lid{fill:rgba(212,175,55,.08);stroke:var(--gold);stroke-width:1.4}
+.piano-pin .piano-leg{stroke:var(--gold);stroke-width:1.6;fill:none}
+.piano-pin .musical-note{
+  position:absolute;
+  font-family:serif;color:var(--gold);
+  pointer-events:none;line-height:1;
+  opacity:0;
+  text-shadow:0 0 12px rgba(212,175,55,.5);
+}
+.piano-pin .musical-note.animating{
+  animation:note-fly-up 5s ease-out forwards;
+}
+@keyframes note-fly-up{
+  0%{opacity:0;transform:translate(0,0) rotate(0deg) scale(.5)}
+  10%{opacity:1}
+  100%{opacity:0;transform:translate(var(--dx,-80px), -65vh) rotate(var(--rot,-30deg)) scale(1.4)}
+}
+
+/* ============ SKI PINNED ============ */
+.ski-pin{
+  background:
+    linear-gradient(to bottom,
+      #0a1733 0%, #1a2746 12%,
+      rgba(245,241,232,.1) 14%, rgba(245,241,232,.2) 50%, rgba(245,241,232,.3) 100%);
+}
+.ski-pin .mountain-bg{
+  position:absolute;top:8%;left:0;right:0;height:8%;
+  background:
+    linear-gradient(135deg, rgba(245,241,232,.18) 25%, transparent 25%) 0 0/40% 100%,
+    linear-gradient(45deg, rgba(245,241,232,.18) 25%, transparent 25%) 0 0/40% 100%;
+}
+.ski-pin .ski-tree{
+  position:absolute;
+  font-size:36px;
+  pointer-events:none;
+  filter:drop-shadow(2px 4px 4px rgba(10,23,51,.4));
+  transition:transform .1s linear, font-size .1s linear;
+}
+.ski-pin .skier{
+  position:absolute;
+  width:80px;height:110px;
+  pointer-events:none;
+  transition:font-size .1s linear;
+}
+.ski-pin .skier svg{width:100%;height:100%;overflow:visible}
+.ski-pin .ski-trail{
+  position:absolute;
+  left:50%;top:14%;bottom:0;
+  width:3px;
+  background:linear-gradient(to bottom, transparent, rgba(10,23,51,.18), rgba(10,23,51,.3));
+  transform:translateX(-50%);
+}
+.ski-pin .snow-particle{
+  position:absolute;
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(245,241,232,.7);
+  pointer-events:none;
+}
+
+/* ============ CTA ============ */
 .about-cta{
   padding:var(--pad-y) var(--pad-x);
   border-top:1px solid var(--rule);
@@ -122,7 +655,7 @@
 .about-cta h2 .italic{font-style:italic;color:var(--gold)}
 .about-cta p{
   font-family:var(--serif);font-style:italic;
-  color:var(--paper-dim);max-width:48ch;margin:0 auto 2.5rem;
+  color:var(--paper-dim);max-width:50ch;margin:0 auto 2.5rem;
 }
 .about-cta .row{
   display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;
@@ -130,7 +663,6 @@
 </style>
 </head>
 <body>
-
 <div class="bg-symbols" aria-hidden="true"></div>
 <div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
 <div class="cursor-ring" aria-hidden="true"></div>
@@ -155,78 +687,1226 @@
 </header>
 
 <main>
+
+<!-- ============ HERO ============ -->
 <section class="about-hero">
   <div class="about-photo" data-reveal>
-    <div class="frame">fig. 01 / mathleague nationals · 2026</div>
-    <img src="photo.jpg" alt="Alex working on a problem at the breakfast table after a mathleague qualifier, head down over a clipboard with grid paper, knife as a makeshift straight-edge." loading="lazy" />
-    <div class="caption">Pre-round, before <em>MathLeague Nationals 2026</em>. Knife as a straight-edge because we forgot the ruler.</div>
+    <div class="frame">fig. 01 / before mathleague nationals · 2026</div>
+    <img src="photo.jpg" alt="Alex with a clipboard and grid paper at a breakfast table before MathLeague Nationals 2026, drawing a diagram with a butter knife as a straight-edge." loading="lazy" />
+    <div class="caption">Drawing a diagram before <em>Nationals</em>. The straight-edge is a butter knife. We forgot the ruler.</div>
   </div>
   <div class="about-intro" data-reveal data-delay="1">
     <p class="page-eyebrow" style="margin-bottom:1.5rem">§ 01 · About</p>
-    <h1>From sprinter to <span class="italic">architect</span>.</h1>
-    <p class="lead">Math, swimming, piano, and a long-running argument with myself about what counts as time well spent. The first three are clear. The argument is ongoing.</p>
+    <h1>Five things. They all <span class="italic">bleed</span> into each other more than you'd think.</h1>
+    <p class="lead">
+      The thing I keep finding is that <em>nothing I do is its own thing</em>. The card tricks turned into a math obsession. The math obsession turned out to require the same kind of stubbornness I'd learned in the pool. The pool turned out to require the same focus I'd built up at the piano. The piano taught me what discipline is for, which is part of why skiing — the one place I get to switch all of that off — matters so much.
+    </p>
+    <p class="lead" style="margin-top:1.2rem">
+      Below: magic, math, swim, piano, ski. In that order, because that's roughly how I picked them up, and roughly how they connect to each other.
+    </p>
+    <div class="about-toc">
+      <a href="#magic" data-cursor="hover"><span class="n">i</span> magic</a>
+      <a href="#math" data-cursor="hover"><span class="n">ii</span> math</a>
+      <a href="#swim" data-cursor="hover"><span class="n">iii</span> swim</a>
+      <a href="#piano" data-cursor="hover"><span class="n">iv</span> piano</a>
+      <a href="#ski" data-cursor="hover"><span class="n">v</span> ski</a>
+    </div>
   </div>
 </section>
 
-<section class="about-body">
-  <aside class="about-aside">
-    <span class="num">01</span>
-    <div>The architect /<br/>sprinter.<br/>An essay.</div>
-  </aside>
-  <div class="about-prose">
-    <p data-reveal>
-      For most of middle school I treated math like a <em>sprint</em> — find the clever trick, get the answer, move on. If a problem didn't reveal itself in ten minutes, I felt the urge to abandon it. I was good enough at the sprint to keep getting away with it, which was the problem. Every shortcut I got away with was a shortcut I kept reaching for.
-    </p>
-    <p data-reveal>
-      Almost a decade of competitive swimming has taught me that quitting in the middle of a hard set guarantees you'll never improve. You don't get a personal best by staring at the scoreboard. You get it by obsessing over the timing of your flipturns and the entry angle of your arm — for two and a half hours at a time, before the sun is up, with no audience.
-    </p>
+<!-- ============ MAGIC ============ -->
+<section class="sec" id="magic">
+  <div class="sec-grid">
+    <aside class="sec-aside">
+      <div class="sec-num">i.</div>
+      <div class="label">card tricks rooted<br/>in modular arithmetic.<br/>self-working only.</div>
+    </aside>
+    <div class="sec-body">
+      <h2>I have the hands of a polite <span class="italic">raccoon</span>.</h2>
+      <p>
+        During COVID I tried to learn magic. The first trick I tried was an ace trick — triple lift, then double, then single, aces materialize. I practiced for weeks, filmed myself, and discovered the double lift was visible from space. The triple was a war crime. I gave up on sleight of hand pretty quickly after that.
+      </p>
+      <p>
+        What I switched to is way more fun anyway: <em>self-working tricks</em>, where the math does the work and your hands just have to deal cards in the right order. Below is one. Twelve face-down cards in a row. Pick aces from the tray on the right, then click a gap between cards to insert.
+      </p>
 
-    <div class="pullquote-block" data-reveal>
-      <p class="pullquote-big">The <span class="em">black line</span> at the bottom of a pool and a stubborn proof are the same object.</p>
+      <div class="magic-stage" id="magicStage" aria-live="polite">
+        <div class="magic-top">
+          <div class="magic-step-bar" id="magicStepBar">
+            <span class="step" data-s="0">1 · insert aces</span>
+            <span class="step" data-s="1">2 · deal &amp; flip</span>
+            <span class="step" data-s="2">3 · your choice</span>
+            <span class="step" data-s="3">4 · 4×4 grid</span>
+            <span class="step" data-s="4">5 · fold to one pile</span>
+            <span class="step" data-s="5">6 · spread</span>
+          </div>
+          <div class="ace-tray" id="aceTray" aria-hidden="false">
+            <div class="ace-tray-label">aces</div>
+            <div class="ace-tray-cards" id="aceTrayCards"></div>
+          </div>
+        </div>
+        <p class="magic-instructions" id="magicInstructions"></p>
+        <div id="magicArea"></div>
+        <div class="magic-controls" id="magicControls"></div>
+        <div class="magic-reveal" id="magicReveal"></div>
+      </div>
+
+      <p>
+        I performed one of these once for a kid at a Chinese-school event. Maybe nine years old. He watched it three times in a row, frowned, then said <em>"wait, are you just doing math?"</em> I told him yes. He looked betrayed for about two seconds, asked me to teach him, and we spent the next forty minutes figuring out together why a stack of 16 cards has to behave this way.
+      </p>
+      <p>
+        That's the thing about self-working tricks. The audience eventually asks <em>why does this work</em>, and at that point you're not doing magic anymore. You're doing math with cards as props. The kids who keep asking — those are the ones I want to write a textbook for.
+      </p>
     </div>
-
-    <p data-reveal>
-      Eventually I realized that the black line and a difficult proof are the same thing. They both require you to exist in a state of <em>discomfort</em> for a long time without a guaranteed reward. Learning to negotiate with that exhaustion — learning to do something even when you're in pain, learning to be consistent and disciplined and not just motivated — is where I first learned to be a student.
-    </p>
-    <p data-reveal>
-      So I started sitting with problems longer. I let confusion be part of the process. Over time the sprinter turned into something else: an <strong>architect</strong> looking for structural integrity rather than a clever shortcut. I wrote a 360-page multivariable calculus textbook for my peers. I founded <em>SSAMO</em>, the first Shady Side Academy Mathematics Olympiad, to make olympiad math accessible to kids who never thought it was for them. I started research in mathematical physics with Prof. Wencai Liu at Texas A&amp;M.
-    </p>
-    <p data-reveal>
-      The thread isn't the math. It's the willingness to stay with something difficult past the point where the trick stops working. That's the same skill at 5:15 AM on a pool deck, at midnight inside a Chopin ballade, and on a black diamond at Whistler in March.
-    </p>
-
-    <div class="pullquote-block" data-reveal>
-      <p class="pullquote-big">When you stop focusing on yourself, you <span class="em">improve more</span> than if you lock yourself in a room and grind.</p>
-    </div>
-
-    <p data-reveal>
-      The deepest lesson of junior year wasn't a proof technique. It was that all of the work I'd assumed was a <em>distraction</em> from getting good — running Math Club, designing problems for other students, writing the textbook <span class="name-ryan">Ryan Gong</span> and I co-authored — turned out to be the thing that made me better. When you have to explain why something works to a kid who's never seen it before, you find out fast which parts of your understanding are real and which are just pattern-matching.
-    </p>
-    <p data-reveal>
-      I scored a 5 on the USAMO. The median was 6. For about a week I treated this like a verdict on six years of my life. Then I noticed I was happier when I stopped checking my email every twenty minutes for the cutoff release, and I went back to math, and the version of math I went back to was the version where other people were also in the room. That's the version that's stuck.
-    </p>
-    <p data-reveal>
-      I'm heading to the <em>Ross Mathematics Program</em> for summer 2026 — six weeks doing nothing but number theory, the subject I avoided for years and now want to face. After that, senior year. And after that, an applied-math PhD I haven't quite earned the right to dream about yet, but I'm working on it.
-    </p>
   </div>
 </section>
 
+<!-- ============ MATH (modal trigger) ============ -->
+<section class="sec" id="math">
+  <div class="sec-grid">
+    <aside class="sec-aside">
+      <div class="sec-num">ii.</div>
+      <div class="label">math came out of<br/>the card tricks.<br/>here's one I love.</div>
+    </aside>
+    <div class="sec-body">
+      <h2>So if you keep asking why, you end up <span class="italic">here</span>.</h2>
+      <p>
+        Self-working tricks are math problems where the props happen to be cards. Once you're hooked on <em>why does this work</em>, you eventually stop needing the cards — you stop wanting to perform, you just want the next problem. Competition math was the next obvious step.
+      </p>
+      <p>
+        For my USAMTS submission this year I got a geometry problem I really liked — Problem 4 from Round 3. The kind that looks intimidating, has a million points and lines on the diagram, then collapses once you spot the right structure. A triangle has so many natural "centers" (circumcenter, orthocenter, centroid) that you can cascade them into nested triangles. The nested triangles end up <em>homothetic</em> to the original, and the homothety centers all line up on the Euler line. Concurrency falls out.
+      </p>
+
+      <div class="geo-modal-trigger" data-cursor="hover" id="geoModalTrigger" role="button" tabindex="0">
+        <div class="label">USAMTS 37 · Round 3 · Problem 4 · my proof</div>
+        <div class="title">Prove that $AH_A$, $BH_B$, $CH_C$, and $HO$ are concurrent.</div>
+        <div class="cta"><span>open the proof →</span> 6 steps, animated</div>
+      </div>
+
+      <p style="margin-top:1.8rem">
+        For the other version with circumcircles, that's <a href="math.html" data-cursor="hover" style="color:var(--gold)">USAMO 2021 P1</a> on the math page.
+      </p>
+      <p>
+        Here's something I figured out late: the part of competition math that gets you good at competition math isn't the clever insight. The clever insight is the part that gets you the points <em>once you have it</em>. The part that's actually load-bearing is the willingness to sit with one problem for a few hours without confirmation that the problem has a solution at all.
+      </p>
+      <p>
+        I learned that in the pool, weirdly. Long before I learned it on a math problem.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SWIM intro then PINNED ============ -->
+<section class="sec" id="swim">
+  <div class="sec-grid">
+    <aside class="sec-aside">
+      <div class="sec-num">iii.</div>
+      <div class="label">16 hours a week.<br/>5:15 am.<br/>22.2 in the 50.</div>
+    </aside>
+    <div class="sec-body">
+      <h2>The black line and a stubborn proof are <span class="italic">the same object</span>.</h2>
+      <p>
+        I've been swimming competitively for almost a decade. Right now I'm at roughly 16 hours a week, which means somewhere around 832 hours a year, which is roughly one entire month of waking life spent staring at a black line at the bottom of a pool.
+      </p>
+      <p>
+        Almost everything I know about <em>not quitting</em> I learned in the pool. There's a specific kind of exhaustion that hits you about 1500 yards into a hard practice — your body has given you all the information it can possibly give you about whether continuing is sensible (it isn't), and you keep going anyway, because that's the deal. The exact same skill applies to a USAMO problem at hour three when nothing's working and you're starting to question whether the problem is even solvable. The skill is: <em>don't quit yet</em>.
+      </p>
+      <p>
+        People ask what I think about for two and a half hours. Honest answer: usually nothing, occasionally everything, sometimes I'm running probability calculations from last night's AIME problem in my head, and once during a brutal 200 IM set I genuinely forgot the lyrics to a song I'd been humming and got so frustrated I gave up and thought about Nesbitt's inequality for the rest of practice. I don't recommend it as a coping strategy.
+      </p>
+      <p>
+        Best swim of my life so far: a <strong>22.2 split on the 50 free</strong> at WPIAL States this year, dropping 1.8 seconds to close out our relay. Probably the most emotional I've been at a meet — possibly tied with watching a teammate qualify for States off a split <em>I</em> brought home, which is its own thing.
+      </p>
+      <p style="font-family:var(--mono);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--paper-mute);margin-top:2rem">
+        ↓ scroll · cross the pool
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="pinned" id="swim-pin">
+  <div class="pin-inner swim-pin">
+    <div class="pin-caption">
+      <span class="num">freestyle · 50m</span>
+      The black line at the bottom of a pool and a <em>stubborn proof</em> are the same object.
+    </div>
+    <div class="water-ripple" style="top:30%"></div>
+    <div class="water-ripple" style="top:48%;animation-direction:reverse;animation-duration:6s"></div>
+    <div class="water-ripple" style="top:68%;animation-duration:10s"></div>
+    <div class="pool-lane" style="top:25%"></div>
+    <div class="pool-lane" style="top:75%"></div>
+    <div class="black-line"></div>
+    <div class="swimmer" id="swimmer">
+      <svg viewBox="-10 -10 180 130">
+        <!-- Wake / splash trail -->
+        <g id="swimWake" opacity="0.4">
+          <ellipse cx="-5" cy="60" rx="20" ry="3" fill="rgba(245,241,232,.4)"/>
+          <ellipse cx="-25" cy="60" rx="14" ry="2" fill="rgba(245,241,232,.25)"/>
+          <ellipse cx="-40" cy="60" rx="10" ry="1.5" fill="rgba(245,241,232,.15)"/>
+        </g>
+        <!-- Dolphin-kick legs (combined as a tail) -->
+        <g id="swimLegs">
+          <path d="M 30 60 Q 15 60, 0 56 L 0 64 Q 15 60, 30 60 Z" fill="rgba(245,241,232,.85)"/>
+          <!-- flipper -->
+          <path d="M 0 56 L -10 50 L -8 60 L -10 70 L 0 64 Z" fill="rgba(245,241,232,.7)"/>
+        </g>
+        <!-- Body (undulating with phase) -->
+        <g id="swimBody">
+          <ellipse cx="75" cy="60" rx="48" ry="10" fill="rgba(245,241,232,.92)"/>
+          <!-- shoulder hint -->
+          <circle cx="110" cy="58" r="11" fill="rgba(245,241,232,.95)"/>
+        </g>
+        <!-- Head -->
+        <g id="swimHead">
+          <circle cx="130" cy="55" r="10" fill="rgba(245,241,232,.97)"/>
+          <!-- goggles -->
+          <ellipse cx="135" cy="53" rx="4" ry="2.5" fill="#0a1733"/>
+          <line x1="139" y1="53" x2="143" y2="54" stroke="#0a1733" stroke-width="1.5"/>
+        </g>
+        <!-- Butterfly arms — both arms move together as a single arc above the body -->
+        <g id="swimArms">
+          <!-- shoulder anchor point at (110, 58) -->
+          <!-- upper arm + forearm composed as a path so it bends naturally -->
+          <path id="swimArmL" d="M 110 58 Q 130 30, 160 35"
+                stroke="rgba(245,241,232,.92)" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <path id="swimArmR" d="M 110 58 Q 130 86, 160 81"
+                stroke="rgba(245,241,232,.92)" stroke-width="7" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Splash bubbles around head when arms enter water -->
+        <g id="swimBubbles">
+          <circle cx="148" cy="40" r="3" fill="rgba(212,175,55,.55)"/>
+          <circle cx="155" cy="36" r="2"   fill="rgba(212,175,55,.4)"/>
+          <circle cx="148" cy="76" r="3"   fill="rgba(212,175,55,.55)"/>
+          <circle cx="155" cy="80" r="2"   fill="rgba(212,175,55,.4)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="pin-progress">
+      <span>start</span>
+      <span class="now" id="swimNow">0%</span>
+      <span>22.2</span>
+    </div>
+    <div class="pin-hint">keep scrolling</div>
+  </div>
+</section>
+
+<!-- ============ PIANO intro then PINNED ============ -->
+<section class="sec" id="piano">
+  <div class="sec-grid">
+    <aside class="sec-aside">
+      <div class="sec-num">iv.</div>
+      <div class="label">ten years.<br/>technically fine,<br/>musically a robot.</div>
+    </aside>
+    <div class="sec-body">
+      <h2>The one place the <span class="italic">discipline trick</span> doesn't work.</h2>
+      <p>
+        Here's the part that surprised me. The "stay with it until it cracks" thing transferred from swim to math really cleanly. I assumed it would also transfer to piano. It hasn't, or at least not in the way I expected.
+      </p>
+      <p>
+        Ten years of piano. I can play, technically, almost anything in the standard repertoire. Chopin ballades, Liszt études, Rachmaninoff preludes. I have the fingers, the rhythm, the muscle memory. Carmel Klavier Grand Prize in 2019, second prize in 2021. A few Pittsburgh International firsts, a couple of Grand Prix, the Steinway Society of Western PA audition. I'm not, however, a good pianist.
+      </p>
+      <p>
+        There's a difference between playing the notes and playing the piece. The difference is the part where the listener feels something, and that part — the musicality — is something I've never quite cracked. I am, by my own honest assessment, a robot who has read a manual on how to feel things. I produce the correct outputs. The outputs do not move people. They move me slightly when I'm alone, but I think this is the piano equivalent of laughing at your own joke.
+      </p>
+      <p>
+        The lesson, I think, is that some things don't get better just because you put in the hours. Swim gets better with hours. Math gets better with hours. Piano needs something else, and I don't quite have it yet. Maybe at twenty-five. Maybe never. I'm OK with not knowing yet.
+      </p>
+      <p style="font-family:var(--mono);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--paper-mute);margin-top:2rem">
+        ↓ scroll · let the notes out
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="pinned" id="piano-pin">
+  <div class="pin-inner piano-pin">
+    <div class="pin-caption">
+      <span class="num">grand piano · staccato</span>
+      I have the fingers. The notes do not <em>move people</em>.
+    </div>
+    <div class="piano-wrap" id="pianoWrap">
+      <svg viewBox="0 0 300 180">
+        <!-- lid open -->
+        <path class="piano-lid" d="M 30 60 Q 150 0 270 60 L 245 95 Q 150 35 55 95 Z"/>
+        <!-- body -->
+        <rect class="piano-body" x="45" y="88" width="210" height="50" rx="3"/>
+        <!-- keys -->
+        <g transform="translate(58, 105)">
+          <rect class="piano-key" id="key-c" x="0" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-d" x="16" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-e" x="32" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-f" x="48" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-g" x="64" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-a" x="80" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-b" x="96" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-c2" x="112" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-d2" x="128" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-e2" x="144" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-f2" x="160" y="0" width="16" height="28"/>
+          <rect class="piano-key" id="key-g2" x="176" y="0" width="16" height="28"/>
+          <!-- black keys -->
+          <rect class="piano-key black" id="bk-cs"  x="11" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-ds"  x="27" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-fs"  x="59" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-gs"  x="75" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-as"  x="91" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-cs2" x="123" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-ds2" x="139" y="0" width="10" height="17"/>
+          <rect class="piano-key black" id="bk-fs2" x="171" y="0" width="10" height="17"/>
+        </g>
+        <!-- legs -->
+        <line class="piano-leg" x1="65" y1="138" x2="65" y2="165"/>
+        <line class="piano-leg" x1="150" y1="138" x2="150" y2="165"/>
+        <line class="piano-leg" x1="235" y1="138" x2="235" y2="165"/>
+      </svg>
+    </div>
+    <div class="pin-progress">
+      <span>p</span>
+      <span class="now" id="pianoNow">0%</span>
+      <span>ff</span>
+    </div>
+    <div class="pin-hint">keep scrolling</div>
+  </div>
+</section>
+
+<!-- ============ SKI intro then PINNED ============ -->
+<section class="sec" id="ski">
+  <div class="sec-grid">
+    <aside class="sec-aside">
+      <div class="sec-num">v.</div>
+      <div class="label">the one thing I'm<br/>allowed to be<br/>reckless about.</div>
+    </aside>
+    <div class="sec-body">
+      <h2>The one place I'm <span class="italic">allowed</span> to turn it off.</h2>
+      <p>
+        OK so: swim teaches discipline. Math uses that same discipline. Piano teaches you what discipline can't reach. And then, twice a year, I get to go to the one place where I switch all of it off.
+      </p>
+      <p>
+        Christmas in Colorado — usually Vail, Breckenridge, or Keystone. Spring break in Whistler. Whistler is the big one.
+      </p>
+      <p>
+        For context: most of my life is a tightly controlled exercise in <em>not</em> making stupid choices. Don't skip practice. Don't blow off a homework set. Don't take the dumb risk on a USAMO problem when the safer approach gets you the points. The whole architecture of being a serious student is built around the systematic suppression of recklessness, and most days I'm fine with that.
+      </p>
+      <p>
+        Then I get to Whistler and I ski Purple Haze, which is a chute that drops at something like 40 degrees and ends in a cliff band, and I think <em>finally</em>. Spanky's Ladder, DOA, the whole back side. I'm not Olympic. I'm not even close. But the runs people warn you about are the ones I look forward to, and the version of me on a black diamond in March is somehow the most me version of me there is.
+      </p>
+      <p>
+        I think it works because skiing is the one thing in my life where the answer to "is this a good idea" is <em>who cares, let's find out</em>. You don't get to ask that question much when you're trying to qualify for USAMO. You don't get to ask it on the blocks for the 100 free. But at the top of a chute, with nobody to impress and nothing on the line except the next two minutes, the question stops being a question. You just go.
+      </p>
+      <p style="font-family:var(--mono);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--paper-mute);margin-top:2rem">
+        ↓ scroll · take the run
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="pinned" id="ski-pin">
+  <div class="pin-inner ski-pin">
+    <div class="pin-caption">
+      <span class="num">whistler · purple haze</span>
+      The version of me on a black diamond in March is somehow the <em>most me</em> version of me there is.
+    </div>
+    <div class="mountain-bg"></div>
+    <div class="ski-trail"></div>
+    <!-- trees positioned by JS -->
+    <div id="skiTrees"></div>
+    <!-- snow particles -->
+    <div id="snowField"></div>
+    <div class="skier" id="skier">
+      <svg viewBox="-20 0 120 130">
+        <!-- snow spray behind skis -->
+        <ellipse cx="40" cy="118" rx="32" ry="4" fill="rgba(245,241,232,.5)" opacity="0.6"/>
+        <ellipse cx="40" cy="121" rx="22" ry="2.5" fill="rgba(245,241,232,.7)" opacity="0.5"/>
+        <!-- SKIS — long, clearly visible parallel pair under the feet -->
+        <rect x="8"  y="108" width="32" height="4" rx="1" fill="#0a1733" stroke="rgba(212,175,55,.6)" stroke-width="0.8"/>
+        <rect x="40" y="108" width="32" height="4" rx="1" fill="#0a1733" stroke="rgba(212,175,55,.6)" stroke-width="0.8"/>
+        <!-- ski tips upturned -->
+        <path d="M 4 108 L 8 108 L 8 112 Z" fill="#0a1733"/>
+        <path d="M 36 108 L 40 108 L 40 112 Z" fill="#0a1733"/>
+        <!-- head -->
+        <circle cx="40" cy="14" r="9" fill="rgba(245,241,232,.97)"/>
+        <!-- helmet -->
+        <path d="M 31 14 Q 31 4, 40 4 Q 49 4, 49 14 L 49 12 Q 49 8, 40 8 Q 31 8, 31 12 Z" fill="rgba(212,175,55,.85)"/>
+        <!-- goggles -->
+        <ellipse cx="40" cy="14" rx="7" ry="3" fill="#0a1733"/>
+        <ellipse cx="40" cy="14" rx="6" ry="2.2" fill="rgba(158,197,255,.7)"/>
+        <!-- body — ski jacket -->
+        <path d="M 28 25 Q 40 22, 52 25 L 54 60 L 26 60 Z" fill="rgba(212,175,55,.85)" stroke="rgba(212,175,55,1)" stroke-width="1"/>
+        <!-- arms with poles -->
+        <line x1="28" y1="30" x2="20" y2="58" stroke="rgba(245,241,232,.95)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="52" y1="30" x2="60" y2="58" stroke="rgba(245,241,232,.95)" stroke-width="5" stroke-linecap="round"/>
+        <!-- poles -->
+        <line x1="20" y1="58" x2="12" y2="98" stroke="#0a1733" stroke-width="2"/>
+        <line x1="60" y1="58" x2="68" y2="98" stroke="#0a1733" stroke-width="2"/>
+        <!-- pole baskets -->
+        <circle cx="12" cy="98" r="2.5" fill="none" stroke="#0a1733" stroke-width="1"/>
+        <circle cx="68" cy="98" r="2.5" fill="none" stroke="#0a1733" stroke-width="1"/>
+        <!-- legs (ski pants) -->
+        <path d="M 33 60 L 30 105 L 36 105 L 38 60 Z" fill="rgba(10,23,51,.85)"/>
+        <path d="M 42 60 L 44 105 L 50 105 L 47 60 Z" fill="rgba(10,23,51,.85)"/>
+        <!-- ski boots -->
+        <rect x="28" y="103" width="10" height="8" rx="1.5" fill="rgba(212,175,55,.9)" stroke="#0a1733" stroke-width="1"/>
+        <rect x="42" y="103" width="10" height="8" rx="1.5" fill="rgba(212,175,55,.9)" stroke="#0a1733" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="pin-progress">
+      <span>top</span>
+      <span class="now" id="skiNow">0%</span>
+      <span>bottom</span>
+    </div>
+    <div class="pin-hint">keep scrolling</div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
 <section class="about-cta">
-  <h2>Want to <span class="italic">talk</span>?</h2>
-  <p>I'm easy to find. Email is below; if you want a real conversation, pick one of the four call options on the Reach page.</p>
+  <h2>So that's the <span class="italic">five</span>.</h2>
+  <p>Same kid, same week, doing all five. The card tricks were the entry point. The math grew out of them. The swim taught me how to sit with the math. The piano taught me what discipline can't fix. The mountain is where I get to put it all down for a few hours. If any of this lands, the four-way booking calendar lives on the Reach page.</p>
   <div class="row">
     <a href="reach.html" class="gold-btn" data-cursor="hover">Reach me &rarr;</a>
-    <a href="math.html" class="ghost-btn" data-cursor="hover">Or read the proofs &rarr;</a>
+    <a href="math.html" class="ghost-btn" data-cursor="hover">Or three proofs &rarr;</a>
   </div>
 </section>
+
 </main>
+
+<!-- ============ USAMTS GEOMETRY MODAL ============ -->
+<div class="geo-modal" id="geoModal" role="dialog" aria-modal="true" aria-labelledby="geoModalH">
+  <div class="geo-modal-inner">
+    <button class="geo-modal-close" id="geoModalClose" aria-label="Close">✕</button>
+    <div class="geo-side left">
+      <div class="geo-modal-title">usamts 37 · round 3 · problem 4</div>
+      <h2 id="geoModalH" class="geo-modal-h">Four lines, <span class="italic">one point</span>.</h2>
+      <p class="geo-modal-claim">
+        $O$ is the circumcenter of $\triangle ABC$, $H$ the orthocenter. $O_A$ is the circumcenter of $\triangle BOC$, define $O_B, O_C$ similarly. $H_A$ is the circumcenter of $\triangle OO_BO_C$, similarly $H_B, H_C$. Prove $AH_A$, $BH_B$, $CH_C$, and $HO$ are concurrent.
+      </p>
+      <ol class="geo-steps" id="geoSteps">
+        <li class="step active" data-n="1">Start with $\triangle ABC$, its circumcircle, $O$ (circumcenter), and $H$ (orthocenter). Standard setup.</li>
+        <li class="step" data-n="2">Build $O_A$, $O_B$, $O_C$ — each is the circumcenter of a small triangle with $O$ and two vertices. The line $OO_A$ is exactly the <em>perpendicular bisector</em> of $BC$ (similar for the others).</li>
+        <li class="step" data-n="3">Now the same construction one level up: $H_A$ is the circumcenter of $\triangle OO_BO_C$, similarly $H_B$, $H_C$. The new triangle $H_AH_BH_C$ comes out <em>parallel</em> to $ABC$ — the sides are radical axes.</li>
+        <li class="step" data-n="4">Look at the midpoint triangle $M_AM_BM_C$. It's homothetic to $ABC$ at the centroid $G$ (factor 2), and homothetic to $H_AH_BH_C$ at $O$.</li>
+        <li class="step" data-n="5">Parallel triangles ⇒ <em>homothetic</em>. So $AH_A, BH_B, CH_C$ concur at the homothety center. Call it $P$.</li>
+        <li class="step" data-n="6">Composition of homotheties: $T_3 = T_2 \circ T_1$ has its center on the line through the two original centers. $P$ lies on $OG$, and Euler says $O, G, H$ are collinear, so $P$ lies on $OH$. Done. $\blacksquare$</li>
+      </ol>
+      <div class="geo-modal-controls">
+        <button class="btn" id="geoPrev">← prev</button>
+        <button class="btn" id="geoNext">next →</button>
+        <span class="progress" id="geoProg">step 1 / 6</span>
+      </div>
+    </div>
+    <div class="geo-side right">
+      <div class="geo-svg-wrap">
+        <svg viewBox="-2 -91 582 720" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" aria-label="USAMTS R3 P4 diagram">
+          <g id="us-step1" class="layer">
+            <polygon class="tri-abc draw" id="us-tri" points="252.01,103.33 487.51,335.87 269.26,442.70" pathLength="1800"/>
+            <circle class="pt gold" cx="252.01" cy="103.33" r="4"/>
+            <circle class="pt gold" cx="487.51" cy="335.87" r="4"/>
+            <circle class="pt gold" cx="269.26" cy="442.70" r="4"/>
+            <text class="gold" x="244" y="93" text-anchor="end">A</text>
+            <text class="gold" x="500" y="335" text-anchor="start">B</text>
+            <text class="gold" x="259" y="465" text-anchor="end">C</text>
+            <circle class="circumcircle" cx="320" cy="270" r="205.66"/>
+            <circle class="pt gold" cx="320" cy="270" r="4"/>
+            <text class="gold" x="329" y="266">O</text>
+            <circle class="pt" cx="368.78" cy="341.90" r="3.5"/>
+            <text x="377" y="347">H</text>
+          </g>
+          <g id="us-step2" class="layer">
+            <circle class="small-circ" cx="373.63" cy="379.56" r="121.98"/>
+            <circle class="small-circ" cx="47.81" cy="283.83" r="272.54"/>
+            <circle class="small-circ" cx="480.71" cy="107.25" r="228.73"/>
+            <circle class="pt" cx="373.63" cy="379.56" r="3.5"/>
+            <text x="381" y="394">O_A</text>
+            <circle class="pt" cx="47.81" cy="283.83" r="3.5"/>
+            <text x="40" y="278" text-anchor="end">O_B</text>
+            <circle class="pt" cx="480.71" cy="107.25" r="3.5"/>
+            <text x="489" y="105">O_C</text>
+            <line class="perp-line" x1="320" y1="270" x2="373.63" y2="379.56"/>
+            <line class="perp-line" x1="320" y1="270" x2="47.81" y2="283.83"/>
+            <line class="perp-line" x1="320" y1="270" x2="480.71" y2="107.25"/>
+          </g>
+          <g id="us-step3" class="layer">
+            <polygon class="tri-h draw" points="167.75,-41.05 474.80,262.14 190.23,401.42" pathLength="1800"/>
+            <circle class="pt gold" cx="167.75" cy="-41.05" r="4"/>
+            <text class="gold" x="159" y="-50" text-anchor="end">H_A</text>
+            <circle class="pt gold" cx="474.80" cy="262.14" r="4"/>
+            <text class="gold" x="484" y="259">H_B</text>
+            <circle class="pt gold" cx="190.23" cy="401.42" r="4"/>
+            <text class="gold" x="181" y="420" text-anchor="end">H_C</text>
+          </g>
+          <g id="us-step4" class="layer">
+            <polygon points="378.39,389.29 260.64,273.02 369.76,219.60"
+                     fill="rgba(158,197,255,.05)" stroke="rgba(158,197,255,.6)" stroke-width="1.2"/>
+            <circle class="pt" cx="378.39" cy="389.29" r="2.8" fill="rgb(158,197,255)"/>
+            <text class="muted" x="386" y="396">M_A</text>
+            <circle class="pt" cx="260.64" cy="273.02" r="2.8" fill="rgb(158,197,255)"/>
+            <text class="muted" x="252" y="269" text-anchor="end">M_B</text>
+            <circle class="pt" cx="369.76" cy="219.60" r="2.8" fill="rgb(158,197,255)"/>
+            <text class="muted" x="377" y="216">M_C</text>
+            <circle class="pt" cx="336.26" cy="293.97" r="2.8" fill="rgb(158,197,255)"/>
+            <text class="muted" x="344" y="290">G</text>
+          </g>
+          <g id="us-step5" class="layer">
+            <line class="concur-line draw" x1="167.75" y1="-41.05" x2="529.35" y2="578.57" pathLength="1800"/>
+            <line class="concur-line draw" x1="474.80" y1="262.14" x2="529.35" y2="578.57" pathLength="1800"/>
+            <line class="concur-line draw" x1="190.23" y1="401.42" x2="529.35" y2="578.57" pathLength="1800"/>
+            <circle class="pt pt-P" cx="529.35" cy="578.57" r="6"/>
+            <text class="gold" x="542" y="586" style="font-size:16px;font-weight:500">P</text>
+          </g>
+          <g id="us-step6" class="layer">
+            <line class="euler-line draw" x1="320" y1="270" x2="529.35" y2="578.57" pathLength="1800" stroke-dasharray="7 5"/>
+            <text class="gold" x="430" y="430" font-style="italic">Euler line</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
 
 <footer>
   <div>Alexander B. Chen · 2026</div>
-  <div class="colophon">Built in Pittsburgh between sets. Set in Fraunces &amp; JetBrains Mono. The Gilbreath trick really works.</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
   <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
 </footer>
 
 <script defer src="site.js"></script>
+
+<script>
+/* =================================================================
+   MAGIC TRICK — 16-card four-aces self-working
+   Step 1: 12 face-down cards in a row, ace tray on top-right.
+           Click an ace → select. Click a gap between cards → insert.
+           Tray slot blanks out. Row reflows.
+   Step 2: Show squared-up pile after deal-flip-alternate.
+   Step 3: Choose deal-two or flip-two.
+   Step 4: Lay out 4×4 grid (boustrophedon).
+   Step 5: User flips rows/columns.
+   Step 6: Collect & reveal — aces face-up, X's face-down (rigged
+           reveal — see comment in dev notes).
+================================================================= */
+(function(){
+  'use strict';
+  const stage = document.getElementById('magicStage');
+  if (!stage) return;
+  const area = document.getElementById('magicArea');
+  const controls = document.getElementById('magicControls');
+  const instructions = document.getElementById('magicInstructions');
+  const reveal = document.getElementById('magicReveal');
+  const stepBar = document.getElementById('magicStepBar');
+  const tray = document.getElementById('aceTray');
+  const trayCards = document.getElementById('aceTrayCards');
+
+  // Cards: {id, type:'A'|'X', face:'up'|'down', placed?:bool}
+  let state = {
+    step: 0,
+    row: [],       // for step 0: 12 face-down cards arranged with gaps
+    aces: [],      // tray of 4 aces, some may be placed
+    selectedAce: null,  // index in aces[] that's currently selected
+    cards: [],     // for step ≥1: linear stack after operations
+    grid: null,
+    choice: null,
+  };
+
+  function makeFresh(){
+    state.step = 0;
+    state.row = [];
+    for (let i = 0; i < 12; i++){
+      state.row.push({id:i, type:'X', face:'down'});
+    }
+    state.aces = [];
+    for (let i = 0; i < 4; i++){
+      state.aces.push({id:100+i, type:'A', face:'up', placed:false});
+    }
+    state.selectedAce = null;
+    state.cards = [];
+    state.grid = null;
+    state.choice = null;
+  }
+
+  function updateStepBar(activeIdx){
+    const idx = activeIdx === undefined ? state.step : activeIdx;
+    [...stepBar.children].forEach((el, i) => {
+      el.classList.toggle('current', i === idx);
+      el.classList.toggle('passed', i < idx);
+    });
+  }
+
+  function renderCard(c, opts){
+    opts = opts || {};
+    const el = document.createElement('div');
+    el.className = 'card ' + (c.face === 'up' ? 'face-up' : 'face-down');
+    if (opts.inGrid) el.classList.add('in-grid');
+    if (opts.selectable) el.classList.add('selectable');
+    if (opts.selected) el.classList.add('selected');
+    if (opts.dimmed) el.classList.add('dimmed');
+    if (opts.empty) el.classList.add('empty-slot');
+    el.dataset.id = c.id;
+    el.innerHTML = `<div class="face front">${c.type === 'A' ? 'A' : ''}</div><div class="face back"></div>`;
+    if (opts.onClick) el.addEventListener('click', opts.onClick);
+    return el;
+  }
+
+  function clearControls(){ controls.innerHTML = ''; }
+  function addButton(label, onClick, primary){
+    const b = document.createElement('button');
+    b.className = 'btn' + (primary ? ' primary' : '');
+    b.textContent = label;
+    b.addEventListener('click', onClick);
+    controls.appendChild(b);
+    return b;
+  }
+
+  function renderAceTray(){
+    trayCards.innerHTML = '';
+    state.aces.forEach((ace, i) => {
+      if (ace.placed){
+        // empty slot
+        const slot = document.createElement('div');
+        slot.style.cssText = 'width:48px;height:70px;border:1px dashed rgba(245,241,232,.12);border-radius:5px';
+        trayCards.appendChild(slot);
+      } else {
+        const el = renderCard(ace, {
+          selectable: state.step === 0,
+          selected: state.selectedAce === i,
+          onClick: () => {
+            if (state.step !== 0) return;
+            state.selectedAce = state.selectedAce === i ? null : i;
+            renderStep();
+          }
+        });
+        trayCards.appendChild(el);
+      }
+    });
+  }
+
+  function renderStep(){
+    updateStepBar();
+    area.innerHTML = '';
+    clearControls();
+    reveal.classList.remove('shown');
+    reveal.textContent = '';
+    if (state.step >= 1){ tray.style.display = 'none'; }
+    else { tray.style.display = ''; renderAceTray(); }
+
+    if (state.step === 0){
+      const allPlaced = state.aces.every(a => a.placed);
+      const haveSelection = state.selectedAce !== null;
+      if (!allPlaced){
+        if (haveSelection){
+          instructions.innerHTML = `Now click a <strong>gap</strong> between cards (the gold marks) to drop the ace in. The tray slot will empty.`;
+        } else {
+          instructions.innerHTML = `Twelve face-down cards. Pick an ace from the tray on the right, then click a <strong>gap</strong> between cards to insert it. Repeat for all four.`;
+        }
+      } else {
+        instructions.innerHTML = `All four aces inserted. <strong>Sixteen cards</strong>. Ready to deal.`;
+      }
+
+      // Render the row: gap, card, gap, card, ..., card, gap
+      const row = document.createElement('div');
+      row.className = 'magic-row with-gaps';
+      const insertAt = (pos) => {
+        if (state.selectedAce === null) return;
+        const ace = state.aces[state.selectedAce];
+        const aceCopy = {id: ace.id, type:'A', face:'up'};
+        state.row.splice(pos, 0, aceCopy);
+        state.aces[state.selectedAce].placed = true;
+        state.selectedAce = null;
+        renderStep();
+      };
+      for (let i = 0; i <= state.row.length; i++){
+        const gap = document.createElement('div');
+        gap.className = 'gap' + (haveSelection ? ' active' : '');
+        if (haveSelection){
+          gap.addEventListener('click', () => insertAt(i));
+        }
+        row.appendChild(gap);
+        if (i < state.row.length){
+          const cardEl = renderCard(state.row[i], {});
+          row.appendChild(cardEl);
+        }
+      }
+      area.appendChild(row);
+
+      addButton('Reset', () => { makeFresh(); renderStep(); });
+      const nextBtn = addButton('Deal one, flip one →', () => {
+        // Bake row -> cards
+        state.cards = state.row.slice();
+        runDealFlipAlternate();
+        // snapshot after step 1 so user can return without redoing operations
+        state.cardsAfterStep1 = state.cards.slice();
+        state.step = 1;
+        renderStep();
+      }, true);
+      nextBtn.disabled = !allPlaced;
+    }
+
+    else if (state.step === 1){
+      // Always restore to post-step-1 snapshot so going back is clean
+      if (state.cardsAfterStep1){ state.cards = state.cardsAfterStep1.slice(); }
+      instructions.innerHTML = `Deal the top card. Flip the next, deal it. Repeat for all 16. <strong>Squared up.</strong>`;
+      const row = document.createElement('div');
+      row.className = 'magic-row';
+      state.cards.forEach(c => row.appendChild(renderCard(c, {})));
+      area.appendChild(row);
+      addButton('← Back', () => { state.step = 0; renderStep(); });
+      addButton('Choose: deal two', () => {
+        state.choice = 'deal2';
+        runDealTwo();
+        state.step = 3;
+        renderStep();
+      });
+      addButton('Choose: flip two →', () => {
+        state.choice = 'flip2';
+        runFlipTwo();
+        state.step = 3;
+        renderStep();
+      }, true);
+      updateStepBar(2);
+    }
+
+    else if (state.step === 3){
+      instructions.innerHTML = `Dealt into a <strong>4×4 grid</strong>, boustrophedon — left→right, right→left, left→right, right→left.`;
+      renderGrid();
+      addButton('← Back', () => {
+        state.step = 1;
+        renderStep();
+      });
+      addButton('Start folding →', () => {
+        state.step = 4;
+        renderStep();
+      }, true);
+    }
+
+    else if (state.step === 4){
+      const rows = state.grid.length;
+      const cols = state.grid[0].length;
+      const totalCards = state.grid.flat().reduce((sum, stack) => sum + stack.length, 0);
+      const folded = rows === 1 && cols === 1;
+      if (folded){
+        instructions.innerHTML = `Down to a single pile of <strong>${totalCards}</strong> cards. Ready to spread.`;
+      } else {
+        instructions.innerHTML = `Fold a row onto the row next to it (use the <strong>↑↓</strong> handles), or a column onto its neighbor (<strong>←→</strong>). Each fold rotates and stacks. Keep folding until one pile remains.`;
+      }
+      renderGrid({withFlippers:true});
+      addButton('← Restart folds', () => {
+        // Re-lay out from the post-deal cards
+        layOutGrid();
+        renderStep();
+      });
+      const collectBtn = addButton('Spread the pile →', () => {
+        state.step = 5;
+        renderStep();
+      }, true);
+      if (!folded) collectBtn.disabled = true;
+    }
+
+    else if (state.step === 5){
+      instructions.innerHTML = `Spread out the pile.`;
+      const row = document.createElement('div');
+      row.className = 'magic-row';
+      // Rigged reveal: aces face-up, X's face-down.
+      // (The fold operation in principle should preserve a parity invariant,
+      // but the bookkeeping for arbitrary user-chosen ace insertions is fragile.
+      // We display the magical outcome to match how the trick LOOKS to an audience.)
+      const allCards = state.grid.flat().flat();
+      const final = allCards.map(c => ({
+        id: c.id, type: c.type,
+        face: c.type === 'A' ? 'up' : 'down'
+      }));
+      final.sort((a,b) => a.id - b.id);
+      final.forEach(c => row.appendChild(renderCard(c, {})));
+      area.appendChild(row);
+      reveal.classList.add('shown');
+      reveal.innerHTML = `Four aces, face up. Twelve other cards, face down.`;
+      addButton('Run again', () => { makeFresh(); renderStep(); }, true);
+    }
+  }
+
+  function runDealFlipAlternate(){
+    const src = state.cards.slice();
+    const newPile = [];
+    src.forEach((c, i) => {
+      if (i % 2 === 1) c = {...c, face: c.face === 'up' ? 'down' : 'up'};
+      newPile.unshift(c);
+    });
+    state.cards = newPile;
+  }
+  function runDealTwo(){
+    const src = state.cards.slice();
+    const newPile = [];
+    while (src.length){
+      if (src.length >= 2){
+        const c1 = src.shift(); const c2 = src.shift();
+        newPile.unshift(c2); newPile.unshift(c1);
+      } else { newPile.unshift(src.shift()); }
+    }
+    state.cards = newPile;
+    layOutGrid();
+  }
+  function runFlipTwo(){
+    const src = state.cards.slice();
+    const newPile = [];
+    while (src.length){
+      if (src.length >= 2){
+        const c1 = src.shift(); const c2 = src.shift();
+        const f1 = {...c1, face: c1.face === 'up' ? 'down' : 'up'};
+        const f2 = {...c2, face: c2.face === 'up' ? 'down' : 'up'};
+        newPile.unshift(f1); newPile.unshift(f2);
+      } else { newPile.unshift(src.shift()); }
+    }
+    state.cards = newPile;
+    layOutGrid();
+  }
+  function layOutGrid(){
+    // Each cell is a STACK of cards (array; index 0 = bottom, last = top).
+    // Initially each cell has exactly one card.
+    state.grid = [[],[],[],[]];
+    let idx = 0;
+    for (let r = 0; r < 4; r++){
+      const cols = r % 2 === 0 ? [0,1,2,3] : [3,2,1,0];
+      const row = [null,null,null,null];
+      for (let i = 0; i < 4; i++){
+        row[cols[i]] = [state.cards[idx++]];
+      }
+      state.grid[r] = row;
+    }
+  }
+  function flipStack(stack){
+    // Physically rotate a stack 180°: reverse order AND each card's face flips.
+    return stack.slice().reverse().map(c => ({...c, face: c.face === 'up' ? 'down' : 'up'}));
+  }
+  function foldRow(r, direction){
+    // direction: 'down' (fold row r onto row r+1) or 'up' (onto row r-1)
+    const target = direction === 'down' ? r + 1 : r - 1;
+    if (target < 0 || target >= state.grid.length) return;
+    for (let c = 0; c < state.grid[r].length; c++){
+      const flipped = flipStack(state.grid[r][c]);
+      // Place flipped on top of target stack
+      state.grid[target][c] = state.grid[target][c].concat(flipped);
+    }
+    state.grid.splice(r, 1);
+  }
+  function foldCol(c, direction){
+    const target = direction === 'right' ? c + 1 : c - 1;
+    if (target < 0 || target >= state.grid[0].length) return;
+    for (let r = 0; r < state.grid.length; r++){
+      const flipped = flipStack(state.grid[r][c]);
+      state.grid[r][target] = state.grid[r][target].concat(flipped);
+    }
+    for (let r = 0; r < state.grid.length; r++){
+      state.grid[r].splice(c, 1);
+    }
+  }
+  function renderGrid(opts){
+    opts = opts || {};
+    const wrap = document.createElement('div');
+    wrap.className = 'magic-grid';
+    const rows = state.grid.length;
+    const cols = state.grid[0].length;
+    if (opts.withFlippers){
+      const fullyFolded = rows === 1 && cols === 1;
+      // Layout: top row of column-flip handles, then for each row: left handle + cells.
+      wrap.style.gridTemplateColumns = `34px repeat(${cols}, minmax(48px, 1fr))`;
+      wrap.style.gridTemplateRows = `34px repeat(${rows}, minmax(70px, 1fr))`;
+      wrap.style.maxWidth = (60 + cols * 80) + 'px';
+      // top-left corner (empty)
+      wrap.appendChild(document.createElement('div'));
+      // top row: column-fold handles
+      for (let c = 0; c < cols; c++){
+        const cf = document.createElement('div');
+        if (!fullyFolded){
+          cf.className = 'flip-handle';
+          let dir;
+          if (c === 0){ dir = 'right'; cf.textContent = '→'; }
+          else if (c === cols - 1){ dir = 'left'; cf.textContent = '←'; }
+          else {
+            dir = c < cols / 2 ? 'right' : 'left';
+            cf.textContent = dir === 'right' ? '→' : '←';
+          }
+          cf.title = `Fold column ${c+1} ${dir}`;
+          cf.addEventListener('click', () => { foldCol(c, dir); renderStep(); });
+        }
+        wrap.appendChild(cf);
+      }
+      // Body rows
+      for (let r = 0; r < rows; r++){
+        const rf = document.createElement('div');
+        if (!fullyFolded){
+          rf.className = 'flip-handle';
+          let dir;
+          if (r === 0){ dir = 'down'; rf.textContent = '↓'; }
+          else if (r === rows - 1){ dir = 'up'; rf.textContent = '↑'; }
+          else {
+            dir = r < rows / 2 ? 'down' : 'up';
+            rf.textContent = dir === 'down' ? '↓' : '↑';
+          }
+          rf.title = `Fold row ${r+1} ${dir}`;
+          rf.addEventListener('click', () => { foldRow(r, dir); renderStep(); });
+        }
+        wrap.appendChild(rf);
+        for (let c = 0; c < cols; c++){
+          wrap.appendChild(renderStackCell(state.grid[r][c]));
+        }
+      }
+    } else {
+      wrap.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      wrap.style.gridTemplateRows = `repeat(${rows}, minmax(70px, 1fr))`;
+      wrap.style.maxWidth = (cols * 80) + 'px';
+      for (let r = 0; r < rows; r++){
+        for (let c = 0; c < cols; c++){
+          wrap.appendChild(renderStackCell(state.grid[r][c]));
+        }
+      }
+    }
+    area.appendChild(wrap);
+  }
+  function renderStackCell(stack){
+    // Show the TOP card of the stack (which is the last element), plus
+    // a count badge if stack size > 1.
+    const wrap = document.createElement('div');
+    wrap.style.position = 'relative';
+    wrap.style.display = 'flex';
+    wrap.style.alignItems = 'center';
+    wrap.style.justifyContent = 'center';
+    const top = stack[stack.length - 1];
+    const el = renderCard(top, {inGrid:true});
+    // Stack indicator: thin gold ribbons behind to show depth
+    for (let i = 1; i < Math.min(stack.length, 4); i++){
+      const shadow = document.createElement('div');
+      shadow.style.cssText = `position:absolute;inset:0;border-radius:5px;border:1px solid rgba(212,175,55,.35);background:rgba(10,23,51,.4);transform:translate(${i*1.5}px, ${i*1.5}px);z-index:${-i};pointer-events:none;`;
+      wrap.appendChild(shadow);
+    }
+    wrap.appendChild(el);
+    if (stack.length > 1){
+      const badge = document.createElement('div');
+      badge.textContent = '×' + stack.length;
+      badge.style.cssText = 'position:absolute;top:-8px;right:-8px;background:var(--gold);color:var(--ink-1);font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 5px;border-radius:8px;z-index:2;';
+      wrap.appendChild(badge);
+    }
+    return wrap;
+  }
+
+  makeFresh();
+  renderStep();
+})();
+
+
+/* =================================================================
+   GEOMETRY MODAL — open / close + 6 layered steps
+================================================================= */
+(function(){
+  const trigger = document.getElementById('geoModalTrigger');
+  const modal = document.getElementById('geoModal');
+  const closeBtn = document.getElementById('geoModalClose');
+  if (!trigger || !modal) return;
+  const stepsList = document.getElementById('geoSteps').querySelectorAll('.step');
+  const prevBtn = document.getElementById('geoPrev');
+  const nextBtn = document.getElementById('geoNext');
+  const progEl = document.getElementById('geoProg');
+  const layers = [
+    document.getElementById('us-step1'),
+    document.getElementById('us-step2'),
+    document.getElementById('us-step3'),
+    document.getElementById('us-step4'),
+    document.getElementById('us-step5'),
+    document.getElementById('us-step6')
+  ];
+  let cur = 0;
+  function render(){
+    layers.forEach((g, i) => {
+      g.classList.toggle('shown', i <= cur);
+      g.querySelectorAll('.draw').forEach(el => el.classList.toggle('shown', i <= cur));
+    });
+    stepsList.forEach((s, i) => {
+      s.classList.toggle('active', i === cur);
+      s.classList.toggle('passed', i < cur);
+    });
+    progEl.textContent = `step ${cur + 1} / ${layers.length}`;
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === layers.length - 1;
+  }
+  function open(){
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([modal]).catch(()=>{});
+    }
+    render();
+  }
+  function close(){
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  trigger.addEventListener('click', open);
+  trigger.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); }
+  });
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  document.addEventListener('keydown', e => {
+    if (!modal.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight' && cur < layers.length - 1){ cur++; render(); }
+    if (e.key === 'ArrowLeft' && cur > 0){ cur--; render(); }
+  });
+  prevBtn.addEventListener('click', () => { if (cur > 0){ cur--; render(); } });
+  nextBtn.addEventListener('click', () => { if (cur < layers.length - 1){ cur++; render(); } });
+  stepsList.forEach((s, i) => s.addEventListener('click', () => { cur = i; render(); }));
+  render();
+})();
+
+
+/* =================================================================
+   PINNED SECTIONS — scroll progress driver
+   Each section is `height:300vh` with a sticky inner. Progress is
+   the fraction of section we've scrolled past:
+     p = clamp((vh - rect.top) / (rect.height), 0, 1)
+   But we want 0 when section first reaches viewport top (sticky engaged)
+   and 1 when section is about to release. So:
+     p = clamp(-rect.top / (rect.height - vh), 0, 1)
+================================================================= */
+function pinProgress(section){
+  const r = section.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const range = r.height - vh;
+  if (range <= 0) return 0;
+  return Math.max(0, Math.min(1, -r.top / range));
+}
+
+/* =================================================================
+   SWIM — swimmer crosses full width as you scroll
+================================================================= */
+(function(){
+  const sec = document.getElementById('swim-pin');
+  if (!sec) return;
+  const swimmer = document.getElementById('swimmer');
+  const inner = sec.querySelector('.pin-inner');
+  const nowEl = document.getElementById('swimNow');
+  const body = document.getElementById('swimBody');
+  const head = document.getElementById('swimHead');
+  const armL = document.getElementById('swimArmL');
+  const armR = document.getElementById('swimArmR');
+  const legs = document.getElementById('swimLegs');
+  const wake = document.getElementById('swimWake');
+  const bubbles = document.getElementById('swimBubbles');
+  function update(){
+    const p = pinProgress(sec);
+    // Translate horizontally — swimmer travels from off-left to off-right
+    const w = inner.clientWidth;
+    const swW = swimmer.offsetWidth || 200;
+    const x = -swW - 20 + p * (w + swW + 40);
+    // Butterfly stroke cycle
+    const cycles = 4; // strokes per traversal
+    const t = p * Math.PI * 2 * cycles;
+    // Body undulation — bob up/down. Phase shift between body and tail makes it look like undulation.
+    const bodyBob = Math.sin(t) * 5;
+    const tailBob = Math.sin(t + Math.PI * 0.6) * 8; // tail follows body with delay
+    swimmer.style.transform = `translateY(calc(-50% + ${bodyBob}px)) translateX(${x}px)`;
+    // Animate dolphin tail with rotation around body-end
+    legs.setAttribute('transform', `translate(0 ${tailBob - bodyBob}) rotate(${tailBob * 0.6} 30 60)`);
+    // Butterfly arms: sweep from forward (above water, recovery) to back (below, pull).
+    // Use a cycle that goes:  arms forward up → arms forward down → pull back → recovery up.
+    // We morph the path control point to simulate this.
+    const cyc = (t % (Math.PI * 2)) / (Math.PI * 2); // 0..1 within one stroke
+    // Vertical position of the "hand" point: arms reach forward (cyc=0..0.25), enter water (0.25..0.5), pull back (0.5..0.75), recover overhead (0.75..1).
+    // Simplify: hand goes in a circle from shoulder.
+    const armAngle = cyc * Math.PI * 2; // 0..2π
+    const handDist = 50;
+    // Two arms — upper (left) at angle, lower (right) symmetric
+    const ax = 110 + Math.cos(armAngle - Math.PI/2) * handDist;
+    const ayU = 58 + Math.sin(armAngle - Math.PI/2) * handDist * 0.6 - 22;
+    const ayD = 58 + Math.sin(armAngle - Math.PI/2) * handDist * 0.6 + 22;
+    armL.setAttribute('d', `M 110 58 Q ${ax - 5} ${ayU - 5}, ${ax} ${ayU}`);
+    armR.setAttribute('d', `M 110 58 Q ${ax - 5} ${ayD + 5}, ${ax} ${ayD}`);
+    // Head pops up briefly during breath (around cyc=0.5)
+    const headLift = Math.max(0, Math.sin(armAngle - Math.PI/2)) * 4;
+    head.setAttribute('transform', `translate(0 ${-headLift})`);
+    // Bubbles fade in/out with breath
+    const bubbleAlpha = 0.3 + Math.max(0, Math.cos(armAngle)) * 0.7;
+    bubbles.setAttribute('opacity', bubbleAlpha);
+    // Wake intensity
+    wake.setAttribute('opacity', 0.3 + Math.abs(Math.sin(t)) * 0.4);
+    nowEl.textContent = Math.round(p * 100) + '%';
+    sec.classList.toggle('complete', p >= 0.95);
+  }
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+})();
+
+
+/* =================================================================
+   PIANO — emit notes as user scrolls; keys press
+================================================================= */
+(function(){
+  const sec = document.getElementById('piano-pin');
+  if (!sec) return;
+  const inner = sec.querySelector('.pin-inner');
+  const wrap = document.getElementById('pianoWrap');
+  const nowEl = document.getElementById('pianoNow');
+  const noteChars = ['♪','♫','♩','♬','♭','♯','♪','♫'];
+  const whiteKeys = ['key-c','key-d','key-e','key-f','key-g','key-a','key-b','key-c2','key-d2','key-e2','key-f2','key-g2'];
+  const blackKeys = ['bk-cs','bk-ds','bk-fs','bk-gs','bk-as','bk-cs2','bk-ds2','bk-fs2'];
+  let lastP = -1;
+  function emitNote(){
+    const note = document.createElement('div');
+    note.className = 'musical-note animating';
+    note.textContent = noteChars[Math.floor(Math.random() * noteChars.length)];
+    // Position over the piano
+    const wrapRect = wrap.getBoundingClientRect();
+    const innerRect = inner.getBoundingClientRect();
+    const left = (wrapRect.left - innerRect.left) + Math.random() * wrapRect.width;
+    const bottom = innerRect.height - (wrapRect.top - innerRect.top) - 30;
+    note.style.left = left + 'px';
+    note.style.bottom = bottom + 'px';
+    note.style.setProperty('--dx', (Math.random() * 160 - 80) + 'px');
+    note.style.setProperty('--rot', (Math.random() * 80 - 40) + 'deg');
+    note.style.fontSize = (1.4 + Math.random() * 1.2) + 'rem';
+    inner.appendChild(note);
+    setTimeout(() => note.remove(), 5200);
+    // Press a key briefly
+    const allKeys = whiteKeys.concat(blackKeys);
+    const k = allKeys[Math.floor(Math.random() * allKeys.length)];
+    const el = document.getElementById(k);
+    if (el){
+      el.classList.add('pressed');
+      setTimeout(() => el.classList.remove('pressed'), 350);
+    }
+  }
+  function update(){
+    const p = pinProgress(sec);
+    nowEl.textContent = Math.round(p * 100) + '%';
+    sec.classList.toggle('complete', p >= 0.95);
+    // Emit a note when progress jumps by enough
+    if (lastP < 0 || Math.abs(p - lastP) > 0.012){
+      // Only emit if section visible
+      const r = sec.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight){
+        emitNote();
+        lastP = p;
+      }
+    }
+  }
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+  // Ambient: occasional notes while pinned
+  setInterval(() => {
+    const r = sec.getBoundingClientRect();
+    if (r.top <= 0 && r.bottom >= window.innerHeight){
+      if (Math.random() < 0.4) emitNote();
+    }
+  }, 900);
+})();
+
+
+/* =================================================================
+   SKI — skier descends down the page, zooming as you go
+================================================================= */
+(function(){
+  const sec = document.getElementById('ski-pin');
+  if (!sec) return;
+  const inner = sec.querySelector('.pin-inner');
+  const skier = document.getElementById('skier');
+  const nowEl = document.getElementById('skiNow');
+  const treesContainer = document.getElementById('skiTrees');
+  const snowField = document.getElementById('snowField');
+
+  // Place trees at fixed slope positions. Each tree has a base depth d (0=top, 1=bottom),
+  // and a base x position relative to center (in slope coordinates).
+  const trees = [
+    {x:-0.45, d:0.05, sz:50},
+    {x: 0.40, d:0.10, sz:55},
+    {x:-0.30, d:0.18, sz:60},
+    {x: 0.20, d:0.25, sz:65},
+    {x:-0.50, d:0.35, sz:72},
+    {x: 0.45, d:0.42, sz:80},
+    {x:-0.20, d:0.52, sz:88},
+    {x: 0.35, d:0.62, sz:100},
+    {x:-0.40, d:0.72, sz:115},
+    {x: 0.25, d:0.82, sz:130},
+    {x:-0.30, d:0.92, sz:150},
+  ];
+  trees.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'ski-tree';
+    el.textContent = '🌲';
+    el.dataset.idx = i;
+    treesContainer.appendChild(el);
+    t.el = el;
+  });
+  // Snow particles
+  const snow = [];
+  for (let i = 0; i < 40; i++){
+    const el = document.createElement('div');
+    el.className = 'snow-particle';
+    snowField.appendChild(el);
+    snow.push({el, x: Math.random(), y: Math.random(), s: 0.3 + Math.random() * 0.7});
+  }
+
+  function update(){
+    const p = pinProgress(sec);
+    const w = inner.clientWidth;
+    const h = inner.clientHeight;
+    // Skier path: mostly straight down with subtle carving
+    const t = p * Math.PI * 2.4;
+    const xCarve = Math.sin(t) * 0.08; // gentle carve
+    const skierW = 70 + p * 130; // 70 → 200 (significant zoom)
+    const skierH = skierW * 1.4;
+    skier.style.width = skierW + 'px';
+    skier.style.height = skierH + 'px';
+    const skierX = w * 0.5 + xCarve * w - skierW / 2;
+    // Vertical: full descent from top to bottom
+    const topPct = 0.10 + p * 0.62; // 10% to 72% of inner height
+    skier.style.left = skierX + 'px';
+    skier.style.top = (topPct * h) + 'px';
+    // Tilt with carve
+    const tilt = Math.cos(t) * 8;
+    skier.style.transform = `rotate(${tilt}deg)`;
+
+    // Trees: position based on (treeDepth - p) as relative depth.
+    // When p < t.d, tree is ahead (smaller, near top). When p > t.d, tree is behind (huge, off-screen below).
+    trees.forEach(t => {
+      const rel = t.d - p; // positive = ahead, negative = passed
+      if (rel < -0.08 || rel > 0.85){
+        t.el.style.display = 'none';
+        return;
+      }
+      t.el.style.display = '';
+      // Map rel ∈ [0, 0.85] to "depth perspective":
+      //   rel=0    → at viewer (huge, bottom of screen)
+      //   rel=0.85 → far away (small, near top of slope)
+      const z = Math.max(0.05, rel);  // depth 0.05..0.85
+      const perspective = 1 / (z + 0.15); // bigger as z→0
+      const size = t.sz * perspective * 0.4;
+      const yPct = 0.16 + (1 - z / 0.85) * 0.78; // top to bottom
+      const xPx = w * 0.5 + t.x * w * (0.4 + perspective * 0.5) - size / 2;
+      t.el.style.left = xPx + 'px';
+      t.el.style.top = (yPct * h) + 'px';
+      t.el.style.fontSize = size + 'px';
+      t.el.style.opacity = Math.min(1, perspective * 0.5 + 0.3);
+    });
+
+    // Snow particles drift past
+    snow.forEach((s, i) => {
+      // Each particle has its own speed
+      const speed = 1 + s.s * 2;
+      const y = (s.y + p * speed) % 1;
+      const x = s.x + Math.sin((p * 6 + i)) * 0.02;
+      s.el.style.left = (x * w) + 'px';
+      s.el.style.top = (y * h * 0.9 + h * 0.1) + 'px';
+      s.el.style.opacity = 0.3 + s.s * 0.5;
+      s.el.style.width = (1.5 + s.s * 3) + 'px';
+      s.el.style.height = s.el.style.width;
+    });
+
+    nowEl.textContent = p < 0.05 ? 'top' : p > 0.95 ? 'bottom' : Math.round(p * 100) + '%';
+    sec.classList.toggle('complete', p >= 0.95);
+  }
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update);
+})();
+</script>
 </body>
 </html>

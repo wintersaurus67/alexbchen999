@@ -4,13 +4,14 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Beyond the math — Alexander B. Chen</title>
-<meta name="description" content="Swimming, piano, skiing, card magic. The other half." />
+<meta name="description" content="Swimming, piano, skiing, card magic. The trivia version of me — the stuff that doesn't fit on a resume." />
 <meta name="theme-color" content="#0a1733" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 <style>
+/* ============ HERO ============ */
 .beyond-intro{padding:7rem var(--pad-x) 3rem}
 .beyond-intro h1{
   font-family:var(--serif);font-weight:300;
@@ -22,25 +23,39 @@
 .beyond-intro .lead{
   font-family:var(--serif);font-style:italic;
   font-size:clamp(1.05rem, 1.5vw, 1.3rem);
-  color:var(--paper-dim);max-width:50ch;margin:0;
+  color:var(--paper-dim);max-width:54ch;margin:0;line-height:1.55;
 }
-
+.beyond-intro .lead em{color:var(--paper);font-style:italic}
+.beyond-toc{
+  margin-top:2rem;
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.beyond-toc a{
+  color:var(--paper-dim);
+  border-bottom:1px solid var(--rule);padding-bottom:.4rem;
+}
+.beyond-toc a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.beyond-toc a .n{color:var(--gold);margin-right:.4em}
+/* ============ INDEX GRID ============ */
 .beyond-grid{
-  padding:0 var(--pad-x) var(--pad-y);
   display:grid;
   grid-template-columns:repeat(2, 1fr);
   gap:1px;
   background:var(--rule);
   border:1px solid var(--rule);
-  margin:0 var(--pad-x) var(--pad-y);
+  margin:0 var(--pad-x) 2rem;
 }
-@media (max-width:880px){.beyond-grid{grid-template-columns:1fr;margin:0;padding:0}}
+@media (max-width:880px){.beyond-grid{grid-template-columns:1fr;margin:0}}
 .beyond-card{
   background:var(--ink-1);
   padding:clamp(2rem, 4vw, 3rem);
-  min-height:440px;
+  min-height:420px;
   display:flex;flex-direction:column;
   transition:background .4s var(--ease);
+  position:relative;
+  text-decoration:none;color:inherit;
 }
 .beyond-card:hover{background:var(--ink-2)}
 .beyond-card .tag{
@@ -50,38 +65,538 @@
 }
 .beyond-card h3{
   font-family:var(--serif);font-weight:400;
-  font-size:clamp(1.5rem, 2.4vw, 2.1rem);
+  font-size:clamp(1.4rem, 2.3vw, 1.95rem);
   line-height:1.1;letter-spacing:-.01em;
   margin:2rem 0 1rem;
 }
 .beyond-card h3 .italic{font-style:italic;color:var(--gold)}
-.beyond-card p{
-  font-family:var(--serif);font-size:1.02rem;
-  line-height:1.55;color:var(--paper-dim);
-  margin:0 0 .8em;max-width:44ch;
+.beyond-card p.summary{
+  font-family:var(--serif);font-size:1rem;
+  line-height:1.5;color:var(--paper-dim);
+  margin:0 0 1rem;max-width:44ch;
 }
 .beyond-card em{color:var(--paper);font-style:italic}
 .beyond-card .stats{
   margin-top:1.5rem;
-  font-family:var(--mono);font-size:10.5px;
+  font-family:var(--mono);font-size:10px;
   letter-spacing:.18em;text-transform:uppercase;
   color:var(--paper-mute);
-  display:flex;flex-wrap:wrap;gap:1rem 2rem;
+  display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;
 }
 .beyond-card .stats span strong{
   display:block;color:var(--paper);font-weight:500;
-  font-size:1.6rem;font-family:var(--serif);font-style:italic;
+  font-size:1.4rem;font-family:var(--serif);font-style:italic;
   letter-spacing:-.02em;margin-bottom:.1rem;
 }
+.beyond-card .jump{
+  position:absolute;bottom:1.2rem;right:1.4rem;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);
+  display:inline-flex;gap:.4rem;align-items:center;
+  transition:gap .3s var(--ease);
+}
+.beyond-card:hover .jump{gap:.8rem}
+/* ============ LONG-FORM SECTIONS ============ */
+.deep{
+  padding:clamp(4rem, 8vw, 7rem) var(--pad-x);
+  border-top:1px solid var(--rule);
+  position:relative;
+  max-width:1280px;margin:0 auto;
+}
+.deep-grid{
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1.7fr);
+  gap:clamp(2rem, 5vw, 5rem);
+  align-items:start;
+}
+@media (max-width:980px){.deep-grid{grid-template-columns:1fr}}
+.deep-aside{position:sticky;top:6rem;}
+@media (max-width:980px){.deep-aside{position:static}}
+.deep-num{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:5rem;line-height:1;color:var(--gold);
+  letter-spacing:-.04em;margin:0 0 .8rem;
+}
+.deep-aside .label{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);max-width:22ch;line-height:1.6;
+}
+.deep-aside .label .gold{color:var(--gold)}
+.deep-body h2{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2rem, 4.5vw, 3.2rem);
+  line-height:1.04;letter-spacing:-.03em;
+  margin:0 0 1.8rem;max-width:24ch;
+}
+.deep-body h2 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.deep-body p{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.05rem, 1.32vw, 1.18rem);
+  line-height:1.7;color:var(--paper);
+  margin:0 0 1.3em;max-width:60ch;
+}
+.deep-body p em{color:var(--gold);font-style:italic}
+.deep-body p strong{color:var(--paper);font-weight:500}
+.deep-body p a{color:var(--gold);border-bottom:1px solid var(--gold)}
+.deep-body .aside-quote{
+  border-left:2px solid var(--gold);
+  padding:.3rem 0 .3rem 1.4rem;
+  margin:2rem 0;
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);
+  font-size:1.1rem;line-height:1.5;
+  max-width:50ch;
+}
+.deep-body .aside-quote .who{
+  display:block;margin-top:.6rem;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);font-style:normal;
+}
+/* ============================================================
+   SWIM — interactive 5-round set runner
+============================================================ */
+.swim-set{
+  margin:2.5rem 0;
+  background:linear-gradient(180deg, rgba(212,175,55,0.04), rgba(245,241,232,0.01));
+  border:1px solid var(--rule);
+  border-radius:4px;
+  padding:1.8rem 1.4rem 1.4rem;
+  font-family:var(--mono);
+  position:relative;
+  overflow:hidden;
+}
+.swim-set-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:1.2rem;
+  flex-wrap:wrap;gap:1rem;
+}
+.swim-set-title{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.3rem;color:var(--paper);
+}
+.swim-set-clock{
+  font-family:var(--mono);
+  font-size:2.2rem;
+  letter-spacing:.05em;
+  color:var(--gold);
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 0 12px rgba(212,175,55,0.3);
+}
+.swim-set-controls{
+  display:flex;gap:.6rem;
+  margin-bottom:1.4rem;
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+}
+.swim-set-controls button{
+  border:1px solid var(--rule);
+  padding:.5rem .9rem;
+  color:var(--paper-dim);
+  border-radius:3px;
+  cursor:pointer;
+  transition:all .25s var(--ease);
+  font-family:var(--mono);
+}
+.swim-set-controls button:hover{border-color:var(--gold);color:var(--gold)}
+.swim-set-controls button.active{
+  background:var(--gold);color:var(--ink-1);border-color:var(--gold);
+}
+.swim-rounds{display:flex;gap:.4rem;margin-bottom:1.2rem}
+.swim-round-pip{flex:1;height:3px;background:var(--rule);border-radius:2px;overflow:hidden;position:relative}
+.swim-round-pip .fill{position:absolute;inset:0;background:var(--gold);transform:translateX(-100%);transition:transform .15s linear}
+.swim-round-pip.done .fill{transform:translateX(0)}
+.swim-round-pip.active .fill{box-shadow:0 0 8px rgba(212,175,55,0.6)}
+.swim-set-grid{display:grid;grid-template-columns:auto 1fr auto auto;gap:.6rem 1rem;font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:1rem}
+.swim-set-grid .head{color:var(--gold);font-weight:500}
+.swim-set-row{display:contents;color:var(--paper-mute)}
+.swim-set-row .label{font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0;font-size:.95rem;color:inherit}
+.swim-set-footer{font-family:var(--serif);font-style:italic;color:var(--paper-mute);font-size:.95rem;border-top:1px solid var(--rule);padding-top:1rem;margin-top:.5rem}
+.swim-set-footer .total{color:var(--gold);font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.2em}
+.swim-pool-strip{position:relative;height:60px;margin-top:1.2rem;background:linear-gradient(180deg, rgba(20,37,71,0.6), rgba(13,27,58,0.8));border-radius:3px;overflow:hidden}
+.swim-pool-strip .lane{position:absolute;left:0;right:0;height:1px;background:rgba(245,241,232,0.08)}
+.swim-pool-strip .lane.l1{top:18px}
+.swim-pool-strip .lane.l2{top:30px;background:rgba(245,241,232,0.18)}
+.swim-pool-strip .lane.l3{top:42px}
+.swim-pool-strip .marker{position:absolute;top:50%;left:0;width:14px;height:6px;background:var(--gold);border-radius:3px;transform:translate(-50%,-50%);box-shadow:0 0 8px rgba(212,175,55,0.7);transition:left .25s linear}
+.swim-pool-strip .bubbles{position:absolute;top:50%;left:0;transform:translateY(-50%);display:flex;gap:3px;opacity:0;transition:opacity .3s}
+.swim-pool-strip .bubbles .b{width:3px;height:3px;border-radius:50%;background:rgba(212,175,55,0.5);animation:bubble-rise 1.5s linear infinite}
+.swim-pool-strip .bubbles .b:nth-child(2){animation-delay:.5s}
+.swim-pool-strip .bubbles .b:nth-child(3){animation-delay:1s}
+@keyframes bubble-rise{0%{transform:translateY(0);opacity:.7}100%{transform:translateY(-20px);opacity:0}}
+.swim-set.running .swim-pool-strip .bubbles{opacity:1}
+/* ============================================================
+   PIANO — full sonata player, full-width breakout
+============================================================ */
+.piano-block{
+  /* Break out of the article's max-width-1280 column */
+  position:relative;
+  margin:3rem calc(50% - 50vw) 3rem calc(50% - 50vw);
+  width:100vw;
+  background:linear-gradient(180deg, rgba(10,23,51,0.7) 0%, rgba(20,37,71,0.5) 50%, rgba(10,23,51,0.7) 100%);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  padding:2rem clamp(1rem, 4vw, 3rem) 1.5rem;
+  overflow:hidden;
+}
+.piano-block-head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  flex-wrap:wrap;gap:1rem;
+  margin-bottom:.8rem;
+  max-width:1400px;margin-left:auto;margin-right:auto;
+  padding:0 .5rem;
+}
+.piano-block-title{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.2rem;color:var(--paper);
+}
+.piano-block-title .piece{color:var(--gold)}
+.piano-meta{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.piano-meta .now-playing{color:var(--gold)}
+/* Mode + movement selector — two rows */
+.piano-controls{
+  max-width:1400px;margin:0 auto 1rem;
+  padding:0 .5rem;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1rem;
+  align-items:center;
+  flex-wrap:wrap;
+}
+@media (max-width:780px){.piano-controls{grid-template-columns:1fr;gap:.6rem}}
+.piano-modes{
+  display:flex;gap:.5rem;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;
+  flex-wrap:wrap;
+}
+.piano-modes button{
+  border:1px solid var(--rule);
+  padding:.5rem .9rem;
+  color:var(--paper-dim);
+  border-radius:3px;cursor:pointer;
+  transition:all .25s var(--ease);
+  font-family:var(--mono);
+  background:transparent;
+}
+.piano-modes button:hover{border-color:var(--gold);color:var(--gold)}
+.piano-modes button.active{background:var(--gold);color:var(--ink-1);border-color:var(--gold)}
+.piano-mvts{
+  display:flex;gap:.3rem;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;
+  justify-self:center;
+  flex-wrap:wrap;
+}
+.piano-mvts button{
+  border:1px solid var(--rule);
+  padding:.5rem .8rem;
+  color:var(--paper-dim);
+  border-radius:3px;cursor:pointer;
+  transition:all .25s var(--ease);
+  font-family:var(--mono);
+  background:transparent;
+  min-width:90px;
+}
+.piano-mvts button .num{color:var(--gold);font-weight:500;margin-right:.4em}
+.piano-mvts button:hover{border-color:var(--gold);color:var(--gold)}
+.piano-mvts button.active{background:rgba(212,175,55,0.1);border-color:var(--gold);color:var(--paper)}
+.piano-vol{
+  display:flex;align-items:center;gap:.5rem;
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.piano-vol input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:80px;height:2px;background:var(--rule);outline:none;cursor:pointer;
+}
+.piano-vol input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:10px;height:10px;border-radius:50%;background:var(--gold);cursor:pointer;
+}
+.piano-vol input[type=range]::-moz-range-thumb{
+  width:10px;height:10px;border-radius:50%;background:var(--gold);cursor:pointer;border:none;
+}
+/* Keyboard */
+.piano-kb-wrap{
+  position:relative;
+  max-width:1400px;
+  margin:0 auto;
+  padding:1rem .5rem 0;
+}
+.piano-kb{
+  position:relative;
+  height:180px;
+  user-select:none;
+  display:grid;
+  /* Set by JS: grid-template-columns: repeat(N, 1fr) */
+}
+@media (max-width:780px){.piano-kb{height:130px}}
+.piano-key{
+  background:linear-gradient(180deg, #f5f1e8 0%, #e8e2d1 100%);
+  border-left:1px solid #0a1733;
+  border-bottom:1px solid #0a1733;
+  border-right:1px solid #0a1733;
+  border-top:1px solid rgba(0,0,0,0.15);
+  border-radius:0 0 4px 4px;
+  position:relative;
+  transition:background .06s ease-out, transform .06s ease-out;
+  cursor:pointer;
+  box-shadow:inset 0 -3px 0 rgba(0,0,0,0.08);
+}
+.piano-key.black{
+  position:absolute;
+  /* width and left set inline by JS so they sit on exact white-key boundaries */
+  height:62%;
+  background:linear-gradient(180deg, #1c2f5a 0%, #0a1733 100%);
+  border:1px solid #000;
+  border-radius:0 0 3px 3px;
+  z-index:2;
+  cursor:pointer;
+  box-shadow:inset 0 -3px 0 rgba(255,255,255,0.08), 0 2px 3px rgba(0,0,0,0.4);
+}
+.piano-key.active{
+  background:linear-gradient(180deg, #d4af37 0%, #b89530 100%);
+  transform:translateY(2px);
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,0.25), 0 0 14px rgba(212,175,55,0.5);
+}
+.piano-key.black.active{
+  background:linear-gradient(180deg, #d4af37 0%, #b89530 100%);
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,0.25), 0 0 14px rgba(212,175,55,0.7);
+}
+.piano-key .label{
+  position:absolute;bottom:6px;left:0;right:0;
+  text-align:center;
+  font-family:var(--mono);font-size:8px;
+  color:var(--paper-mute);
+  pointer-events:none;
+}
+.piano-key.black .label{color:rgba(245,241,232,0.4);bottom:4px}
+.piano-key.c-marker .label{color:var(--gold)}
+/* Scrubber */
+.piano-scrub-wrap{
+  max-width:1400px;
+  margin:1rem auto 0;
+  padding:0 .5rem;
+}
+.piano-scrub-times{
+  display:flex;justify-content:space-between;align-items:center;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.15em;
+  color:var(--paper-mute);
+  margin-bottom:.4rem;
+  font-variant-numeric:tabular-nums;
+}
+.piano-scrub-times .now{color:var(--gold)}
+.piano-scrub-times .play{
+  border:1px solid var(--rule);
+  background:transparent;
+  color:var(--paper);
+  width:34px;height:34px;border-radius:50%;
+  cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:all .2s var(--ease);
+  margin:0 .8rem;
+}
+.piano-scrub-times .play:hover{border-color:var(--gold);color:var(--gold)}
+.piano-scrub-times .play svg{width:14px;height:14px;fill:currentColor}
+.piano-scrub{
+  position:relative;
+  height:24px;
+  cursor:pointer;
+  touch-action:none;
+}
+.piano-scrub .track{
+  position:absolute;
+  left:0;right:0;top:50%;
+  transform:translateY(-50%);
+  height:4px;
+  background:var(--rule);
+  border-radius:2px;
+  overflow:visible;
+}
+.piano-scrub .track .buffered{
+  position:absolute;inset:0;
+  background:rgba(245,241,232,0.08);
+  border-radius:2px;
+}
+.piano-scrub .track .played{
+  position:absolute;left:0;top:0;bottom:0;
+  width:0%;
+  background:linear-gradient(90deg, #d4af37 0%, #e8c54a 100%);
+  border-radius:2px;
+  box-shadow:0 0 8px rgba(212,175,55,0.5);
+}
+.piano-scrub .track .hover-fill{
+  position:absolute;left:0;top:0;bottom:0;
+  width:0%;
+  background:rgba(212,175,55,0.18);
+  border-radius:2px;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+}
+.piano-scrub:hover .track .hover-fill{opacity:1}
+.piano-scrub .handle{
+  position:absolute;top:50%;left:0%;
+  transform:translate(-50%, -50%) scale(.6);
+  width:16px;height:16px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 10px rgba(212,175,55,0.6), 0 2px 4px rgba(0,0,0,0.4);
+  transition:transform .15s var(--ease);
+  pointer-events:none;
+}
+.piano-scrub:hover .handle, .piano-scrub.dragging .handle{
+  transform:translate(-50%, -50%) scale(1);
+}
+.piano-scrub .mvt-marker{
+  position:absolute;top:50%;
+  transform:translate(-50%, -50%);
+  width:2px;height:14px;
+  background:var(--paper-mute);
+  opacity:.5;
+  pointer-events:none;
+}
+.piano-scrub .mvt-marker.passed{background:var(--gold);opacity:.8}
+.piano-scrub .mvt-label{
+  position:absolute;
+  top:-22px;
+  transform:translateX(-50%);
+  font-family:var(--mono);font-size:8px;
+  letter-spacing:.15em;
+  color:var(--paper-mute);
+  pointer-events:none;
+  text-transform:uppercase;
+}
+.piano-scrub .mvt-label.passed{color:var(--gold)}
+.piano-scrub .tooltip{
+  position:absolute;
+  bottom:24px;
+  transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;
+  background:var(--ink-1);
+  border:1px solid var(--rule);
+  padding:.3rem .5rem;border-radius:3px;
+  color:var(--paper);
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  font-variant-numeric:tabular-nums;
+}
+.piano-scrub:hover .tooltip, .piano-scrub.dragging .tooltip{opacity:1}
+.piano-caption{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-mute);
+  font-size:.95rem;
+  margin:1rem auto 0;
+  line-height:1.5;
+  max-width:60ch;
+  text-align:center;
+  padding:0 1rem;
+}
+.piano-caption .em{color:var(--gold);font-style:normal}
+/* Dynamics indicator (rubato mode only) */
+.piano-dyn{
+  max-width:1400px;margin:.6rem auto 0;
+  padding:0 .5rem;
+  display:flex;align-items:center;gap:.8rem;
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);
+  height:14px;
+  opacity:0;transition:opacity .3s;
+}
+.piano-dyn.shown{opacity:1}
+.piano-dyn .marking{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.1rem;
+  color:var(--gold);
+  text-transform:none;letter-spacing:0;
+  min-width:3em;
+}
+.piano-dyn .bar{
+  flex:1;height:3px;background:var(--rule);border-radius:2px;overflow:hidden;max-width:200px;
+}
+.piano-dyn .bar .fill{
+  height:100%;background:var(--gold);width:0%;
+  transition:width .3s ease;
+}
+/* ============================================================
+   SKI — animated trail map (unchanged)
+============================================================ */
+.ski-map{margin:2.5rem 0;background:linear-gradient(180deg, #0a1733 0%, #142547 100%);border:1px solid var(--rule);border-radius:4px;padding:1.4rem;position:relative;overflow:hidden}
+.ski-map-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem;flex-wrap:wrap;gap:1rem}
+.ski-map-title{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--paper)}
+.ski-map-title .em{color:var(--gold)}
+.ski-map-elev{font-family:var(--mono);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--paper-mute)}
+.ski-map-elev .now{color:var(--gold);font-variant-numeric:tabular-nums}
+.ski-map-stage{position:relative;aspect-ratio:5/4;max-width:520px;margin:0 auto;background:radial-gradient(ellipse at top, rgba(245,241,232,0.04), transparent 60%)}
+.ski-map-stage svg{width:100%;height:100%;display:block}
+.ski-map-stage .snow-bg{position:absolute;inset:0;background:radial-gradient(circle at 25% 20%, rgba(245,241,232,0.04), transparent 40%),radial-gradient(circle at 70% 60%, rgba(245,241,232,0.03), transparent 50%);pointer-events:none}
+.ski-snow-particle{position:absolute;width:2px;height:2px;background:rgba(245,241,232,0.5);border-radius:50%;pointer-events:none}
+.ski-trail-bg{fill:none;stroke:rgba(245,241,232,0.08);stroke-width:2.5}
+.ski-trail-fg{fill:none;stroke:var(--gold);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(212,175,55,0.7));stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset .25s linear}
+.ski-tree{font-family:var(--serif);font-size:14px;pointer-events:none}
+.ski-event{cursor:pointer;transition:transform .25s var(--ease)}
+.ski-event .pin{fill:var(--gold);stroke:var(--ink-1);stroke-width:1.5;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));opacity:0;transform-origin:center;transform:scale(.3);transition:opacity .35s var(--ease), transform .35s var(--ease)}
+.ski-event.shown .pin{opacity:1;transform:scale(1)}
+.ski-event .pin-num{fill:var(--ink-1);font-family:var(--mono);font-weight:600;font-size:9px;letter-spacing:.05em;text-anchor:middle;dominant-baseline:central;pointer-events:none;opacity:0;transition:opacity .35s var(--ease)}
+.ski-event.shown .pin-num{opacity:1}
+.ski-event:hover .pin{filter:drop-shadow(0 0 10px rgba(212,175,55,0.9))}
+.ski-skier{fill:var(--paper);stroke:var(--gold);stroke-width:1;transition:transform .15s linear;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4))}
+.ski-callouts{margin-top:1rem;display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:.6rem;font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase}
+.ski-callout{border:1px solid var(--rule);padding:.7rem .9rem;border-radius:3px;color:var(--paper-mute);transition:all .3s var(--ease);cursor:pointer}
+.ski-callout:hover, .ski-callout.active{border-color:var(--gold);color:var(--paper);background:rgba(212,175,55,0.04)}
+.ski-callout .n{color:var(--gold);margin-right:.4em;font-weight:500}
+.ski-callout .what{display:block;font-family:var(--serif);font-style:italic;text-transform:none;letter-spacing:0;font-size:.85rem;color:var(--paper-dim);margin-top:.3rem;line-height:1.4}
+.ski-progress-hint{font-family:var(--mono);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--paper-mute);text-align:center;margin-top:.8rem}
+/* ============================================================
+   CARDS (unchanged)
+============================================================ */
+.cards-stage{margin:2.5rem 0;background:linear-gradient(180deg, rgba(20,37,71,0.4), rgba(10,23,51,0.6));border:1px solid var(--rule);border-radius:4px;padding:0;height:340px;position:relative;overflow:hidden}
+.cards-stage-head{position:absolute;top:1rem;left:1.2rem;right:1.2rem;display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--paper-mute);z-index:5;pointer-events:none}
+.cards-stage-head .em{color:var(--gold)}
+.cards-stage-felt{position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(212,175,55,0.05), transparent 60%);pointer-events:none}
+.cards-container{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.playing-card{position:absolute;top:0;left:0;width:54px;height:78px;background:linear-gradient(135deg, #f5f1e8 0%, #e8e2d1 100%);border:1px solid #0a1733;border-radius:5px;box-shadow:0 2px 6px rgba(0,0,0,0.4), inset 0 0 0 2px rgba(212,175,55,0.15);transform-origin:center center;will-change:transform;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.6rem;font-weight:500}
+.playing-card.face-down{background:repeating-linear-gradient(45deg, rgba(212,175,55,0.18) 0 4px, transparent 4px 8px),linear-gradient(135deg, #1c2f5a 0%, #0a1733 100%);color:transparent;border-color:#0a1733;box-shadow:0 2px 6px rgba(0,0,0,0.4), inset 0 0 0 2px rgba(212,175,55,0.3)}
+.playing-card.red{color:#a23838}
+.playing-card.black{color:#0a1733}
+.playing-card .corner-tl, .playing-card .corner-br{position:absolute;font-family:var(--mono);font-size:.55rem;letter-spacing:0;font-weight:600;text-align:center;line-height:1}
+.playing-card .corner-tl{top:4px;left:5px}
+.playing-card .corner-br{bottom:4px;right:5px;transform:rotate(180deg)}
+.playing-card .pip{font-size:1.5rem;line-height:1}
+.cards-stage-controls{position:absolute;bottom:.9rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:6}
+.cards-stage-controls button{font-family:var(--mono);font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:.55rem .9rem;border:1px solid var(--rule);border-radius:3px;color:var(--paper-dim);cursor:pointer;transition:all .25s var(--ease);background:rgba(10,23,51,0.7);backdrop-filter:blur(4px)}
+.cards-stage-controls button:hover{border-color:var(--gold);color:var(--gold)}
+/* ============================================================
+   CLOSING + RESPONSIVE
+============================================================ */
+.beyond-closing{padding:5rem var(--pad-x) 4rem;border-top:1px solid var(--rule);text-align:center}
+.beyond-closing p{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(1.3rem, 2.4vw, 2.1rem);line-height:1.3;letter-spacing:-.01em;color:var(--paper);max-width:34ch;margin:0 auto 2rem}
+.beyond-closing p .em{color:var(--gold);font-style:normal}
+@media (max-width:680px){
+  .swim-set-grid{font-size:9px;gap:.5rem .6rem}
+  .swim-set-clock{font-size:1.7rem}
+  .ski-map-stage{aspect-ratio:1/1}
+  .cards-stage{height:280px}
+  .playing-card{width:44px;height:64px;font-size:1.2rem}
+  .piano-key .label{font-size:7px}
+}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/tone@14.8.49/build/Tone.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.js"></script>
 </head>
 <body>
-
 <div class="bg-symbols" aria-hidden="true"></div>
 <div class="margin-trace" aria-hidden="true"><div class="fill"></div></div>
 <div class="cursor-ring" aria-hidden="true"></div>
 <div class="cursor-dot" aria-hidden="true"></div>
-
 <header class="site-header">
   <a class="brand" href="index.html" data-cursor="hover">
     <span class="brand-mark" aria-hidden="true"></span>
@@ -99,81 +614,496 @@
     </ul>
   </nav>
 </header>
-
 <main>
 <section class="beyond-intro">
   <p class="page-eyebrow">§ 05 · Beyond the math</p>
   <h1>Outside <span class="italic">the room</span>.</h1>
-  <p class="lead">I'm not a nerd who happens to also swim. I'm a swimmer who happens to also do olympiad math, plus a few other things. None of this is on my transcript. All of it adds up to me.</p>
+  <p class="lead">About is the essay version of me. <em>This is the trivia version.</em> The practice I still think about. The piece my teacher said exposed me. The Whistler run where I crashed into a tree because the landing was the easy part. The first sleight I ever tried and gave up on. None of this is on a resume. All of it is the part I'd actually tell you over coffee.</p>
+  <div class="beyond-toc">
+    <a href="#swim" data-cursor="hover"><span class="n">i</span> swim</a>
+    <a href="#piano" data-cursor="hover"><span class="n">ii</span> piano</a>
+    <a href="#ski" data-cursor="hover"><span class="n">iii</span> ski</a>
+    <a href="#cards" data-cursor="hover"><span class="n">iv</span> cards</a>
+  </div>
 </section>
-
 <section class="beyond-grid">
-  <article class="beyond-card" data-reveal>
+  <a class="beyond-card" href="#swim" data-reveal data-cursor="hover">
     <div class="tag">i · swimming</div>
-    <h3>I have voluntarily destroyed my <span class="italic">circadian rhythm</span>.</h3>
-    <p>
-      Nine years competitive. About sixteen hours a week in season, which works out to roughly one entire month of waking life per year spent staring at a black line at the bottom of a pool.
-    </p>
-    <p>
-      WPIAL States qualifier in the 50 and 100 free. I dropped 1.8 seconds at last States to close out a relay with a 22.2 split. The thing I never expected: some of my best math happens in the half-hour <em>after</em> practice — exhausted, walking home, brain too tired to talk itself out of an idea.
-    </p>
+    <h3>Five times around. <span class="italic">I still think about it.</span></h3>
+    <p class="summary">Nine years competitive. Short course, because my turns are the only thing I have over the long-course guys. 22.2 split to close a relay at WPIAL States. The set that still haunts me: <em>5 rounds, 4×200s each</em>, on a stack of intervals designed to break you on the last one.</p>
     <div class="stats">
-      <span><strong>States</strong> qualifier · varsity</span>
       <span><strong>22.2</strong> · 50 free split</span>
       <span><strong>16 h</strong>/wk · in-season</span>
+      <span><strong>5 × 4×200</strong> · the set</span>
     </div>
-  </article>
-
-  <article class="beyond-card" data-reveal data-delay="1">
+    <span class="jump">read deep &rarr;</span>
+  </a>
+  <a class="beyond-card" href="#piano" data-reveal data-delay="1" data-cursor="hover">
     <div class="tag">ii · piano</div>
-    <h3>A long &amp; ongoing relationship with <span class="italic">mediocrity</span>.</h3>
-    <p>
-      Ten years. I have the fingers — Chopin ballades, Liszt études, Rachmaninoff preludes, technically in reach. What I don't quite have yet is the musicality. I'm a robot who has read a manual on how to feel things.
-    </p>
-    <p>
-      I still play almost every day. There's something about working through a piece you can't quite express that keeps a person honest.
-    </p>
+    <h3>I have the fingers. I do not have <span class="italic">the feeling.</span></h3>
+    <p class="summary">Ten years. Chopin Ballade No. 2. <em>La Campanella</em>. Rach Études-tableaux. The piece that exposed me: the <em>Pathétique</em> — nowhere to hide. Favorite composer: Chopin. Worst at: also Chopin. Make it make sense.</p>
     <div class="stats">
-      <span><strong>Carmel Klavier</strong> · GP '19 · 2nd '21</span>
-      <span><strong>Pittsburgh Int'l</strong> · 1st, multiple GP</span>
-      <span><strong>Steinway Society</strong> W. PA · audition winner</span>
+      <span><strong>10</strong> yrs</span>
+      <span><strong>Heinz Hall</strong> · most recent</span>
+      <span><strong>Carmel · Pitt Int'l · Steinway</strong></span>
     </div>
-  </article>
-
-  <article class="beyond-card" data-reveal data-delay="2">
+    <span class="jump">read deep &rarr;</span>
+  </a>
+  <a class="beyond-card" href="#ski" data-reveal data-delay="2" data-cursor="hover">
     <div class="tag">iii · skiing</div>
-    <h3>The only thing I let myself be <span class="italic">reckless</span> about.</h3>
-    <p>
-      Christmas in Colorado — Vail, Breckenridge, Keystone. Spring break at Whistler. Most of my life is a tightly-controlled exercise in not making stupid choices. Skiing is the one place where the answer to <em>"is this a good idea?"</em> is <em>who cares, let's find out</em>.
-    </p>
-    <p>
-      Purple Haze, Spanky's Ladder, DOA. Not Olympic, not even close. But the version of me on a black diamond in March is somehow the most <em>me</em> version of me there is.
-    </p>
+    <h3>The tree I hit <span class="italic">trying to stop.</span></h3>
+    <p class="summary">Christmas in Colorado. Spring break at Whistler. Spanky's Ladder is the run. I got lost, cliffed out, hit Air Jordan, landed clean, then crashed into a tree because I couldn't slow down. <em>The landing was the easy part.</em> Skis: Rustler 9, 179, 94 underfoot.</p>
     <div class="stats">
-      <span><strong>Whistler</strong> · spring · back side</span>
-      <span><strong>Vail / Breck / Keystone</strong> · winter</span>
+      <span><strong>Spanky's</strong> · the run</span>
+      <span><strong>Rustler 9</strong> · 179/94</span>
     </div>
-  </article>
-
-  <article class="beyond-card" data-reveal data-delay="3">
+    <span class="jump">read deep &rarr;</span>
+  </a>
+  <a class="beyond-card" href="#cards" data-reveal data-delay="3" data-cursor="hover">
     <div class="tag">iv · card magic</div>
-    <h3>Self-working tricks, hundred-year-old <span class="italic">combinatorics</span>.</h3>
-    <p>
-      Tried sleight-of-hand during COVID. Discovered my hands have the dexterity of a polite raccoon. So I switched to self-working tricks — the kind where modular arithmetic and permutation parity do the work and you just deal cards in the right order.
-    </p>
-    <p>
-      My favorite is the Gilbreath Principle: alternate the deck, let the spectator riffle-shuffle, deal in pairs — every pair is one red and one black. Not marked cards. Just a fact about permutations. There's a working version of it on the <a href="reach.html" data-cursor="hover" style="color:var(--gold);border-bottom:1px solid var(--gold)">Reach page</a>.
-    </p>
-  </article>
+    <h3>The polite raccoon and <span class="italic">the trick I came back to.</span></h3>
+    <p class="summary">Gave up on sleight at thirteen. The double lift was visible from space. The triple was a war crime. Switched to self-working — modular arithmetic in card form. Then years later, quietly, the hands actually did improve. <em>I get to be a little wrong about the raccoon line now.</em></p>
+    <div class="stats">
+      <span><strong>2020</strong> · gave up</span>
+      <span><strong>11th gr.</strong> · came back</span>
+    </div>
+    <span class="jump">read deep &rarr;</span>
+  </a>
+</section>
+<!-- SWIM section unchanged -->
+<section class="deep" id="swim">
+  <div class="deep-grid">
+    <aside class="deep-aside">
+      <div class="deep-num">i.</div>
+      <div class="label">5,200 yards.<br/>about 65 minutes.<br/><span class="gold">the set that breaks people.</span></div>
+    </aside>
+    <div class="deep-body" data-reveal>
+      <h2>The set is <span class="italic">honest</span>. The 3:00 free at the end of each round is where it stops being a workout.</h2>
+      <p>Nine years competitive. Roughly sixteen hours a week in season, which works out to one entire month of waking life per year spent staring at a black line. Short course, because my turns are the only thing I really have over the long-course guys, and long course just feels too long.</p>
+      <p>WPIAL States qualifier in the 50 and 100 free. Best swim of my life so far is the 22.2 split I dropped to close out our relay last year — 1.8 seconds off my previous best, on a cold morning in February, in a meet I'd been losing sleep over for two weeks. I won't pretend the time matters to anyone but me. It does to me.</p>
+      <p>Below is the practice I still think about. Hit <em>start</em> — the clock runs at full speed by default, but you can slow it down if you want to follow round-by-round. Or just watch it run.</p>
+      <div class="swim-set" id="swimSet">
+        <div class="swim-set-head">
+          <div class="swim-set-title">Main set · <span style="color:var(--gold)">5 × (4×200)</span></div>
+          <div class="swim-set-clock" id="swimClock">0:00</div>
+        </div>
+        <div class="swim-set-controls">
+          <button data-speed="1" class="active" id="swimBtn">▶ start · 60×</button>
+          <button data-speed="0.2" id="swimBtnSlow">slower · 12×</button>
+          <button id="swimBtnReset">reset</button>
+        </div>
+        <div class="swim-rounds" id="swimRounds">
+          <div class="swim-round-pip"><div class="fill"></div></div>
+          <div class="swim-round-pip"><div class="fill"></div></div>
+          <div class="swim-round-pip"><div class="fill"></div></div>
+          <div class="swim-round-pip"><div class="fill"></div></div>
+          <div class="swim-round-pip"><div class="fill"></div></div>
+        </div>
+        <div class="swim-set-grid" id="swimGrid">
+          <div class="head">#</div><div class="head">what</div><div class="head">interval</div><div class="head">cum.</div>
+        </div>
+        <div class="swim-pool-strip">
+          <div class="lane l1"></div><div class="lane l2"></div><div class="lane l3"></div>
+          <div class="marker" id="swimMarker"></div>
+          <div class="bubbles"><div class="b"></div><div class="b"></div><div class="b"></div></div>
+        </div>
+        <div class="swim-set-footer">
+          <span class="total">total: 5,200 yds · ~65 min · interval-true</span>
+          &nbsp;&nbsp;The 3:00 free at the end of each round is the killer. Just long enough to feel like rest. You forget you're starting the next round on the 2:20.
+        </div>
+      </div>
+      <p>My coach said something to me once that I'm paraphrasing because I don't remember it word-for-word — <em>you can feel like absolute shit in the water and still get something out of the set</em>. I think about that one a lot. Not just in the pool.</p>
+      <p>The thing the pool has taught me is that the feeling of <em>this is pointless, I'm done</em> is almost never a reliable signal. Sometimes it's information about the workout. Sometimes it's information about how I slept. Sometimes it's just noise that goes away in 200 yards. The skill isn't pushing through every time, it's figuring out which one of those three it is without quitting first.</p>
+      <div class="aside-quote">
+        Some of my best math happens in the half-hour after practice — exhausted, walking home, brain too tired to talk itself out of an idea.
+        <span class="who">— what I tell people who ask why I bother with a 5:15 alarm</span>
+      </div>
+      <p>I don't actually know whether the swim makes the math better or whether the kind of person willing to do both is just a kind of person. I suspect it's the second one and I tell myself it's the first one, because telling yourself the second one starts to feel like cheating.</p>
+    </div>
+  </div>
+</section>
+<!-- PIANO section — new full-sonata player -->
+<section class="deep" id="piano">
+  <div class="deep-grid">
+    <aside class="deep-aside">
+      <div class="deep-num">ii.</div>
+      <div class="label">ten years.<br/>technique: <span class="gold">there</span>.<br/>musicality: gone.</div>
+    </aside>
+    <div class="deep-body" data-reveal>
+      <h2>Beethoven's <span class="italic">Pathétique</span>, all three movements. The same notes, twice. <em style="font-style:italic;color:var(--gold)">You'll hear the difference.</em></h2>
+      <p>Ten years of piano. Chopin Ballade No. 2. Liszt's <em>La Campanella</em>. Rachmaninoff Études-tableaux. The fingers are there. The musicality, by my teacher's own honest assessment, is not — <em>very talented, gifted technique, but you can't quite express yourself yet</em>. He's not wrong, and the part I respect about him is that he didn't soften it.</p>
+      <p>The piece that exposed it most is the <em>Pathétique</em>. The notes are easy. The silence between them is where the music is, and I play the silences like a metronome ticks them. Below is the whole sonata, all three movements, played two ways. The <em>robot</em> version is what it sounds like when I play it: every note exactly on the grid, one flat dynamic, no pedal, no breathing. The <em>rubato</em> version is what it should sound like — dynamics, phrasing, the rests that mean something. Same notes. Different music. Click any key to play it yourself.</p>
+    </div>
+  </div>
+</section>
+<!-- Full-width piano breakout (outside the .deep article column) -->
+<div class="piano-block" id="pianoBlock">
+  <div class="piano-block-head">
+    <div class="piano-block-title">Beethoven · <span class="piece">Sonata No. 8 in C minor, Op. 13 · "Pathétique"</span></div>
+    <div class="piano-meta"><span id="pianoNowPlaying" class="now-playing">— select a movement</span></div>
+  </div>
+  <div class="piano-controls">
+    <div class="piano-modes">
+      <button data-mode="robot" id="pianoModeRobot">▶ robot · me</button>
+      <button data-mode="rubato" class="active" id="pianoModeRubato">▶ rubato · should be</button>
+    </div>
+    <div class="piano-mvts">
+      <button data-mvt="1" class="active"><span class="num">I.</span>Grave · Allegro</button>
+      <button data-mvt="2"><span class="num">II.</span>Adagio cantabile</button>
+      <button data-mvt="3"><span class="num">III.</span>Rondo</button>
+    </div>
+    <div class="piano-vol">
+      <span>vol</span>
+      <input type="range" id="pianoVol" min="0" max="100" value="65"/>
+    </div>
+  </div>
+  <div class="piano-kb-wrap">
+    <div class="piano-kb" id="pianoKb"></div>
+  </div>
+  <div class="piano-scrub-wrap">
+    <div class="piano-scrub-times">
+      <span><span class="now" id="pianoCurTime">0:00</span></span>
+      <button class="play" id="pianoPlay" aria-label="play/pause">
+        <svg viewBox="0 0 16 16" id="pianoPlayIcon"><path d="M3 2 L13 8 L3 14 Z"/></svg>
+      </button>
+      <span id="pianoTotalTime">0:00</span>
+    </div>
+    <div class="piano-scrub" id="pianoScrub">
+      <div class="track">
+        <div class="buffered"></div>
+        <div class="hover-fill" id="pianoScrubHover"></div>
+        <div class="played" id="pianoScrubPlayed"></div>
+      </div>
+      <div class="handle" id="pianoScrubHandle"></div>
+      <div class="tooltip" id="pianoScrubTip">0:00</div>
+    </div>
+  </div>
+  <div class="piano-dyn shown" id="pianoDyn">
+    <span class="marking" id="pianoDynMark">p</span>
+    <div class="bar"><div class="fill" id="pianoDynFill"></div></div>
+    <span id="pianoDynLabel">soft</span>
+  </div>
+  <p class="piano-caption" id="pianoCaption">
+    Two versions of the same piece. The <span class="em">robot</span> is what I sound like. The <span class="em">rubato</span> is what the music actually wants.
+  </p>
+</div>
+<section class="deep" style="border-top:none;padding-top:clamp(2rem, 4vw, 3rem)">
+  <div class="deep-grid">
+    <aside class="deep-aside"></aside>
+    <div class="deep-body" data-reveal>
+      <p>I am, by my own honest assessment, a robot who has read a manual on how to feel things. I produce the correct outputs. The outputs do not move people. They move me slightly when I'm alone, but I think this is the piano equivalent of laughing at your own joke.</p>
+      <p>Funniest part: my favorite composer is <em>Chopin</em>, and Chopin is the one I'm objectively worst at. The whole point of Chopin is rubato — the small expressive stretches and contractions of time, the breathing. Everything I have works against that. I keep playing him anyway. The Ballade No. 2 in F major is my current war. I will lose it again, slowly, over the next year.</p>
+      <p>I performed last in the Heinz Hall lobby — Pittsburgh Symphony's main hall, but the lobby, which is the right amount of "this matters" and "nobody's actually here for you." Recordings of most of this are on my <a href="https://www.youtube.com/@alex09092009" target="_blank" rel="noopener">YouTube channel</a>. Proceed with appropriate expectations.</p>
+      <div class="aside-quote">
+        The lesson, I think, is that some things don't get better just because you put in the hours. Swim gets better with hours. Math gets better with hours. Piano needs something else, and I don't have it yet.
+        <span class="who">— what I've ended up believing, ten years in</span>
+      </div>
+      <p>Maybe at twenty-five. Maybe never. I'm OK with not knowing yet.</p>
+    </div>
+  </div>
+</section>
+<!-- SKI section unchanged -->
+<section class="deep" id="ski">
+  <div class="deep-grid">
+    <aside class="deep-aside">
+      <div class="deep-num">iii.</div>
+      <div class="label">whistler · spring '26<br/>spanky's ladder<br/><span class="gold">three things happened.</span></div>
+    </aside>
+    <div class="deep-body" data-reveal>
+      <h2>The landing was the easy part. <span class="italic">Stopping</span> was the part I hadn't planned.</h2>
+      <p>Christmas in Colorado — usually Vail, Breckenridge, or Keystone. Spring break in Whistler. Whistler is the one. The back side of Whistler is where I get to put down everything I spend the rest of the year carrying.</p>
+      <p>The run is Spanky's Ladder. Too many things happened on Spanky's for me to remember it as anything else. Scroll the map below — or click the pins.</p>
+      <div class="ski-map" id="skiMap">
+        <div class="ski-map-head">
+          <div class="ski-map-title">Spanky's Ladder · <span class="em">Whistler back bowls</span></div>
+          <div class="ski-map-elev">elev <span class="now" id="skiElev">7,000 ft</span></div>
+        </div>
+        <div class="ski-map-stage" id="skiStage">
+          <div class="snow-bg"></div>
+          <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
+            <path d="M 0 70 Q 80 50, 140 60 Q 220 75, 280 55 Q 360 40, 440 70 L 500 75 L 500 0 L 0 0 Z" fill="rgba(245,241,232,0.04)" stroke="rgba(245,241,232,0.15)" stroke-width="1"/>
+            <path d="M 0 110 Q 100 95, 180 105 Q 260 115, 350 95 Q 420 85, 500 105 L 500 70 L 0 70 Z" fill="rgba(245,241,232,0.02)" stroke="rgba(245,241,232,0.08)" stroke-width="0.5"/>
+            <g class="trees">
+              <text class="ski-tree" x="60" y="155">🌲</text>
+              <text class="ski-tree" x="100" y="175">🌲</text>
+              <text class="ski-tree" x="420" y="160">🌲</text>
+              <text class="ski-tree" x="460" y="180">🌲</text>
+              <text class="ski-tree" x="80" y="200">🌲</text>
+              <text class="ski-tree" x="440" y="220">🌲</text>
+              <text class="ski-tree" x="120" y="280">🌲</text>
+              <text class="ski-tree" x="380" y="300">🌲</text>
+              <text class="ski-tree" x="100" y="340">🌲</text>
+              <text class="ski-tree" x="160" y="350">🌲</text>
+              <text class="ski-tree" x="340" y="350">🌲</text>
+              <text class="ski-tree" x="400" y="370">🌲</text>
+              <text class="ski-tree" x="200" y="375" style="font-size:18px">🌲</text>
+              <text class="ski-tree" x="260" y="380" style="font-size:20px">🌲</text>
+            </g>
+            <path class="ski-trail-bg" d="M 250 50 L 240 95 L 210 130 L 195 160 L 230 195 L 270 225 L 250 260 L 220 290 L 180 320 L 215 345 L 250 365" id="skiTrailBg"/>
+            <path class="ski-trail-fg" d="M 250 50 L 240 95 L 210 130 L 195 160 L 230 195 L 270 225 L 250 260 L 220 290 L 180 320 L 215 345 L 250 365" id="skiTrailFg"/>
+            <circle class="ski-skier" id="skiSkier" cx="250" cy="50" r="5"/>
+            <g class="ski-event" id="skiEv1" data-x="195" data-y="160"><circle class="pin" cx="195" cy="160" r="13"/><text class="pin-num" x="195" y="160">1</text></g>
+            <g class="ski-event" id="skiEv2" data-x="270" data-y="225"><circle class="pin" cx="270" cy="225" r="13"/><text class="pin-num" x="270" y="225">2</text></g>
+            <g class="ski-event" id="skiEv3" data-x="220" data-y="290"><circle class="pin" cx="220" cy="290" r="13"/><text class="pin-num" x="220" y="290">3</text></g>
+            <g class="ski-event" id="skiEv4" data-x="215" data-y="345"><circle class="pin" cx="215" cy="345" r="13"/><text class="pin-num" x="215" y="345">4</text></g>
+          </svg>
+        </div>
+        <div class="ski-progress-hint">scroll · or click a pin</div>
+        <div class="ski-callouts">
+          <div class="ski-callout" data-pin="1"><span class="n">1.</span> drop in<span class="what">scary at the top. it always is. you don't ski Spanky's by mistake.</span></div>
+          <div class="ski-callout" data-pin="2"><span class="n">2.</span> got lost<span class="what">trying to find a way out. ended up cliffed out — couldn't go down, couldn't really go back.</span></div>
+          <div class="ski-callout" data-pin="3"><span class="n">3.</span> Air Jordan<span class="what">the cliff. went for it. landing was perfect. the part that came right after, less so.</span></div>
+          <div class="ski-callout" data-pin="4"><span class="n">4.</span> the tree<span class="what">crashed into it trying to slow down. landed clean, couldn't brake, ended in the bark. fine, mostly.</span></div>
+        </div>
+      </div>
+      <p>Most of my life is a tightly-controlled exercise in <em>not</em> making stupid choices. Don't skip practice. Don't blow off the problem set. Don't take the dumb risk on the USAMO problem when the safer approach gets you the points. The whole architecture of being a serious student is built around the systematic suppression of recklessness, and most days I'm fine with that.</p>
+      <p>Then I get to Whistler and the answer to <em>is this a good idea?</em> stops being a question. Tree skiing. Moguls. Anything with air. The version of me looking down a chute in March is somehow the most <em>me</em> version of me there is.</p>
+      <div class="aside-quote">Skis: Rustler 9, 179 cm, 94 underfoot. They will go where I point them. That's the whole spec.<span class="who">— in case you actually ski</span></div>
+      <p>I'll be back at Whistler in March. The tree is still there. So is the cliff. I owe the cliff a redo.</p>
+    </div>
+  </div>
+</section>
+<!-- CARDS section unchanged -->
+<section class="deep" id="cards">
+  <div class="deep-grid">
+    <aside class="deep-aside">
+      <div class="deep-num">iv.</div>
+      <div class="label">double lift.<br/>visible from space.<br/><span class="gold">eventually fixed.</span></div>
+    </aside>
+    <div class="deep-body" data-reveal>
+      <h2>The polite raccoon, the war crime, <span class="italic">and the trick I came back to.</span></h2>
+      <p>The first trick I ever tried — COVID year, thirteen years old — was an ace production. Triple lift, then double, then single, the aces appear from the top of the deck. The trick depends entirely on the lift looking like one card. Mine didn't. The double was visible from space. The triple was a war crime. I filmed myself doing it, watched it back, and concluded that my hands had the dexterity of a polite raccoon.</p>
+      <p>So I switched to self-working — tricks where modular arithmetic and permutation parity do the work and your hands just deal the cards in the right order. The Gilbreath Principle is the cleanest one. Alternate the deck red-black. Let the spectator riffle shuffle however they want. Deal in pairs. Every pair is one red and one black, every time. Not marked cards, not sleight, just a fact about how a riffle interacts with an alternating sequence. There's a working version of it on the <a href="reach.html">Reach page</a>.</p>
+      <div class="cards-stage" id="cardsStage">
+        <div class="cards-stage-head"><span>self-working · <span class="em">Gilbreath</span></span><span id="cardsStageState">idle</span></div>
+        <div class="cards-stage-felt"></div>
+        <div class="cards-container" id="cardsContainer"></div>
+        <div class="cards-stage-controls">
+          <button id="cardsBtnRiffle">riffle</button>
+          <button id="cardsBtnCascade">cascade</button>
+          <button id="cardsBtnFlourish">flourish</button>
+        </div>
+      </div>
+      <p>The funny part is I eventually went back. The hands actually did improve — not at thirteen, not for years, but I came back to the double lift sometime in eleventh grade and could finally make it look like one card. Then the pinky break, then the side steal, then a center-deal that's still ugly but no longer a war crime. The first trick I tried and gave up on is now the trick I open with.</p>
+      <p>I don't perform much. I do tricks for friends in the math room when we're stuck on a problem and need a break, for kids at Chinese-school events who watch a self-working trick three times in a row before asking <em>wait, are you just doing math?</em>, and occasionally, badly, at parties. The polite-raccoon line was true at thirteen and I get to be a little wrong about it now.</p>
+      <div class="aside-quote">The audience eventually asks <em>why does this work</em>. At that point you're not doing magic anymore. You're doing math with cards as props.<span class="who">— the thing I keep coming back to</span></div>
+    </div>
+  </div>
+</section>
+<section class="beyond-closing">
+  <p>Four things. Same kid, same week, doing all four.<br/><span class="em">If any of this lands, the calendar is on the <a href="reach.html" style="color:var(--gold);border-bottom:1px solid var(--gold)">Reach page</a>.</span></p>
 </section>
 </main>
-
 <footer>
   <div>Alexander B. Chen · 2026</div>
-  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy · the tree is still there</div>
   <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
 </footer>
-
 <script defer src="site.js"></script>
+<script src="piano.js"></script>
+<script>
+(function(){
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ===== SWIM SET RUNNER ===== */
+  (function(){
+    const set = document.getElementById('swimSet');
+    if (!set) return;
+    const clockEl = document.getElementById('swimClock');
+    const grid    = document.getElementById('swimGrid');
+    const rounds  = document.getElementById('swimRounds').querySelectorAll('.swim-round-pip');
+    const marker  = document.getElementById('swimMarker');
+    const btn     = document.getElementById('swimBtn');
+    const btnSlow = document.getElementById('swimBtnSlow');
+    const btnRst  = document.getElementById('swimBtnReset');
+    const reps = [
+      {lbl:'200 free', iv:140},
+      {lbl:'200 stroke (fly)', iv:160},
+      {lbl:'200 IM', iv:150},
+      {lbl:'200 free', iv:180},
+    ];
+    let allRows = [];
+    let cum = 0;
+    for (let r=0;r<5;r++){
+      for (let i=0;i<reps.length;i++){
+        const row = document.createElement('div');
+        row.className = 'swim-set-row';
+        const num=document.createElement('div'), what=document.createElement('div'), iv=document.createElement('div'), cumEl=document.createElement('div');
+        num.textContent = `${r+1}.${i+1}`;
+        what.className = 'label'; what.textContent = reps[i].lbl;
+        iv.textContent = `:${String(Math.floor(reps[i].iv/60))}:${String(reps[i].iv%60).padStart(2,'0')}`;
+        const cumStart = cum; cum += reps[i].iv;
+        cumEl.textContent = `${Math.floor(cum/60)}:${String(cum%60).padStart(2,'0')}`;
+        grid.appendChild(num); grid.appendChild(what); grid.appendChild(iv); grid.appendChild(cumEl);
+        allRows.push({els:[num,what,iv,cumEl], cumStart, cumEnd:cum, round:r, rep:i, iv:reps[i].iv});
+      }
+    }
+    const totalSec = cum;
+    let running=false, speed=60, simSec=0, lastTs=0, raf;
+    function fmt(s){const m=Math.floor(s/60), sec=Math.floor(s%60); return `${m}:${String(sec).padStart(2,'0')}`}
+    function render(){
+      clockEl.textContent = fmt(simSec);
+      let activeIdx = -1;
+      for (let i=0;i<allRows.length;i++){const row=allRows[i]; if (simSec>=row.cumStart && simSec<row.cumEnd){activeIdx=i;break}}
+      if (simSec>=totalSec) activeIdx=-1;
+      allRows.forEach((row,i)=>{
+        const isDone = simSec>=row.cumEnd; const isCur = i===activeIdx;
+        row.els.forEach(e=>{e.classList.toggle('current-cell',isCur); e.classList.toggle('done-cell',isDone)});
+      });
+      rounds.forEach((pip,ri)=>{
+        const startSec = allRows[ri*4].cumStart, endSec = allRows[ri*4+3].cumEnd;
+        const f = pip.querySelector('.fill');
+        if (simSec>=endSec){pip.classList.add('done');pip.classList.remove('active');f.style.transform='translateX(0)'}
+        else if (simSec>startSec){pip.classList.add('active');pip.classList.remove('done');const p=(simSec-startSec)/(endSec-startSec);f.style.transform=`translateX(${(p-1)*100}%)`}
+        else{pip.classList.remove('done','active');f.style.transform='translateX(-100%)'}
+      });
+      if (activeIdx>=0){
+        const row = allRows[activeIdx];
+        const repP = (simSec-row.cumStart)/row.iv;
+        const lengths = 4; const lenIdx = Math.floor(repP*lengths); const within = (repP*lengths)-lenIdx;
+        const direction = (lenIdx%2===0)?within:1-within;
+        marker.style.left = (5+direction*90)+'%';
+        set.classList.add('running');
+      } else set.classList.remove('running');
+    }
+    function tick(ts){if(!running)return;if(!lastTs)lastTs=ts;const dt=(ts-lastTs)/1000;lastTs=ts;simSec+=dt*speed;if(simSec>=totalSec){simSec=totalSec;render();stop();return}render();raf=requestAnimationFrame(tick)}
+    function start(){if(simSec>=totalSec)simSec=0;running=true;lastTs=0;btn.textContent='❚❚ pause · 60×';btnSlow.textContent='▶ slower · 12×';btn.classList.toggle('active',speed===60);btnSlow.classList.toggle('active',speed===12);raf=requestAnimationFrame(tick)}
+    function stop(){running=false;cancelAnimationFrame(raf);btn.textContent='▶ start · 60×';btnSlow.textContent='slower · 12×'}
+    function reset(){stop();simSec=0;render()}
+    btn.addEventListener('click',()=>{speed=60;if(running&&btn.classList.contains('active')){stop();return}start()});
+    btnSlow.addEventListener('click',()=>{speed=12;if(running&&btnSlow.classList.contains('active')){stop();return}start()});
+    btnRst.addEventListener('click',reset);
+    const sheet=document.createElement('style');
+    sheet.textContent = `.swim-set-row .current-cell{color:var(--gold)!important}.swim-set-row .done-cell{color:var(--paper-dim);opacity:.4;text-decoration:line-through;text-decoration-color:var(--paper-mute)}`;
+    document.head.appendChild(sheet);
+    render();
+  })();
+  /* ===== SKI MAP ===== */
+  (function(){
+    const map = document.getElementById('skiMap'); if (!map) return;
+    const fg = document.getElementById('skiTrailFg'); const skier = document.getElementById('skiSkier');
+    const elevEl = document.getElementById('skiElev'); const stage = document.getElementById('skiStage');
+    const pins = ['skiEv1','skiEv2','skiEv3','skiEv4'].map(id=>document.getElementById(id));
+    const callouts = document.querySelectorAll('.ski-callout');
+    if (!fg) return;
+    const totalLen = fg.getTotalLength();
+    fg.style.strokeDasharray = totalLen; fg.style.strokeDashoffset = totalLen;
+    const pinTs = [0.32,0.55,0.78,0.96];
+    let shown = [false,false,false,false];
+    function update(){
+      const r = stage.getBoundingClientRect(); const vh = window.innerHeight;
+      const startPx = vh*0.85, endPx = vh*0.25;
+      let p = (startPx - r.top)/(startPx - endPx); p = Math.max(0,Math.min(1,p));
+      fg.style.strokeDashoffset = totalLen*(1-p);
+      const pt = fg.getPointAtLength(totalLen*p);
+      skier.setAttribute('cx',pt.x); skier.setAttribute('cy',pt.y);
+      pinTs.forEach((th,i)=>{
+        if (p>=th && !shown[i]){shown[i]=true;pins[i].classList.add('shown');callouts[i].classList.add('active')}
+        else if (p<th && shown[i] && p<0.05){shown[i]=false;pins[i].classList.remove('shown');callouts[i].classList.remove('active')}
+      });
+      const elev = Math.round(7200 - p*1800);
+      elevEl.textContent = elev.toLocaleString()+' ft';
+    }
+    update();
+    window.addEventListener('scroll',update,{passive:true});
+    window.addEventListener('resize',update);
+    if (!reduce){
+      for (let i=0;i<25;i++){
+        const s = document.createElement('div'); s.className='ski-snow-particle';
+        s.style.left = Math.random()*100+'%'; s.style.top = Math.random()*100+'%';
+        s.style.opacity = (.2+Math.random()*.5).toString();
+        s.style.animation = `ski-snow-fall ${8+Math.random()*8}s linear ${-Math.random()*10}s infinite`;
+        stage.appendChild(s);
+      }
+      const ss = document.createElement('style');
+      ss.textContent = `@keyframes ski-snow-fall{0%{transform:translate(0,0)}100%{transform:translate(-20px,100vh)}}`;
+      document.head.appendChild(ss);
+    }
+    callouts.forEach((c,i)=>{c.addEventListener('click',()=>{const targetP=pinTs[i]+0.02;const r=stage.getBoundingClientRect();const vh=window.innerHeight;const startPx=vh*0.85,endPx=vh*0.25;const desiredTop=startPx-targetP*(startPx-endPx);const delta=r.top-desiredTop;window.scrollBy({top:delta,behavior:'smooth'})})});
+    pins.forEach((p,i)=>{p.style.cursor='pointer';p.addEventListener('click',()=>callouts[i].click())});
+  })();
+  /* ===== CARDS ===== */
+  (function(){
+    const stage = document.getElementById('cardsStage'); if (!stage) return;
+    const container = document.getElementById('cardsContainer'); const stateEl = document.getElementById('cardsStageState');
+    const btnRiffle = document.getElementById('cardsBtnRiffle'); const btnCascade = document.getElementById('cardsBtnCascade'); const btnFlourish = document.getElementById('cardsBtnFlourish');
+    const suits = [{s:'♠',cls:'black'},{s:'♥',cls:'red'},{s:'♣',cls:'black'},{s:'♦',cls:'red'}];
+    const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    function makeCard(rank,suit,faceDown){
+      const c=document.createElement('div'); c.className='playing-card '+(faceDown?'face-down':suit.cls);
+      if (!faceDown){c.innerHTML=`<span class="corner-tl">${rank}<br/>${suit.s}</span><span class="pip">${suit.s}</span><span class="corner-br">${rank}<br/>${suit.s}</span>`}
+      container.appendChild(c); return c;
+    }
+    let busy = false;
+    function clearStage(){container.querySelectorAll('.playing-card').forEach(c=>c.remove())}
+    function cardDims(){const p=document.createElement('div');p.className='playing-card';p.style.visibility='hidden';container.appendChild(p);const r=p.getBoundingClientRect();p.remove();return{w:r.width||54,h:r.height||78}}
+    function moveCard(card,opts,delay,dims){const dur=opts.dur||600;const w=dims.w,h=dims.h;setTimeout(()=>{card.style.transition=`transform ${dur}ms cubic-bezier(.2,.7,.2,1), opacity ${dur}ms ease`;const tx=opts.cx-w/2,ty=opts.cy-h/2;let tf=`translate(${tx}px, ${ty}px)`;if(opts.rot!==undefined)tf+=` rotate(${opts.rot}deg)`;if(opts.scale!==undefined)tf+=` scale(${opts.scale})`;card.style.transform=tf;if(opts.opacity!==undefined)card.style.opacity=opts.opacity},delay)}
+    function placeCard(card,cx,cy,rot,scale,opacity,dims){card.style.transition='none';const tx=cx-dims.w/2,ty=cy-dims.h/2;let tf=`translate(${tx}px, ${ty}px)`;if(rot!==undefined)tf+=` rotate(${rot}deg)`;if(scale!==undefined)tf+=` scale(${scale})`;card.style.transform=tf;if(opacity!==undefined)card.style.opacity=opacity;card.offsetHeight}
+    function riffle(){
+      if (busy) return; busy=true; stateEl.textContent='riffle ↬'; clearStage();
+      const rect=stage.getBoundingClientRect(); const dims=cardDims();
+      const cx=rect.width/2,cy=rect.height/2;
+      const padX=dims.w/2+12; const safeMax=rect.width-padX;
+      const halfSpread = Math.min(rect.width*0.42,(safeMax-padX)/2);
+      const N=12; const left=[],right=[];
+      for (let i=0;i<N/2;i++){
+        const c1=makeCard(ranks[i%ranks.length], i%2===0?suits[0]:suits[1], true);
+        placeCard(c1,-dims.w,cy,-10,1,0,dims); left.push(c1);
+        const c2=makeCard(ranks[i%ranks.length], i%2===0?suits[2]:suits[3], true);
+        placeCard(c2,rect.width+dims.w,cy,10,1,0,dims); right.push(c2);
+      }
+      const stackOffset=3;
+      left.forEach((c,i)=>moveCard(c,{cx:cx-60,cy:cy+(i-2.5)*stackOffset,rot:-8,opacity:1,dur:500},i*30,dims));
+      right.forEach((c,i)=>moveCard(c,{cx:cx+60,cy:cy+(i-2.5)*stackOffset,rot:8,opacity:1,dur:500},i*30,dims));
+      setTimeout(()=>{
+        const inter=[]; for (let i=0;i<left.length;i++) inter.push(left[i],right[i]);
+        inter.forEach((c,i)=>moveCard(c,{cx,cy:cy+(i-inter.length/2)*stackOffset*1.1,rot:0,dur:380},i*45,dims));
+      },800);
+      setTimeout(()=>{
+        const all = container.querySelectorAll('.playing-card'); const total=all.length;
+        all.forEach((c,i)=>{const t=total===1?0:(i/(total-1))-0.5;const xPos=cx+t*2*halfSpread;const yArc=Math.abs(t)*18;moveCard(c,{cx:xPos,cy:cy+yArc-6,rot:t*22,dur:600},i*30,dims)});
+      },1900);
+      setTimeout(()=>{busy=false;stateEl.textContent='idle'},3100);
+    }
+    function cascade(){
+      if (busy) return; busy=true; stateEl.textContent='cascade ↝'; clearStage();
+      const rect=stage.getBoundingClientRect(); const dims=cardDims();
+      const cy=rect.height/2; const padX=dims.w/2+8; const startX=padX, endX=rect.width-padX;
+      const N=14;
+      for (let i=0;i<N;i++){
+        const c=makeCard(ranks[i%ranks.length],suits[i%4],false);
+        placeCard(c,startX-dims.w*0.4,cy,-15,1,0,dims);
+        const t=i/(N-1); const targetX=startX+t*(endX-startX); const arcY=-28*Math.sin(t*Math.PI); const drift=(i-N/2)*0.6;
+        moveCard(c,{cx:targetX,cy:cy+arcY+drift,rot:t*30-15,opacity:1,dur:1100},i*55,dims);
+        setTimeout(()=>{c.style.transition='opacity 400ms ease';c.style.opacity='0'},1150+i*55);
+      }
+      setTimeout(()=>{busy=false;stateEl.textContent='idle';clearStage()},2400);
+    }
+    function flourish(){
+      if (busy) return; busy=true; stateEl.textContent='flourish ✦'; clearStage();
+      const rect=stage.getBoundingClientRect(); const dims=cardDims();
+      const cx=rect.width/2,cy=rect.height/2;
+      const maxR = Math.min(rect.width,rect.height)/2 - Math.max(dims.w,dims.h)/2 - 6;
+      const N=18; const cards=[];
+      for (let i=0;i<N;i++){const c=makeCard(ranks[i%ranks.length],suits[i%4],i%2===0);placeCard(c,cx,cy,0,0.3,0,dims);cards.push(c)}
+      cards.forEach((c,i)=>{const angle=(i/N)*Math.PI*4;const radius=20+(i/N)*maxR;const tx=cx+Math.cos(angle)*radius;const ty=cy+Math.sin(angle)*radius;moveCard(c,{cx:tx,cy:ty,rot:angle*180/Math.PI+90,scale:1,opacity:1,dur:700},i*40,dims)});
+      setTimeout(()=>{cards.forEach((c,i)=>moveCard(c,{cx:cx+(i-N/2)*0.6,cy:cy+(i-N/2)*0.6,rot:0,scale:1,dur:700},i*25,dims))},1800);
+      setTimeout(()=>{busy=false;stateEl.textContent='idle'},3000);
+    }
+    btnRiffle.addEventListener('click',riffle);
+    btnCascade.addEventListener('click',cascade);
+    btnFlourish.addEventListener('click',flourish);
+    if (!reduce && 'IntersectionObserver' in window){
+      const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){setTimeout(flourish,500);io.disconnect()}}),{threshold:0.4});
+      io.observe(stage);
+    }
+  })();
+})();
+</script>
+<style>
+/* play button loading state — works with piano.js */
+.piano-scrub-times .play:disabled{ opacity: .55; cursor: wait; }
+.piano-scrub-times .play:disabled svg{ animation: none; }
+</style>
 </body>
 </html>

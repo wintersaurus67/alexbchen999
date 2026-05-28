@@ -4,13 +4,50 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Projects — Alexander B. Chen</title>
-<meta name="description" content="SSAMO, the ARC textbook, the 360-page multivariable calc book, the Markov-frog mock AMC." />
+<meta name="description" content="SSAMO, the ARC textbook with Ryan Gong, a 360-page Calc 3 book, the AMC mock that predicted a real problem, an Anderson-localization research project, and a sharp piecewise generalization of Nesbitt's inequality." />
 <meta name="theme-color" content="#0a1733" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<!-- MathJax (same setup as about.html / math.html) -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.05 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'], enableMenu: false },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        document.documentElement.classList.add('mathjax-loaded');
+      });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
+html:not(.mathjax-loaded) mjx-container { visibility:hidden; }
+mjx-container[jax="SVG"]:not([display="true"]){
+  display:inline-block !important;
+  vertical-align:-0.22em; line-height:normal;
+  margin:0 0.1em; color:inherit; word-spacing:normal;
+}
+mjx-container[jax="SVG"]:not([display="true"]) svg{
+  display:inline-block; vertical-align:baseline; color:inherit; overflow:visible;
+}
+mjx-assistive-mml{
+  position:absolute !important; top:0;left:0;
+  clip:rect(1px,1px,1px,1px);
+  padding:0 !important;border:0 !important;
+  width:1px !important;height:1px !important;overflow:hidden !important;
+}
+</style>
+<style>
+/* ========================================================
+   HERO
+======================================================== */
 .projects-intro{padding:7rem var(--pad-x) 3rem}
 .projects-intro h1{
   font-family:var(--serif);font-weight:300;
@@ -22,9 +59,625 @@
 .projects-intro .lead{
   font-family:var(--serif);font-style:italic;
   font-size:clamp(1.05rem, 1.5vw, 1.3rem);
-  color:var(--paper-dim);max-width:46ch;margin:0;
+  color:var(--paper-dim);max-width:54ch;margin:0;line-height:1.55;
+}
+.projects-intro .lead em{color:var(--paper);font-style:italic}
+.projects-toc{
+  margin-top:2rem;
+  display:flex;gap:1.5rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.18em;text-transform:uppercase;
+}
+.projects-toc a{
+  color:var(--paper-dim);
+  border-bottom:1px solid var(--rule);padding-bottom:.4rem;
+}
+.projects-toc a:hover{color:var(--gold);border-bottom-color:var(--gold)}
+.projects-toc a .n{color:var(--gold);margin-right:.4em}
+
+/* ========================================================
+   FULL-BLEED SECTION (SSAMO, ARC)
+======================================================== */
+.full{
+  padding:clamp(4rem, 8vw, 7rem) var(--pad-x);
+  border-top:1px solid var(--rule);
+  position:relative;
+}
+.full-head{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:2rem;align-items:end;
+  margin-bottom:2.5rem;
+  border-bottom:1px solid var(--rule);
+  padding-bottom:1.5rem;
+}
+@media (max-width:780px){
+  .full-head{grid-template-columns:1fr;gap:1rem;align-items:start}
+}
+.full-num{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(4rem, 9vw, 7rem);
+  line-height:.85;color:var(--gold);
+  letter-spacing:-.04em;
+}
+.full-meta{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--paper-mute);
+  text-align:right;line-height:2;
+}
+@media (max-width:780px){.full-meta{text-align:left}}
+.full-meta .gold{color:var(--gold)}
+.full-title{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2.4rem, 5.5vw, 4.2rem);
+  line-height:1.02;letter-spacing:-.03em;
+  margin:0;max-width:18ch;
+}
+.full-title .italic{font-style:italic;color:var(--gold);font-weight:500}
+
+.full-body{
+  display:grid;
+  grid-template-columns:1fr 1.1fr;
+  gap:clamp(2rem, 5vw, 4rem);
+  align-items:start;
+}
+@media (max-width:980px){.full-body{grid-template-columns:1fr}}
+.full-prose{
+  font-family:var(--serif);font-weight:300;
+}
+.full-prose p{
+  font-size:clamp(1.05rem, 1.32vw, 1.18rem);
+  line-height:1.7;color:var(--paper);
+  margin:0 0 1.3em;max-width:54ch;
+}
+.full-prose p em{color:var(--gold);font-style:italic}
+.full-prose p strong{color:var(--paper);font-weight:500}
+.full-prose p a{color:var(--gold);border-bottom:1px solid var(--gold);transition:opacity .2s}
+.full-prose p a:hover{opacity:.7}
+.full-prose .aside-quote{
+  border-left:2px solid var(--gold);
+  padding:.3rem 0 .3rem 1.4rem;
+  margin:2rem 0;
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);
+  font-size:1.1rem;line-height:1.5;
+  max-width:50ch;
+}
+.full-prose .aside-quote .who{
+  display:block;margin-top:.6rem;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);font-style:normal;
+}
+.full-cta{
+  margin-top:2rem;
+  display:flex;gap:1rem;flex-wrap:wrap;
 }
 
+/* ========================================================
+   SSAMO — Countdown Round
+======================================================== */
+.ssamo-stage{
+  position:relative;
+  background:
+    radial-gradient(ellipse at top right, rgba(212,175,55,0.05), transparent 60%),
+    linear-gradient(180deg, var(--ink-2), var(--ink-1));
+  border:1px solid var(--rule);
+  border-radius:6px;
+  padding:1.8rem 1.6rem 1.6rem;
+  min-height:480px;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.ssamo-bar{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1rem;align-items:center;
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--paper-mute);
+  padding-bottom:1rem;
+  border-bottom:1px solid var(--rule);
+  margin-bottom:1.5rem;
+}
+.ssamo-bar .ssamo-mark{color:var(--gold);font-weight:500;letter-spacing:.3em}
+.ssamo-bar .ssamo-q-num{color:var(--paper);font-weight:500}
+.ssamo-timer{
+  font-family:var(--mono);font-size:11px;
+  color:var(--paper-dim);font-variant-numeric:tabular-nums;
+  text-align:right;letter-spacing:.15em;
+}
+.ssamo-timer .digit{
+  display:inline-block;min-width:1.2em;
+  color:var(--gold);font-size:1.2em;font-weight:500;
+}
+.ssamo-timer.urgent .digit{color:#e63946;text-shadow:0 0 8px rgba(230,57,70,0.5)}
+.ssamo-problem{
+  flex:1;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  text-align:center;
+  padding:1rem 0;
+}
+.ssamo-problem .label{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:1.2rem;
+}
+.ssamo-problem .question{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.15rem, 1.8vw, 1.5rem);
+  line-height:1.45;letter-spacing:-.005em;
+  color:var(--paper);
+  max-width:36ch;margin:0 auto 1.6rem;
+}
+.ssamo-problem .question .em{color:var(--gold);font-style:italic}
+.ssamo-problem .answer{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(2.2rem, 5vw, 3.6rem);
+  font-weight:500;
+  color:var(--gold);
+  margin:0;opacity:0;
+  transform:translateY(20px);
+  transition:opacity .6s var(--ease-out), transform .6s var(--ease-out);
+  letter-spacing:-.02em;
+  text-shadow:0 0 24px rgba(212,175,55,0.4);
+}
+.ssamo-problem.revealed .answer{opacity:1;transform:none}
+.ssamo-problem.revealed .answer-prompt{opacity:0}
+.ssamo-problem .answer-prompt{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  margin-top:1rem;transition:opacity .4s;
+}
+.ssamo-problem .answer-prompt .blink{
+  display:inline-block;width:6px;height:6px;
+  background:var(--gold);border-radius:50%;
+  margin-left:.6rem;vertical-align:middle;
+  animation:ssamo-blink 1s steps(2) infinite;
+}
+@keyframes ssamo-blink{50%{opacity:0}}
+
+.ssamo-controls{
+  display:flex;gap:.6rem;
+  margin-top:auto;padding-top:1rem;
+  border-top:1px solid var(--rule);
+  flex-wrap:wrap;
+}
+.ssamo-stage button{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.25em;text-transform:uppercase;
+  border:1px solid var(--rule);
+  background:transparent;
+  padding:.6rem 1rem;
+  color:var(--paper-dim);
+  border-radius:3px;
+  cursor:pointer;
+  transition:all .25s var(--ease);
+}
+.ssamo-stage button:hover{
+  border-color:var(--gold);color:var(--gold);
+}
+.ssamo-stage button:disabled{
+  opacity:.35;cursor:not-allowed;
+  border-color:var(--rule)!important;color:var(--paper-mute)!important;
+}
+.ssamo-stage button.primary{
+  background:var(--gold);color:var(--ink-1);border-color:var(--gold);
+  font-weight:500;
+  padding:.75rem 1.4rem;
+  font-size:11px;
+}
+.ssamo-stage button.primary:hover{
+  background:transparent;color:var(--gold);
+}
+.ssamo-stage button.primary:disabled{
+  background:transparent!important;
+}
+.ssamo-progress-dots{
+  display:flex;gap:.4rem;align-items:center;
+  margin-left:auto;
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+  color:var(--paper-mute);
+}
+.ssamo-progress-dots .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--rule);
+  transition:background .25s;
+}
+.ssamo-progress-dots .dot.seen{background:var(--gold);box-shadow:0 0 6px rgba(212,175,55,0.5)}
+.ssamo-progress-dots .dot.win{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.6)}
+.ssamo-progress-dots .dot.loss{background:#e63946;box-shadow:0 0 6px rgba(230,57,70,0.5)}
+
+/* ─── SSAMO game-state screens ─── */
+.ssamo-screen{
+  display:flex;flex-direction:column;
+  flex:1;
+}
+.ssamo-screen[hidden]{display:none}
+
+/* INTRO */
+.ssamo-intro-body{
+  flex:1;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  padding:.5rem 0 1rem;
+}
+.ssamo-intro-h{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.6rem, 3vw, 2.2rem);
+  line-height:1.1;letter-spacing:-.02em;
+  color:var(--paper);
+  margin:0 0 1.4rem;
+}
+.ssamo-intro-h .gold{font-style:italic;color:var(--gold);font-weight:500}
+.ssamo-rules{
+  list-style:none;margin:0 0 1.6rem;padding:0;
+  font-family:var(--serif);
+  font-size:.98rem;line-height:1.55;
+  color:var(--paper-dim);max-width:42ch;
+}
+.ssamo-rules li{
+  display:flex;
+  gap:.7rem;align-items:baseline;
+  margin-bottom:.5rem;
+}
+.ssamo-rules li .n{
+  flex:0 0 auto;
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;
+  min-width:1.2rem;
+}
+.ssamo-rules li .body{flex:1}
+.ssamo-rules li em{color:var(--paper);font-style:italic}
+.ssamo-rules li .gold{color:var(--gold);font-weight:500}
+.ssamo-intro-cta{margin-top:auto}
+
+/* GAME — input row and result */
+.ssamo-input-row{
+  display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;
+  max-width:32rem;margin:0 auto;
+  width:100%;
+}
+.ssamo-answer-input{
+  flex:1;min-width:8rem;
+  font-family:var(--mono);
+  font-size:1.05rem;
+  letter-spacing:.05em;
+  background:var(--ink-2);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:.7rem .9rem;
+  color:var(--paper);
+  outline:none;
+  transition:border-color .25s var(--ease);
+}
+.ssamo-answer-input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(212,175,55,0.12);
+}
+.ssamo-answer-input::placeholder{color:var(--paper-mute);font-style:italic}
+.ssamo-answer-input.locked{opacity:.6;pointer-events:none}
+
+.ssamo-result{
+  max-width:36rem;margin:0 auto;
+  width:100%;
+}
+.ssamo-result-row{
+  display:flex;flex-direction:column;gap:.6rem;
+  margin-bottom:1.2rem;
+}
+.ssamo-result-line{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1rem;align-items:baseline;
+  padding:.6rem .9rem;
+  border:1px solid var(--rule);
+  border-radius:3px;
+  background:rgba(20,37,71,0.4);
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.ssamo-result-line.correct{border-color:rgba(212,175,55,0.3)}
+.ssamo-result-line.you-correct{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.04)}
+.ssamo-result-line.you-wrong{border-color:rgba(230,57,70,0.4);background:rgba(230,57,70,0.04)}
+.ssamo-result-line.you-skipped{border-color:rgba(245,241,232,0.18)}
+.ssamo-result-label{color:var(--paper-mute)}
+.ssamo-result-line.you-correct .ssamo-result-label{color:#4ade80}
+.ssamo-result-line.you-wrong .ssamo-result-label{color:#e63946}
+.ssamo-result-line.correct .ssamo-result-label{color:var(--gold)}
+.ssamo-result-val{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.3rem;font-weight:500;
+  color:var(--paper);
+  letter-spacing:-.01em;
+  text-transform:none;
+}
+.ssamo-result-line.correct .ssamo-result-val{color:var(--gold)}
+.ssamo-result-line.you-correct .ssamo-result-val{color:#4ade80}
+.ssamo-result-line.you-wrong .ssamo-result-val{color:#e63946;text-decoration:line-through;text-decoration-color:rgba(230,57,70,0.5)}
+.ssamo-result-time{
+  font-variant-numeric:tabular-nums;
+  color:var(--paper-dim);
+  letter-spacing:.1em;
+}
+.ssamo-verdict{
+  text-align:center;
+  font-family:var(--serif);font-style:italic;
+  font-size:1.05rem;
+  color:var(--paper-dim);
+  line-height:1.4;
+}
+.ssamo-verdict .win{color:#4ade80;font-weight:500;font-style:normal;letter-spacing:.02em}
+.ssamo-verdict .loss{color:#e63946;font-weight:500;font-style:normal;letter-spacing:.02em}
+.ssamo-verdict .em{color:var(--gold)}
+
+/* END screen */
+.ssamo-end-body{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:.5rem 0 1rem;
+}
+.ssamo-end-h{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(1.6rem, 3vw, 2.2rem);
+  line-height:1.1;letter-spacing:-.02em;
+  color:var(--paper);
+  margin:0 0 1.6rem;
+}
+.ssamo-end-h .gold{color:var(--gold);font-style:italic;font-weight:500}
+.ssamo-end-summary{
+  display:flex;flex-direction:column;gap:.5rem;
+  margin-bottom:1.5rem;
+}
+.ssamo-end-row{
+  display:grid;
+  grid-template-columns:auto 1fr auto auto;
+  gap:.8rem 1.2rem;align-items:baseline;
+  padding:.6rem .9rem;
+  border:1px solid var(--rule);
+  border-radius:3px;
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-dim);
+  font-variant-numeric:tabular-nums;
+}
+.ssamo-end-row.win{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.04)}
+.ssamo-end-row.loss{border-color:rgba(230,57,70,0.3)}
+.ssamo-end-row .ssamo-end-num{color:var(--gold);font-weight:500;letter-spacing:.1em}
+.ssamo-end-row .ssamo-end-verdict{
+  font-family:var(--serif);font-style:italic;
+  text-transform:none;letter-spacing:0;
+}
+.ssamo-end-row.win .ssamo-end-verdict{color:#4ade80}
+.ssamo-end-row.loss .ssamo-end-verdict{color:#e63946}
+.ssamo-end-final{
+  text-align:center;
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:1.2rem;
+  color:var(--paper);
+  margin-top:.6rem;
+  line-height:1.4;
+}
+.ssamo-end-final .gold{color:var(--gold);font-weight:500;font-style:normal}
+
+/* Review panel — appears below the end summary */
+.ssamo-review-hint{
+  text-align:center;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--paper-mute);
+  padding:1.4rem 0 1rem;
+  border-top:1px dashed var(--rule);
+  margin-top:1.5rem;
+}
+.ssamo-review-hint .gold{color:var(--gold);font-weight:500}
+.ssamo-review{
+  display:flex;flex-direction:column;gap:.7rem;
+}
+.ssamo-review-card{
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:1rem 1.1rem;
+  background:rgba(20,37,71,0.3);
+}
+.ssamo-review-card .head{
+  display:flex;justify-content:space-between;align-items:baseline;
+  gap:.6rem;flex-wrap:wrap;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  margin-bottom:.7rem;
+}
+.ssamo-review-card .head .gold{color:var(--gold)}
+.ssamo-review-card .q{
+  font-family:var(--serif);font-weight:300;
+  font-size:1.02rem;line-height:1.5;
+  color:var(--paper);
+  margin-bottom:.7rem;
+}
+.ssamo-review-card .a-row{
+  display:flex;gap:1.4rem;flex-wrap:wrap;align-items:baseline;
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.ssamo-review-card .a-row .ans{
+  font-family:var(--serif);font-style:italic;font-weight:500;
+  font-size:1.15rem;color:var(--gold);
+  text-transform:none;letter-spacing:-.01em;
+}
+
+/* ========================================================
+   ARC — Animated book + section reveals
+======================================================== */
+.arc-stage{
+  position:relative;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:2.2rem;
+  align-items:start;
+}
+@media (max-width:680px){.arc-stage{grid-template-columns:1fr}}
+.arc-book{
+  position:relative;
+  width:200px;height:280px;
+  perspective:900px;
+  margin:0 auto;
+}
+@media (max-width:680px){.arc-book{margin-bottom:1rem}}
+.arc-book-inner{
+  position:relative;
+  width:100%;height:100%;
+  transform-style:preserve-3d;
+  transform:rotateY(-22deg) rotateX(2deg);
+  transition:transform .6s var(--ease);
+}
+.arc-book:hover .arc-book-inner{transform:rotateY(-30deg) rotateX(2deg)}
+.arc-book-cover{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, #0d1b3a 0%, #1c2f5a 100%);
+  border:1px solid rgba(212,175,55,0.4);
+  border-radius:2px 6px 6px 2px;
+  padding:1.5rem 1.2rem;
+  display:flex;flex-direction:column;
+  box-shadow:
+    inset 0 0 0 1px rgba(212,175,55,0.1),
+    -2px 4px 16px rgba(0,0,0,0.5);
+}
+.arc-book-cover::before{
+  content:"";position:absolute;
+  top:0;bottom:0;left:8px;
+  width:1px;background:rgba(212,175,55,0.3);
+}
+.arc-book-cover .arc-mark{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);
+}
+.arc-book-cover .arc-bigtitle{
+  font-family:var(--serif);font-weight:500;
+  font-style:italic;
+  font-size:3.4rem;line-height:.9;
+  color:var(--paper);
+  margin:auto 0;
+}
+.arc-book-cover .arc-subtitle{
+  font-family:var(--serif);font-weight:300;
+  font-size:.78rem;line-height:1.3;
+  color:var(--paper-dim);
+  letter-spacing:.02em;
+}
+.arc-book-cover .arc-authors{
+  font-family:var(--mono);font-size:8px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  margin-top:.6rem;
+}
+.arc-book-cover .arc-authors .gold{color:var(--gold)}
+.arc-book-pages{
+  position:absolute;
+  right:-3px;top:6px;bottom:6px;
+  width:6px;
+  background:repeating-linear-gradient(
+    to bottom,
+    #e8e2d1 0px, #e8e2d1 1px,
+    #cfc8b6 1px, #cfc8b6 2px
+  );
+  border-radius:0 2px 2px 0;
+  box-shadow:1px 0 2px rgba(0,0,0,0.3);
+}
+
+.arc-sections{
+  display:flex;flex-direction:column;gap:.6rem;
+}
+.arc-section{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:1rem;align-items:center;
+  padding:.9rem 1rem;
+  border:1px solid var(--rule);
+  border-radius:3px;
+  background:rgba(20,37,71,0.3);
+  transition:all .35s var(--ease);
+  position:relative;
+  overflow:hidden;
+}
+.arc-section.lit{
+  border-color:rgba(212,175,55,0.4);
+  background:rgba(212,175,55,0.04);
+}
+.arc-section.lit .arc-section-icon{color:var(--gold)}
+.arc-section .arc-section-icon{
+  font-family:var(--serif);font-style:italic;
+  font-size:1.4rem;color:var(--paper-mute);
+  font-weight:500;
+  width:30px;text-align:center;
+  transition:color .35s;
+}
+.arc-section .arc-section-body{}
+.arc-section .arc-section-name{
+  font-family:var(--serif);
+  font-size:1.1rem;
+  color:var(--paper);
+  font-weight:400;
+}
+.arc-section .arc-section-meta{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+  margin-top:.15rem;
+}
+.arc-section .arc-section-stamp{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  padding:.25rem .6rem;
+  border:1px solid var(--paper-mute);
+  border-radius:2px;
+  color:var(--paper-mute);
+  white-space:nowrap;
+}
+.arc-section.done .arc-section-stamp{
+  border-color:var(--gold);color:var(--gold);
+  background:rgba(212,175,55,0.06);
+}
+.arc-section.lit::after{
+  content:"";position:absolute;
+  left:0;top:0;bottom:0;width:3px;
+  background:var(--gold);
+  box-shadow:0 0 8px rgba(212,175,55,0.6);
+}
+
+.arc-progress-bar{
+  margin-top:1.5rem;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:.8rem;align-items:center;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+}
+.arc-progress-bar .bar{
+  height:3px;background:var(--rule);
+  border-radius:2px;overflow:hidden;
+  position:relative;
+}
+.arc-progress-bar .bar .fill{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg, var(--gold), #b89530);
+  transform-origin:left;
+  transform:scaleX(0);
+  transition:transform .5s var(--ease-out);
+  box-shadow:0 0 6px rgba(212,175,55,0.5);
+}
+.arc-progress-bar .pct{color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* ========================================================
+   ALTERNATING GRID (mocks, PReMA, Nesbitt, calc 3)
+======================================================== */
 .project-list{padding:0 var(--pad-x) var(--pad-y)}
 .project{
   display:grid;
@@ -39,7 +692,6 @@
   .project{grid-template-columns:1fr;gap:2rem}
   .project:nth-of-type(even) .project-visual{order:0}
 }
-
 .project-meta{
   font-family:var(--mono);font-size:11px;
   letter-spacing:.25em;text-transform:uppercase;
@@ -54,61 +706,441 @@
 }
 .project-title{
   font-family:var(--serif);font-weight:400;
-  font-size:clamp(2rem, 4.5vw, 3.6rem);
-  line-height:1.02;letter-spacing:-.02em;
+  font-size:clamp(1.9rem, 4vw, 3.2rem);
+  line-height:1.04;letter-spacing:-.02em;
   margin:0 0 1rem;
 }
-.project-title .italic{font-style:italic;color:var(--gold)}
+.project-title .italic{font-style:italic;color:var(--gold);font-weight:500}
 .project-desc{
-  font-family:var(--serif);font-size:1.1rem;
+  font-family:var(--serif);font-size:1.08rem;
   line-height:1.55;color:var(--paper-dim);
-  max-width:42ch;margin:0 0 2rem;
+  max-width:44ch;margin:0 0 1.4em;
 }
+.project-desc em{color:var(--paper);font-style:italic}
+.project-desc strong{color:var(--paper);font-weight:500}
 .project-meta-info{
-  font-family:var(--mono);font-size:11px;
+  font-family:var(--mono);font-size:10.5px;
   letter-spacing:.18em;text-transform:uppercase;
-  color:var(--paper-mute);margin-bottom:2rem;
-  display:flex;gap:1.5rem;flex-wrap:wrap;
+  color:var(--paper-mute);margin-bottom:1.6rem;
+  display:flex;gap:1.2rem 1.6rem;flex-wrap:wrap;
 }
 .project-meta-info strong{color:var(--paper);font-weight:500}
 
 .project-visual{
   position:relative;
-  aspect-ratio:4/3;
-  background:var(--ink-2);
+  aspect-ratio:5/4;
+  background:linear-gradient(180deg, rgba(20,37,71,0.4), rgba(13,27,58,0.6));
   border:1px solid var(--rule);
+  border-radius:4px;
   overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .5s var(--ease);
 }
-.project-visual .layer{
+
+/* ========================================================
+   AMC MOCKS — Frog Markov chain
+======================================================== */
+.frog-stage{
   position:absolute;inset:0;
+  display:flex;flex-direction:column;
+}
+.frog-head{
+  padding:.9rem 1.1rem .4rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  flex-wrap:wrap;gap:.5rem;
+}
+.frog-head .gold{color:var(--gold)}
+.frog-canvas{
+  flex:1;position:relative;
+}
+.frog-canvas svg{width:100%;height:100%;display:block}
+.frog-pad{
+  fill:rgba(212,175,55,0.06);
+  stroke:rgba(212,175,55,0.4);
+  stroke-width:1;
+  transition:fill .25s var(--ease), stroke .25s var(--ease);
+  cursor:pointer;
+}
+.frog-pad:hover{
+  fill:rgba(212,175,55,0.14);
+}
+.frog-pad.active{
+  fill:rgba(212,175,55,0.25);
+  stroke:var(--gold);
+  filter:drop-shadow(0 0 8px rgba(212,175,55,0.5));
+}
+.frog-pad.blocked{
+  fill:rgba(230,57,70,0.10);
+  stroke:rgba(230,57,70,0.55);
+  cursor:pointer;
+}
+.frog-pad.blocked:hover{
+  fill:rgba(230,57,70,0.18);
+}
+.frog-pad.blocked.active{
+  filter:none;
+}
+.frog-block-x{
+  stroke:rgba(230,57,70,0.85);
+  stroke-width:2.5;stroke-linecap:round;
+  pointer-events:none;
+}
+.frog-edge-link{
+  stroke:rgba(212,175,55,0.35);
+  stroke-width:1.5;
+  fill:none;
+  transition:stroke .35s var(--ease), opacity .35s var(--ease);
+}
+.frog-edge-link.dead{
+  stroke:rgba(230,57,70,0.4);
+  stroke-dasharray:3 4;
+  opacity:.55;
+}
+.frog-edge-link.flash{
+  stroke:var(--gold);
+  stroke-width:2;
+  filter:drop-shadow(0 0 6px rgba(212,175,55,0.6));
+  animation:frog-edge-flash 1.2s var(--ease) forwards;
+}
+@keyframes frog-edge-flash{
+  0%{opacity:1}
+  40%{opacity:1}
+  100%{opacity:.35;stroke-width:1.5;filter:none}
+}
+.frog-pad-label{
+  font-family:var(--mono);font-size:11px;
+  fill:var(--paper-dim);
+  text-anchor:middle;dominant-baseline:central;
+  pointer-events:none;
+}
+.frog-pad.active + .frog-pad-label, .frog-pad.active ~ .frog-pad-label{}
+.frog-stat-label{
+  font-family:var(--mono);font-size:9px;
+  fill:var(--gold);
+  text-anchor:middle;dominant-baseline:central;
+  letter-spacing:.05em;
+  opacity:.85;
+  font-variant-numeric:tabular-nums;
+}
+.frog{
+  font-size:24px;
+  pointer-events:none;
+  transition:transform .55s cubic-bezier(.5,1.6,.4,1);
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+}
+.frog-bottom{
+  padding:.7rem 1.1rem .9rem;
+  display:flex;gap:1rem;align-items:center;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+  border-top:1px solid var(--rule);
+  flex-wrap:wrap;
+}
+.frog-bottom .step{color:var(--paper);font-variant-numeric:tabular-nums}
+.frog-bottom button{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  border:1px solid var(--rule);
+  background:transparent;padding:.4rem .7rem;
+  color:var(--paper-dim);border-radius:3px;
+  cursor:pointer;transition:all .25s var(--ease);
+}
+.frog-bottom button:hover{border-color:var(--gold);color:var(--gold)}
+.frog-bottom .right{margin-left:auto;display:flex;gap:.5rem;align-items:center}
+.frog-hist{
+  display:flex;align-items:flex-end;gap:2px;
+  height:24px;
+}
+.frog-hist .bar{
+  width:6px;background:var(--gold);border-radius:1px;
+  opacity:.7;transition:height .35s var(--ease-out);
+}
+
+/* ========================================================
+   PReMA — Tridiagonal matrix + decay curve
+======================================================== */
+.prema-stage{
+  position:absolute;inset:0;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+}
+.prema-head{
+  padding:.9rem 1.1rem .4rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  flex-wrap:wrap;gap:.5rem;
+}
+.prema-head .gold{color:var(--gold)}
+.prema-body{
+  display:grid;
+  grid-template-columns:1fr 1.3fr;
+  gap:1rem;padding:0 1.1rem;
+  align-items:center;min-height:0;
+}
+.prema-matrix{
+  font-family:var(--mono);font-size:9px;
+  color:var(--paper-dim);
+  letter-spacing:.05em;
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  aspect-ratio:1;
+  max-width:160px;
+  font-variant-numeric:tabular-nums;
+}
+.prema-cell{
+  background:var(--ink-2);
   display:flex;align-items:center;justify-content:center;
-  will-change:transform;
+  font-size:9px;
+  transition:background .3s var(--ease), color .3s var(--ease);
+  min-height:18px;
 }
-.project-visual .bg-grad{
-  background:radial-gradient(ellipse at center, rgba(212,175,55,0.08), transparent 60%);
+.prema-cell.zero{color:var(--paper-mute);opacity:.4}
+.prema-cell.off{color:var(--paper-dim)}
+.prema-cell.diag{color:var(--gold);font-weight:500}
+.prema-cell.diag.high{background:rgba(212,175,55,0.18)}
+.prema-cell.diag.low{background:rgba(20,37,71,0.6)}
+
+.prema-plot{
+  position:relative;
+  width:100%;
+  aspect-ratio:1.4;
+  max-height:100%;
 }
-.project-visual .grid-overlay{
-  background-image:
-    linear-gradient(var(--rule) 1px, transparent 1px),
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size:32px 32px;opacity:.4;
+.prema-plot svg{width:100%;height:100%;display:block}
+.prema-axis{stroke:var(--paper-mute);stroke-width:.6;opacity:.5}
+.prema-axis-label{
+  font-family:var(--mono);font-size:8px;
+  fill:var(--paper-mute);letter-spacing:.1em;
 }
-.project-visual .glyph{
-  font-family:var(--serif);font-style:italic;
-  font-size:clamp(4.5rem, 11vw, 10rem);
-  color:rgba(212,175,55,0.18);font-weight:300;
-  letter-spacing:-.03em;
+.prema-curve{
+  fill:none;stroke-width:1.6;
+  stroke-linecap:round;
 }
-.project-visual .accent{
+.prema-curve.bern{stroke:var(--gold);filter:drop-shadow(0 0 4px rgba(212,175,55,0.5))}
+.prema-curve.unif{stroke:#7faaff;filter:drop-shadow(0 0 4px rgba(127,170,255,0.5))}
+.prema-curve.dim{opacity:.25}
+.prema-dot{
+  transition:cx .35s var(--ease-out), cy .35s var(--ease-out), opacity .35s;
+}
+.prema-dot.bern{
+  fill:var(--gold);
+  filter:drop-shadow(0 0 6px rgba(212,175,55,0.9));
+}
+.prema-dot.unif{
+  fill:#7faaff;
+  filter:drop-shadow(0 0 6px rgba(127,170,255,0.9));
+}
+.prema-trail-dot{
+  transition:opacity .8s ease-out;
+}
+.prema-trail-dot.bern{fill:var(--gold)}
+.prema-trail-dot.unif{fill:#7faaff}
+.prema-gamma-label{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.1em;
+}
+.prema-gamma-label.bern{fill:var(--gold)}
+.prema-gamma-label.unif{fill:#7faaff}
+
+.prema-bottom{
+  padding:.7rem 1.1rem .9rem;
+  display:flex;gap:.5rem;align-items:center;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+  border-top:1px solid var(--rule);
+  flex-wrap:wrap;
+}
+.prema-bottom .toggle{
+  display:flex;border:1px solid var(--rule);border-radius:3px;overflow:hidden;
+}
+.prema-bottom .toggle button{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  background:transparent;padding:.4rem .7rem;
+  color:var(--paper-dim);
+  cursor:pointer;border:none;
+  transition:all .25s var(--ease);
+}
+.prema-bottom .toggle button.active{
+  background:var(--gold);color:var(--ink-1);
+}
+.prema-bottom .toggle button:not(.active):hover{color:var(--gold)}
+.prema-bottom .stat{
+  margin-left:auto;color:var(--paper);
+  font-variant-numeric:tabular-nums;
+}
+.prema-bottom .stat .em{color:var(--gold)}
+
+/* ========================================================
+   NESBITT — α slider + live infimum plot
+======================================================== */
+.nesbitt-stage{
+  position:absolute;inset:0;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+}
+.nesbitt-head{
+  padding:.9rem 1.1rem .4rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  flex-wrap:wrap;gap:.5rem;
+}
+.nesbitt-head .gold{color:var(--gold)}
+.nesbitt-plot{
+  position:relative;
+  padding:.4rem .8rem;
+}
+.nesbitt-plot svg{width:100%;height:100%;display:block}
+.nesbitt-curve{
+  fill:none;stroke:var(--gold);stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round;
+  filter:drop-shadow(0 0 4px rgba(212,175,55,0.5));
+}
+.nesbitt-curve.boundary{
+  stroke:#7faaff;stroke-width:1.4;
+  stroke-dasharray:4 3;
+  filter:drop-shadow(0 0 3px rgba(127,170,255,0.4));
+}
+.nesbitt-curve.symmetric{
+  stroke:rgba(245,241,232,0.4);
+  stroke-width:1.2;
+  stroke-dasharray:3 3;
+}
+.nesbitt-axis{stroke:var(--paper-mute);stroke-width:.6;opacity:.5}
+.nesbitt-axis-label{
+  font-family:var(--mono);font-size:8px;
+  fill:var(--paper-mute);letter-spacing:.05em;
+}
+.nesbitt-threshold-line{
+  stroke:rgba(212,175,55,0.4);
+  stroke-width:1;
+  stroke-dasharray:2 3;
+}
+.nesbitt-threshold-label{
+  font-family:var(--mono);font-size:8px;
+  fill:var(--gold);
+  letter-spacing:.05em;
+}
+.nesbitt-dot{
+  fill:var(--gold);
+  filter:drop-shadow(0 0 6px rgba(212,175,55,0.7));
+}
+.nesbitt-readout{
   position:absolute;
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:var(--gold);opacity:.7;
+  top:.5rem;right:1rem;
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.1em;
+  color:var(--paper-dim);
+  text-align:right;line-height:1.6;
+  font-variant-numeric:tabular-nums;
 }
-.project-visual .accent.tl{top:1rem;left:1rem}
-.project-visual .accent.br{bottom:1rem;right:1rem}
+.nesbitt-readout .val{color:var(--gold);font-weight:500}
+.nesbitt-readout .em{color:var(--paper)}
+
+.nesbitt-bottom{
+  padding:.7rem 1.1rem .9rem;
+  display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;
+  align-items:center;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+  border-top:1px solid var(--rule);
+}
+.nesbitt-bottom .alpha-val{color:var(--gold);font-variant-numeric:tabular-nums;letter-spacing:.05em}
+.nesbitt-slider{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:3px;
+  background:linear-gradient(90deg,
+    #e63946 0%, #e63946 58.5%,
+    var(--gold) 58.5%, var(--gold) 100%);
+  border-radius:2px;outline:none;
+  cursor:pointer;
+}
+.nesbitt-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:14px;height:14px;
+  border-radius:50%;
+  background:var(--gold);
+  border:2px solid var(--ink-1);
+  cursor:pointer;
+  box-shadow:0 0 8px rgba(212,175,55,0.5);
+}
+.nesbitt-slider::-moz-range-thumb{
+  width:14px;height:14px;
+  border-radius:50%;
+  background:var(--gold);
+  border:2px solid var(--ink-1);
+  cursor:pointer;
+  box-shadow:0 0 8px rgba(212,175,55,0.5);
+}
+
+/* ========================================================
+   CALC 3 — Vector field
+======================================================== */
+.calc-stage{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+}
+.calc-head{
+  padding:.9rem 1.1rem .4rem;
+  display:flex;justify-content:space-between;align-items:baseline;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  flex-wrap:wrap;gap:.5rem;
+}
+.calc-head .gold{color:var(--gold)}
+.calc-field{
+  flex:1;position:relative;overflow:hidden;
+}
+.calc-field svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.calc-arrow{
+  stroke:rgba(212,175,55,0.6);
+  stroke-width:1.2;
+  fill:none;
+  marker-end:url(#calcArrowhead);
+}
+.calc-particle{
+  fill:var(--gold);
+  filter:drop-shadow(0 0 4px rgba(212,175,55,0.7));
+}
+.calc-bottom{
+  padding:.7rem 1.1rem .9rem;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--paper-mute);
+  border-top:1px solid var(--rule);
+  display:flex;gap:1rem;flex-wrap:wrap;
+}
+.calc-bottom .gold{color:var(--gold)}
+
+/* ========================================================
+   CLOSING
+======================================================== */
+.projects-closing{
+  padding:5rem var(--pad-x) 4rem;
+  border-top:1px solid var(--rule);
+  text-align:center;
+}
+.projects-closing p{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  font-size:clamp(1.3rem, 2.4vw, 2.1rem);
+  line-height:1.3;letter-spacing:-.01em;
+  color:var(--paper);
+  max-width:36ch;
+  margin:0 auto 1rem;
+}
+.projects-closing p .em{color:var(--gold);font-style:normal}
 </style>
 </head>
 <body>
@@ -137,58 +1169,448 @@
 </header>
 
 <main>
+
+<!-- ============ HERO ============ -->
 <section class="projects-intro">
   <p class="page-eyebrow">§ 03 · Projects</p>
-  <h1>Things I'm <span class="italic">making</span>.</h1>
-  <p class="lead">Some live, some in draft, all real. Each one started as a thing I wanted to exist that didn't yet.</p>
+  <h1>Things I've actually <span class="italic">made</span>.</h1>
+  <p class="lead">Six projects. Two olympiad-style, two textbooks, two research. Each one started as a thing I wanted to exist that didn't yet — <em>or that existed but cost $400 a month</em>. Click through them. The ones with interactive bits are interactive on purpose, not just because I needed an excuse to write the JavaScript.</p>
+  <div class="projects-toc">
+    <a href="#ssamo" data-cursor="hover"><span class="n">i</span> SSAMO</a>
+    <a href="#arc" data-cursor="hover"><span class="n">ii</span> ARC</a>
+    <a href="#mocks" data-cursor="hover"><span class="n">iii</span> AMC mocks</a>
+    <a href="#prema" data-cursor="hover"><span class="n">iv</span> PReMA</a>
+    <a href="#nesbitt" data-cursor="hover"><span class="n">v</span> Nesbitt</a>
+    <a href="#calc3" data-cursor="hover"><span class="n">vi</span> Calc 3 book</a>
+  </div>
 </section>
 
+<!-- ============ SSAMO — FULL-BLEED ============ -->
+<section class="full" id="ssamo">
+  <div class="full-head">
+    <div class="full-num">i.</div>
+    <h2 class="full-title">SSAMO — Shady Side Academy <span class="italic">Mathematics Olympiad</span></h2>
+    <div class="full-meta">
+      Olympiad · founder<br/>
+      <span class="gold">April 2026</span><br/>
+      5 schools · 25 problems
+    </div>
+  </div>
+  <div class="full-body">
+    <div class="full-prose" data-reveal>
+      <p>
+        The first-ever olympiad <span class="name-ryan">Ryan Gong</span> and I founded and ran at our school. Months of original problem design, school-board funding, logistics — the kind of project that, two years ago, I would've started with a college-app angle in mind. I didn't this time. <em>I just wanted the contest to exist.</em>
+      </p>
+      <p>
+        We started writing problems in October. Argued about each one for elegance, for difficulty, for whether the answer was findable or actually <em>interesting</em>. By April we had 25 problems we were proud of, a venue at our school, registrations from multiple schools, and a board-approved budget that took two meetings and a written proposal to get.
+      </p>
+      <p>
+        The thing nobody tells you about writing an olympiad: <em>you watch your problems get solved from the other side of the table</em>. You see which problems people get stuck on. You see which ones get cracked in fifteen minutes by a kid you've never met. You see the exact configuration on Problem 4 that you spent two weeks polishing land cleanly — or, occasionally, not land at all, because the freshman in row three saw it three different ways and picked the one we hadn't thought of.
+      </p>
+      <div class="aside-quote">
+        Some of them solved problems we'd been proud of writing. Some got stuck on problems we thought would be easy. It was the first time I'd ever watched my own math from the other side of the table.
+        <span class="who">— from "Chasing dreams a long way back"</span>
+      </div>
+      <p>
+        To the right, a stylized countdown round with three problems we actually wrote. Click <em>reveal</em> to see the answer; <em>next</em> to cycle. The timer runs because the timer always runs.
+      </p>
+      <div class="full-cta">
+        <a href="https://sites.google.com/view/ssamo-ssa-mathematics-olympiad/home" target="_blank" rel="noopener" class="gold-btn" data-cursor="hover">Visit SSAMO &rarr;</a>
+      </div>
+    </div>
+
+    <!-- ===== SSAMO COUNTDOWN GAME ===== -->
+    <div class="ssamo-stage" id="ssamoStage" data-reveal data-delay="1">
+
+      <!-- ───── INTRO SCREEN ───── -->
+      <div class="ssamo-screen ssamo-intro" id="ssamoIntro">
+        <div class="ssamo-bar">
+          <span class="ssamo-mark">SSAMO · countdown</span>
+          <span class="ssamo-q-num">rules</span>
+          <span class="ssamo-timer"><span class="digit">45</span>s</span>
+        </div>
+        <div class="ssamo-intro-body">
+          <h3 class="ssamo-intro-h">Countdown round.<br/><span class="gold">You against me.</span></h3>
+          <ul class="ssamo-rules">
+            <li><span class="n">1</span><span class="body">Three problems. Combinatorics, number theory, geometry.</span></li>
+            <li><span class="n">2</span><span class="body">45 seconds each. Type your answer and submit.</span></li>
+            <li><span class="n">3</span><span class="body"><em>One shot.</em> Wrong answer locks the problem and moves on.</span></li>
+            <li><span class="n">4</span><span class="body">Beat both my time <em>and</em> get it right to win the problem.</span></li>
+            <li><span class="n">5</span><span class="body">My times: <span class="gold">30s</span>, <span class="gold">25s</span>, <span class="gold">5s</span>.</span></li>
+          </ul>
+          <div class="ssamo-intro-cta">
+            <button class="primary" id="ssamoStart">▸ start round</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ───── GAME SCREEN ───── -->
+      <div class="ssamo-screen ssamo-game" id="ssamoGame" hidden>
+        <div class="ssamo-bar">
+          <span class="ssamo-mark">SSAMO · countdown</span>
+          <span class="ssamo-q-num" id="ssamoQNum">problem 1 / 3</span>
+          <span class="ssamo-timer" id="ssamoTimer">
+            <span class="digit" id="ssamoMin">0</span>:<span class="digit" id="ssamoSec">45</span>
+          </span>
+        </div>
+        <div class="ssamo-problem" id="ssamoProblem">
+          <div class="label" id="ssamoLabel">2026 · SSAMO #4 · combinatorics</div>
+          <div class="question" id="ssamoQuestion"></div>
+          <!-- input row (visible during play) -->
+          <div class="ssamo-input-row" id="ssamoInputRow">
+            <input type="text" id="ssamoAnswerInput" class="ssamo-answer-input"
+                   placeholder="your answer" autocomplete="off" spellcheck="false"
+                   inputmode="text" />
+            <button class="primary" id="ssamoSubmit">submit</button>
+            <button id="ssamoGiveUp">give up</button>
+          </div>
+          <!-- result row (visible after submit / timeout / give-up) -->
+          <div class="ssamo-result" id="ssamoResult" hidden>
+            <div class="ssamo-result-row">
+              <div class="ssamo-result-line">
+                <span class="ssamo-result-label" id="ssamoYouLabel">your answer</span>
+                <span class="ssamo-result-val" id="ssamoYouVal"></span>
+                <span class="ssamo-result-time" id="ssamoYouTime"></span>
+              </div>
+              <div class="ssamo-result-line correct">
+                <span class="ssamo-result-label">correct answer</span>
+                <span class="ssamo-result-val" id="ssamoCorrectVal"></span>
+                <span class="ssamo-result-time" id="ssamoMyTime"></span>
+              </div>
+            </div>
+            <div class="ssamo-verdict" id="ssamoVerdict"></div>
+          </div>
+        </div>
+        <div class="ssamo-controls">
+          <button id="ssamoNext" hidden>next problem &rarr;</button>
+          <div class="ssamo-progress-dots">
+            <span>problems</span>
+            <span class="dot" data-i="0"></span>
+            <span class="dot" data-i="1"></span>
+            <span class="dot" data-i="2"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ───── END SCREEN ───── -->
+      <div class="ssamo-screen ssamo-end" id="ssamoEnd" hidden>
+        <div class="ssamo-bar">
+          <span class="ssamo-mark">SSAMO · countdown</span>
+          <span class="ssamo-q-num">final</span>
+          <span class="ssamo-timer"><span class="digit">∎</span></span>
+        </div>
+        <div class="ssamo-end-body">
+          <h3 class="ssamo-end-h" id="ssamoEndH">round complete.</h3>
+          <div class="ssamo-end-summary" id="ssamoEndSummary"></div>
+          <div class="ssamo-review-hint">↓ <span class="gold">review the problems</span> · the round is one-and-done</div>
+          <div class="ssamo-review" id="ssamoReview"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARC — FULL-BLEED ============ -->
+<section class="full" id="arc">
+  <div class="full-head">
+    <div class="full-num">ii.</div>
+    <h2 class="full-title"><span class="italic">ARC</span> — AIME Roadmap &amp; Curriculum</h2>
+    <div class="full-meta">
+      Textbook · w/ <span class="gold">Ryan Gong</span><br/>
+      Combi done · ~600 pp<br/>
+      <span class="gold">A · NT · C · G</span>
+    </div>
+  </div>
+  <div class="full-body">
+    <div class="full-prose" data-reveal>
+      <p>
+        Free olympiad-prep textbook for kids who can't access expensive prep, in a moment when online resources have been compromised by cheating scandals. <em>Combinatorics is done — around 600 pages of it.</em> The other three sections are in progress; we're aiming to drop the full thing before September so kids have it for AMC season.
+      </p>
+      <p>
+        People have asked me, more or less directly: <em>who are you to write a textbook? You barely made USAMO. You scored a 5.</em>
+      </p>
+      <p>
+        The honest answer is that they probably shouldn't read it if what they want is to learn from the best. There are plenty of resources by MOP kids and IMO medalists — Evan Chen's notes alone are probably better than anything I'll write in my lifetime. If you're a top-ten student in the country, ARC is not for you.
+      </p>
+      <div class="aside-quote">
+        ARC is for the kid scoring 75 on the AMC 10 who doesn't know if they'll ever break 100. For the kid who just made AIME and has no idea what to study next. For someone who has the passion but doesn't have the resources to make the next jump. <em>That was me, once.</em>
+        <span class="who">— why we're writing it</span>
+      </div>
+      <p>
+        The reason I think I can write something useful for that kid isn't that I'm the best at math. It's that I remember exactly what it felt like to <em>not</em> understand, in a way that someone who's been good at it since they were eight doesn't. Every technique in the book is a technique I personally got wrong before I got it right, and I remember the wrong versions.
+      </p>
+      <div class="full-cta">
+        <a href="https://drive.google.com/drive/folders/1r_W_rcSNr5aO2rfgV_lvlJTAHKZkOKyN?usp=drive_link" target="_blank" rel="noopener" class="gold-btn" data-cursor="hover">Read drafts &rarr;</a>
+      </div>
+    </div>
+
+    <!-- ===== ARC BOOK + SECTIONS ===== -->
+    <div class="arc-stage" data-reveal data-delay="1">
+      <div class="arc-book">
+        <div class="arc-book-inner">
+          <div class="arc-book-cover">
+            <div class="arc-mark">vol. 01 · 2026</div>
+            <div class="arc-bigtitle">ARC</div>
+            <div class="arc-subtitle">
+              AIME Roadmap<br/>&amp; Curriculum
+            </div>
+            <div class="arc-authors">A. Chen · <span class="gold">R. Gong</span></div>
+          </div>
+          <div class="arc-book-pages"></div>
+        </div>
+      </div>
+      <div>
+        <div class="arc-sections" id="arcSections">
+          <div class="arc-section done" data-section="C">
+            <div class="arc-section-icon">C</div>
+            <div class="arc-section-body">
+              <div class="arc-section-name">Combinatorics</div>
+              <div class="arc-section-meta">~600 pp · counting · graphs · gen. fn.</div>
+            </div>
+            <div class="arc-section-stamp">done</div>
+          </div>
+          <div class="arc-section" data-section="A">
+            <div class="arc-section-icon">A</div>
+            <div class="arc-section-body">
+              <div class="arc-section-name">Algebra</div>
+              <div class="arc-section-meta">in progress · polynomials · inequalities · FE</div>
+            </div>
+            <div class="arc-section-stamp">drafting</div>
+          </div>
+          <div class="arc-section" data-section="NT">
+            <div class="arc-section-icon">NT</div>
+            <div class="arc-section-body">
+              <div class="arc-section-name">Number Theory</div>
+              <div class="arc-section-meta">my weakest area · LTE · mod arithmetic · diophantine</div>
+            </div>
+            <div class="arc-section-stamp">outlining</div>
+          </div>
+          <div class="arc-section" data-section="G">
+            <div class="arc-section-icon">G</div>
+            <div class="arc-section-body">
+              <div class="arc-section-name">Geometry</div>
+              <div class="arc-section-meta">synth. · trig · proj. · inversive</div>
+            </div>
+            <div class="arc-section-stamp">drafting</div>
+          </div>
+        </div>
+        <div class="arc-progress-bar">
+          <span>progress</span>
+          <div class="bar"><div class="fill" id="arcProgressFill"></div></div>
+          <span class="pct" id="arcProgressPct">25%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ALTERNATING GRID ============ -->
 <section class="project-list">
-  <article class="project" data-reveal data-cursor="hover">
+
+  <!-- ===== MOCKS ===== -->
+  <article class="project" id="mocks" data-reveal data-cursor="hover">
     <div class="project-text">
-      <div class="project-meta">Olympiad · founder</div>
-      <h2 class="project-title"><span class="italic">SSAMO</span> — Shady Side Academy Mathematics Olympiad</h2>
+      <div class="project-meta">Mock exam · co-written</div>
+      <h2 class="project-title">AMC Mock — <span class="italic">the Markov-frog edition</span></h2>
       <div class="project-meta-info">
-        <span><strong>April 2026</strong> · first edition</span>
-        <span>5 schools · original problems</span>
+        <span><strong>25 problems</strong></span>
+        <span>predicted real AMC question</span>
+        <span><strong>w/ Ryan Gong</strong></span>
       </div>
       <p class="project-desc">
-        The first-ever olympiad I founded and ran at my school. Months of original problem design, school-board funding, logistics. Kids from multiple schools competed on problems <span class="name-ryan">Ryan Gong</span> and I had co-written. We watched our problems being solved from the other side of the table.
+        Co-written AMC mock. We accidentally predicted a real AMC question about Markov chains and jumping frogs — the kind of accident that only happens after months of writing problems and arguing about which configuration looks <em>AMC enough</em>. The kind of accident I'd like to keep having.
       </p>
-      <a href="https://sites.google.com/view/ssamo-ssa-mathematics-olympiad/home" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">Visit SSAMO &rarr;</a>
+      <p class="project-desc" style="font-size:.95rem">
+        On the right: a frog actually doing the chain. Linear, five pads, adjacent moves only. <em>Click any pad to block it.</em> If both neighbors get blocked, the frog gets stuck — which is a real Markov-chain phenomenon and not a bug. Visit counts update under each pad as it runs.
+      </p>
+      <a href="https://drive.google.com/drive/folders/1WGSIBr1KYUvb8-5sz56ZHuGNUHe9GrKC?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">See the problems &rarr;</a>
     </div>
     <div class="project-visual">
-      <div class="layer bg-grad"></div>
-      <div class="layer grid-overlay"></div>
-      <div class="layer"><div class="glyph">Ω</div></div>
-      <div class="accent tl">vol. i · 2026</div>
-      <div class="accent br">april</div>
+      <div class="frog-stage">
+        <div class="frog-head">
+          <span><span class="gold">Markov chain</span> · linear · click to block</span>
+          <span id="frogPadLabel">on pad <span class="gold" id="frogCurrentPad">1</span></span>
+        </div>
+        <div class="frog-canvas">
+          <svg viewBox="0 0 400 200" id="frogSvg" preserveAspectRatio="xMidYMid meet">
+            <!-- Edges between adjacent pads (rendered first so they sit behind) -->
+            <line class="frog-edge-link" id="frogEdge12" x1="50"  y1="115" x2="125" y2="115"/>
+            <line class="frog-edge-link" id="frogEdge23" x1="125" y1="115" x2="200" y2="115"/>
+            <line class="frog-edge-link" id="frogEdge34" x1="200" y1="115" x2="275" y2="115"/>
+            <line class="frog-edge-link" id="frogEdge45" x1="275" y1="115" x2="350" y2="115"/>
+            <!-- Pads, evenly spaced at y=115 -->
+            <ellipse id="frogPad1" class="frog-pad" cx="50"  cy="115" rx="28" ry="16" data-pad="1"/>
+            <ellipse id="frogPad2" class="frog-pad" cx="125" cy="115" rx="28" ry="16" data-pad="2"/>
+            <ellipse id="frogPad3" class="frog-pad" cx="200" cy="115" rx="28" ry="16" data-pad="3"/>
+            <ellipse id="frogPad4" class="frog-pad" cx="275" cy="115" rx="28" ry="16" data-pad="4"/>
+            <ellipse id="frogPad5" class="frog-pad" cx="350" cy="115" rx="28" ry="16" data-pad="5"/>
+            <!-- Pad labels -->
+            <text class="frog-pad-label" x="50"  y="116">1</text>
+            <text class="frog-pad-label" x="125" y="116">2</text>
+            <text class="frog-pad-label" x="200" y="116">3</text>
+            <text class="frog-pad-label" x="275" y="116">4</text>
+            <text class="frog-pad-label" x="350" y="116">5</text>
+            <!-- Visit counts below each pad (dynamic) -->
+            <text class="frog-stat-label" id="frogVisits1" x="50"  y="148">0</text>
+            <text class="frog-stat-label" id="frogVisits2" x="125" y="148">0</text>
+            <text class="frog-stat-label" id="frogVisits3" x="200" y="148">0</text>
+            <text class="frog-stat-label" id="frogVisits4" x="275" y="148">0</text>
+            <text class="frog-stat-label" id="frogVisits5" x="350" y="148">0</text>
+            <!-- Frog -->
+            <text class="frog" id="frog" x="50" y="120" text-anchor="middle" dominant-baseline="central">🐸</text>
+            <!-- Block markers (X over a blocked pad — opacity:0 by default, JS shows when blocked) -->
+            <g id="frogBlocks"></g>
+          </svg>
+        </div>
+        <div class="frog-bottom">
+          <span>step <span class="step" id="frogStep">0</span></span>
+          <button id="frogStepBtn">▸ hop</button>
+          <button id="frogRunBtn">▶ run</button>
+          <button id="frogResetBtn">reset</button>
+          <div class="right">
+            <span>visits</span>
+            <div class="frog-hist" id="frogHist">
+              <div class="bar" style="height:0"></div>
+              <div class="bar" style="height:0"></div>
+              <div class="bar" style="height:0"></div>
+              <div class="bar" style="height:0"></div>
+              <div class="bar" style="height:0"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </article>
 
-  <article class="project" data-reveal data-cursor="hover">
+  <!-- ===== PReMA ===== -->
+  <article class="project" id="prema" data-reveal data-cursor="hover">
     <div class="project-text">
-      <div class="project-meta">Textbook · w/ <span class="name-ryan">Ryan Gong</span> <span class="badge">Coming Soon</span></div>
-      <h2 class="project-title"><span class="italic">ARC</span> — AIME Roadmap &amp; Curriculum</h2>
+      <div class="project-meta">Research · PReMA · Texas A&amp;M · co-author</div>
+      <h2 class="project-title">Random Schrödinger Operators &amp; <span class="italic">Anderson Localization</span></h2>
       <div class="project-meta-info">
-        <span><strong>Combinatorics</strong> done · ~600 pp</span>
-        <span>Algebra · NT · C · G</span>
+        <span><strong>w/ Mei, Shaw, Tang</strong></span>
+        <span>advised by Prof. Wencai Liu</span>
+        <span>\(\gamma \approx 0.019\) Bernoulli · \(0.008\) uniform</span>
       </div>
       <p class="project-desc">
-        Four sections — Algebra, Number Theory, Combinatorics, Geometry — written for the kid scoring 75 on the AMC 10 who doesn't know if they'll ever break 100. Free olympiad-prep for students without access to expensive prep, in a moment when online resources have been compromised by cheating scandals.
+        Studying eigenvector decay in discrete random Schrödinger operators on the lattice, with i.i.d. potentials on the diagonal of a tridiagonal matrix. We computed the asymptotic decay rate \(\gamma\) for three distributions — Bernoulli \(\{0,1\}\), discrete uniform with parameter \(p\), and continuous uniform on \([0,1]\) — at \(N = 500\), \(K = 10{,}000\) Monte Carlo. <em>The variance-to-rate map is not a simple proportionality.</em>
       </p>
-      <a href="https://drive.google.com/drive/folders/1r_W_rcSNr5aO2rfgV_lvlJTAHKZkOKyN?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">Read drafts &rarr;</a>
+      <p class="project-desc" style="font-size:.95rem">
+        On the right: a \(7\times 7\) slice of the tridiagonal matrix on top, with the diagonal flickering through Bernoulli or uniform values. The decay curve \(\mathbb{E}(Q(k))\) plots itself, log-scale. <em>Each flicker is a fresh Monte Carlo sample — the dot on the curve is where that realization's \(\gamma\) lands.</em> Watch it bounce around the asymptotic value. Toggle the distribution to see \(\gamma\) change.
+      </p>
+      <span class="gold-link" style="cursor:default;border-bottom-color:var(--paper-mute);color:var(--paper-mute)">In progress · PReMA 2026</span>
     </div>
     <div class="project-visual">
-      <div class="layer bg-grad"></div>
-      <div class="layer grid-overlay"></div>
-      <div class="layer"><div class="glyph">A · NT · C · G</div></div>
-      <div class="accent tl">manuscript · ongoing</div>
-      <div class="accent br">drop sept '26</div>
+      <div class="prema-stage">
+        <div class="prema-head">
+          <span><span class="gold">tridiagonal</span> · random Schrödinger</span>
+          <span id="premaModeLabel"><span class="gold">Bernoulli</span> · γ ≈ 0.019</span>
+        </div>
+        <div class="prema-body">
+          <div class="prema-matrix" id="premaMatrix" aria-hidden="true"></div>
+          <div class="prema-plot">
+            <svg viewBox="0 0 200 140" preserveAspectRatio="none">
+              <!-- axes -->
+              <line class="prema-axis" x1="20" y1="120" x2="190" y2="120"/>
+              <line class="prema-axis" x1="20" y1="10"  x2="20"  y2="120"/>
+              <!-- axis labels -->
+              <text class="prema-axis-label" x="100" y="135" text-anchor="middle">k → N</text>
+              <text class="prema-axis-label" x="10"  y="14"  text-anchor="middle" transform="rotate(-90 10 14)">log 𝔼(Q)</text>
+              <!-- Bernoulli curve (gold) -->
+              <polyline class="prema-curve bern" id="premaCurveBern" points=""/>
+              <!-- Uniform curve (blue) — drawn but starts dimmed -->
+              <polyline class="prema-curve unif dim" id="premaCurveUnif" points=""/>
+              <!-- Trail dots (older samples, faded) — populated by JS -->
+              <g id="premaTrailBern"></g>
+              <g id="premaTrailUnif"></g>
+              <!-- Current sample dots -->
+              <circle class="prema-dot bern" id="premaDotBern" cx="0" cy="0" r="2.5" opacity="0"/>
+              <circle class="prema-dot unif" id="premaDotUnif" cx="0" cy="0" r="2.5" opacity="0"/>
+              <!-- γ labels at end of curves -->
+              <text class="prema-gamma-label bern" id="premaLabelBern" x="190" y="60" text-anchor="end">γ=0.019</text>
+              <text class="prema-gamma-label unif" id="premaLabelUnif" x="190" y="100" text-anchor="end" opacity=".4">γ=0.008</text>
+            </svg>
+          </div>
+        </div>
+        <div class="prema-bottom">
+          <div class="toggle">
+            <button class="active" id="premaBern">Bernoulli</button>
+            <button id="premaUnif">uniform</button>
+            <button id="premaBoth">both</button>
+          </div>
+          <span class="stat" id="premaStat">N=500 · K=10,000 · <span class="em">γ ≈ 0.01905</span></span>
+        </div>
+      </div>
     </div>
   </article>
 
-  <article class="project" data-reveal data-cursor="hover">
+  <!-- ===== NESBITT ===== -->
+  <article class="project" id="nesbitt" data-reveal data-cursor="hover">
+    <div class="project-text">
+      <div class="project-meta">Research · solo · preprint</div>
+      <h2 class="project-title">A Sharp Piecewise Generalization of <span class="italic">Nesbitt's Inequality</span></h2>
+      <div class="project-meta-info">
+        <span><strong>preprint</strong> · 2026</span>
+        <span>\(\alpha \in (0,1]\)</span>
+        <span>phase at \(\log_{2}(3/2)\)</span>
+      </div>
+      <p class="project-desc">
+        Establishes a sharp lower bound for the cyclic power sum \(\displaystyle\sum_{\mathrm{cyc}}\!\left(\frac{a}{b+c}\right)^{\!\alpha}\) on positive reals for \(\alpha \in (0,1]\), with a phase transition at \(\alpha^{*} = \log_{2}(3/2) \approx 0.585\). Above the threshold, the symmetric minimum \(3\cdot 2^{-\alpha}\) is sharp; below it, the infimum is \(2\), approached as one variable vanishes. Recovers classical Nesbitt at \(\alpha=1\).
+      </p>
+      <p class="project-desc" style="font-size:.95rem">
+        Slide \(\alpha\) below to see the phase transition. At \(\alpha = 1\) you get Nesbitt's classical \(3/2\). Below \(\alpha \approx 0.585\) the boundary configuration wins. <em>The kink in the curve is the result.</em>
+      </p>
+      <a href="math.html" class="gold-link" data-cursor="hover">Walk through the proof &rarr;</a>
+    </div>
+    <div class="project-visual">
+      <div class="nesbitt-stage">
+        <div class="nesbitt-head">
+          <span>inf <span class="gold">∑(a/(b+c))<sup>α</sup></span></span>
+          <span>α ∈ (0, 1]</span>
+        </div>
+        <div class="nesbitt-plot">
+          <svg viewBox="0 0 260 150" preserveAspectRatio="xMidYMid meet">
+            <!-- axes -->
+            <line class="nesbitt-axis" x1="30" y1="135" x2="245" y2="135"/>
+            <line class="nesbitt-axis" x1="30" y1="15"  x2="30"  y2="135"/>
+            <!-- axis ticks/labels -->
+            <text class="nesbitt-axis-label" x="30"  y="148" text-anchor="middle">0</text>
+            <text class="nesbitt-axis-label" x="245" y="148" text-anchor="middle">α=1</text>
+            <text class="nesbitt-axis-label" x="22"  y="138" text-anchor="end">1</text>
+            <text class="nesbitt-axis-label" x="22"  y="107" text-anchor="end">1.5</text>
+            <text class="nesbitt-axis-label" x="22"  y="76"  text-anchor="end">2</text>
+            <text class="nesbitt-axis-label" x="22"  y="15"  text-anchor="end">3</text>
+            <!-- threshold vertical line at α = log2(3/2) ≈ 0.585 → x = 30 + 0.585*215 ≈ 155.78 -->
+            <line class="nesbitt-threshold-line" x1="155.8" y1="15" x2="155.8" y2="135"/>
+            <text class="nesbitt-threshold-label" x="158" y="22">α*=log₂(3/2)</text>
+            <!-- candidate curves (drawn behind) -->
+            <!-- (3/2)^α for α ∈ (0,1] — climbs from 1 at α=0 to 1.5 at α=1 -->
+            <polyline class="nesbitt-curve symmetric" id="nesbittSym" points=""/>
+            <!-- constant 2 baseline (for α ∈ (0, α*)) -->
+            <polyline class="nesbitt-curve boundary" id="nesbittBdry" points=""/>
+            <!-- main inf curve (foreground): piecewise min of the two -->
+            <polyline class="nesbitt-curve" id="nesbittMain" points=""/>
+            <!-- current-α dot -->
+            <circle class="nesbitt-dot" id="nesbittDot" cx="155.8" cy="46" r="3.5"/>
+          </svg>
+          <div class="nesbitt-readout" id="nesbittReadout">
+            <div>\(\alpha\) = <span class="val" id="nesbittAlphaVal">0.585</span></div>
+            <div>inf = <span class="val" id="nesbittInfVal">2.000</span></div>
+            <div class="em" id="nesbittRegime">phase boundary</div>
+          </div>
+        </div>
+        <div class="nesbitt-bottom">
+          <span>α</span>
+          <input type="range" min="1" max="100" value="59" class="nesbitt-slider" id="nesbittSlider"/>
+          <span class="alpha-val" id="nesbittAlphaTick">0.59</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ===== CALC 3 — kept from your original, with a small refresh ===== -->
+  <article class="project" id="calc3" data-reveal data-cursor="hover">
     <div class="project-text">
       <div class="project-meta">Textbook · solo</div>
       <h2 class="project-title">Multivariable Calculus, <span class="italic">written for peers</span></h2>
@@ -197,116 +1619,1113 @@
         <span>iPe + LaTeX · classroom reference</span>
       </div>
       <p class="project-desc">
-        Started when our regular BC Calc teacher was out for three weeks and three substitutes gave up trying to teach the class. I wanted my classmates to have something they could actually read. Vector fields and 3D solids drawn in iPe. Used by this year's Calc 3 cohort.
+        Started sophomore year when our BC Calc teacher was out for three weeks and three substitutes gave up trying to teach the class. I ended up running the room for most of those three weeks — and afterwards, wrote a 360-page Calc 3 textbook so my classmates would have something they could actually read. Vector fields, line integrals, 3D solids all drawn in iPe. <em>Used by this year's Calc 3 cohort.</em>
+      </p>
+      <p class="project-desc" style="font-size:.95rem">
+        On the right: a vector field. \(\mathbf{F}(x,y) = (-y,\, x)\), the classic rotational. Particles drift along the field lines because that's what particles do in a rotational field. The book's first chapter starts with this exact picture.
       </p>
       <a href="https://drive.google.com/file/d/14erpD4iBdTqWrkAp4FkGKjTiEO3C7mgQ/view?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">Read the PDF &rarr;</a>
     </div>
     <div class="project-visual">
-      <div class="layer bg-grad"></div>
-      <div class="layer grid-overlay"></div>
-      <div class="layer"><div class="glyph">∇·F</div></div>
-      <div class="accent tl">calc iii</div>
-      <div class="accent br">360 pp</div>
+      <div class="calc-stage">
+        <div class="calc-head">
+          <span><span class="gold">∇ · F</span> · rotational field</span>
+          <span>F(x,y) = (−y, x)</span>
+        </div>
+        <div class="calc-field" id="calcField">
+          <svg id="calcSvg" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <marker id="calcArrowhead" viewBox="0 0 10 10" refX="9" refY="5"
+                      markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(212,175,55,0.7)"/>
+              </marker>
+            </defs>
+            <g id="calcArrows"></g>
+            <g id="calcParticles"></g>
+          </svg>
+        </div>
+        <div class="calc-bottom">
+          <span>360 pp</span>
+          <span class="gold">Calc III · 2024</span>
+          <span>iPe diagrams · LaTeX</span>
+        </div>
+      </div>
     </div>
   </article>
 
-  <article class="project" data-reveal data-cursor="hover">
-    <div class="project-text">
-      <div class="project-meta">Mock exam · co-written</div>
-      <h2 class="project-title">AMC Mock — <span class="italic">the Markov-frog edition</span></h2>
-      <div class="project-meta-info">
-        <span><strong>25 problems</strong></span>
-        <span>predicted real AMC question</span>
-      </div>
-      <p class="project-desc">
-        Co-written AMC mock. We accidentally predicted a real AMC question about Markov chains and jumping frogs — the kind of accident that only happens after months of writing problems and arguing about which configuration looks "AMC enough."
-      </p>
-      <a href="https://drive.google.com/drive/folders/1WGSIBr1KYUvb8-5sz56ZHuGNUHe9GrKC?usp=drive_link" class="gold-link" target="_blank" rel="noopener" data-cursor="hover">See the problems &rarr;</a>
-    </div>
-    <div class="project-visual">
-      <div class="layer bg-grad"></div>
-      <div class="layer grid-overlay"></div>
-      <div class="layer"><div class="glyph">P[k]</div></div>
-      <div class="accent tl">aops · mock amc</div>
-      <div class="accent br">25 Q</div>
-    </div>
-  </article>
-
-  <article class="project" data-reveal data-cursor="hover">
-    <div class="project-text">
-      <div class="project-meta">Research · solo</div>
-      <h2 class="project-title">A Sharp Piecewise Generalization of <span class="italic">Nesbitt's Inequality</span></h2>
-      <div class="project-meta-info">
-        <span><strong>preprint</strong> · 2026</span>
-        <span>α ∈ (0,1] · phase at log₂(3/2)</span>
-      </div>
-      <p class="project-desc">
-        Establishes a sharp lower bound for the cyclic power sum ∑(a/(b+c))<sup>α</sup> on positive reals for α ∈ (0,1], with a phase transition at α* = log₂(3/2). Above the threshold, the symmetric minimum is sharp; below it, the infimum is 2, approached as one variable vanishes. Recovers classical Nesbitt at α=1.
-      </p>
-      <a href="math.html" class="gold-link" data-cursor="hover">Walk through the proof &rarr;</a>
-    </div>
-    <div class="project-visual">
-      <div class="layer bg-grad"></div>
-      <div class="layer grid-overlay"></div>
-      <div class="layer"><div class="glyph">∑<sub>cyc</sub></div></div>
-      <div class="accent tl">research · inequality</div>
-      <div class="accent br">preprint</div>
-    </div>
-  </article>
-
-  <article class="project" data-reveal data-cursor="hover">
-    <div class="project-text">
-      <div class="project-meta">Research · PReMA · Texas A&amp;M</div>
-      <h2 class="project-title">Random Schrödinger Operators &amp; <span class="italic">Anderson Localization</span></h2>
-      <div class="project-meta-info">
-        <span><strong>w/ Mei, Shaw, Tang</strong></span>
-        <span>advised by Prof. Wencai Liu</span>
-      </div>
-      <p class="project-desc">
-        Studying eigenvector decay in discrete random Schrödinger operators on the lattice, with i.i.d. Bernoulli potentials on the diagonal of a tridiagonal matrix. Building computational frameworks to numerically observe exponential localization — distinguishing real decay from rounding artifact — and connecting numerics to the analytic statements about almost-sure localization.
-      </p>
-      <span class="gold-link" style="cursor:default;border-bottom-color:var(--paper-mute);color:var(--paper-mute)">In progress · PReMA 2026</span>
-    </div>
-    <div class="project-visual">
-      <div class="layer bg-grad"></div>
-      <div class="layer grid-overlay"></div>
-      <div class="layer"><div class="glyph">Hψ=Eψ</div></div>
-      <div class="accent tl">math physics</div>
-      <div class="accent br">PReMA</div>
-    </div>
-  </article>
 </section>
+
+<!-- ============ CLOSING ============ -->
+<section class="projects-closing">
+  <p>
+    Six projects. <span class="em">All in service of the thing I wanted to exist that didn't.</span>
+  </p>
+  <p style="font-size:1rem;color:var(--paper-mute);font-family:var(--mono);letter-spacing:.2em;text-transform:uppercase;font-style:normal">
+    <a href="reach.html" style="color:var(--gold);border-bottom:1px solid var(--gold)" data-cursor="hover">reach &rarr;</a>
+  </p>
+</section>
+
 </main>
 
 <footer>
   <div>Alexander B. Chen · 2026</div>
-  <div class="colophon">Built in Pittsburgh between sets. Set in Fraunces &amp; JetBrains Mono. The Gilbreath trick really works.</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
   <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
 </footer>
 
 <script defer src="site.js"></script>
 <script>
-/* Subtle parallax tilt on hover (desktop only) */
+/* ============================================================
+   PROJECTS PAGE INTERACTIVES
+============================================================ */
 (function(){
-  if (window.matchMedia('(hover:none),(pointer:coarse)').matches) return;
-  document.querySelectorAll('.project-visual').forEach(vis=>{
-    vis.addEventListener('mousemove', e=>{
-      const r = vis.getBoundingClientRect();
-      const x = ((e.clientX - r.left)/r.width - .5);
-      const y = ((e.clientY - r.top)/r.height - .5);
-      vis.style.transform = `perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg)`;
-      const layers = vis.querySelectorAll('.layer');
-      layers.forEach((l,i)=>{
-        const depth = (i+1) * 6;
-        l.style.transform = `translate3d(${x*depth}px, ${y*depth}px, 0)`;
+  'use strict';
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* =================================================================
+     SSAMO — Full countdown-round game:
+       intro screen → 3 problems with input → final score vs Alex
+  ================================================================= */
+  (function(){
+    const stage    = document.getElementById('ssamoStage');
+    if (!stage) return;
+
+    // Screens
+    const introEl  = document.getElementById('ssamoIntro');
+    const gameEl   = document.getElementById('ssamoGame');
+    const endEl    = document.getElementById('ssamoEnd');
+
+    // Game elements
+    const labelEl   = document.getElementById('ssamoLabel');
+    const qNumEl    = document.getElementById('ssamoQNum');
+    const qEl       = document.getElementById('ssamoQuestion');
+    const inputRow  = document.getElementById('ssamoInputRow');
+    const inputEl   = document.getElementById('ssamoAnswerInput');
+    const submitBtn = document.getElementById('ssamoSubmit');
+    const giveupBtn = document.getElementById('ssamoGiveUp');
+    const resultEl  = document.getElementById('ssamoResult');
+    const youValEl  = document.getElementById('ssamoYouVal');
+    const youTimeEl = document.getElementById('ssamoYouTime');
+    const youLabel  = document.getElementById('ssamoYouLabel');
+    const youLine   = youValEl.closest('.ssamo-result-line');
+    const corrValEl = document.getElementById('ssamoCorrectVal');
+    const myTimeEl  = document.getElementById('ssamoMyTime');
+    const verdictEl = document.getElementById('ssamoVerdict');
+    const nextBtn   = document.getElementById('ssamoNext');
+    const minEl     = document.getElementById('ssamoMin');
+    const secEl     = document.getElementById('ssamoSec');
+    const timerEl   = document.getElementById('ssamoTimer');
+    const dots      = stage.querySelectorAll('.ssamo-progress-dots .dot');
+
+    // Intro / end buttons
+    const startBtn  = document.getElementById('ssamoStart');
+    const endH      = document.getElementById('ssamoEndH');
+    const endSumm   = document.getElementById('ssamoEndSummary');
+    const reviewEl  = document.getElementById('ssamoReview');
+
+    // ─── Problems. LaTeX in `q`, plain display in `aDisplay`,
+    //     normalized accepted answers in `aAccept` (an array of strings).
+    //     `alexSec` = Alex's solve time for that problem.
+    const problems = [
+      {
+        label: '2026 · SSAMO #4 · combinatorics',
+        q: 'Find the coefficient of \\(x^{5}\\) in the expansion of \\((1 + x + x^{2})^{10}\\).',
+        aDisplay: '1452',
+        aAccept:  ['1452','1,452'],
+        alexSec:  30,
+      },
+      {
+        label: '2026 · SSAMO #11 · number theory',
+        q: 'Find the last three digits of \\(7^{2026}\\).',
+        aDisplay: '649',
+        aAccept:  ['649','0649'],
+        alexSec:  25,
+      },
+      {
+        label: '2026 · SSAMO #18 · geometry',
+        q: 'A circle is inscribed in a \\(3\\text{-}4\\text{-}5\\) right triangle. Find the area of the region inside the triangle but outside the circle.',
+        aDisplay: '\\(6 - \\pi\\)',
+        aAccept:  ['6-pi','6 - pi','6-π','6 - π','6−π','6 − π','6 - \\pi'],
+        alexSec:  5,
+      },
+    ];
+
+    const ROUND_SEC = 45;
+    let idx = 0;
+    let timeLeft = ROUND_SEC;
+    let timerInterval = null;
+    let problemStartTs = 0;
+    let results = []; // {correct, time, alexSec, you}
+    let played = false; // once the round ends, locks any retry
+
+    function fmt(s){ return String(Math.max(0, Math.floor(s))).padStart(2,'0'); }
+
+    function renderTimer(){
+      minEl.textContent = Math.floor(timeLeft/60);
+      secEl.textContent = fmt(timeLeft % 60);
+      timerEl.classList.toggle('urgent', timeLeft <= 10 && timeLeft > 0);
+    }
+
+    function stopTimer(){
+      if (timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+    }
+
+    function startTimer(){
+      stopTimer();
+      timerInterval = setInterval(()=>{
+        timeLeft -= 1;
+        renderTimer();
+        if (timeLeft <= 0){
+          stopTimer();
+          submit(true); // forced
+        }
+      }, 1000);
+    }
+
+    function typesetMath(node){
+      if (window.MathJax && MathJax.typesetPromise){
+        try { MathJax.typesetPromise([node]); } catch(e){}
+      } else {
+        // MathJax not loaded yet — try again shortly.
+        setTimeout(()=>typesetMath(node), 200);
+      }
+    }
+
+    function showScreen(which){
+      [introEl, gameEl, endEl].forEach(s=>{ s.hidden = true; });
+      which.hidden = false;
+    }
+
+    function startRound(){
+      if (played){
+        // Once a round has been played in this session, the user cannot retry.
+        // Just show them the end screen with their results + review.
+        showScreen(endEl);
+        return;
+      }
+      idx = 0;
+      results = [];
+      dots.forEach(d=>d.classList.remove('seen','win','loss'));
+      showScreen(gameEl);
+      loadProblem();
+    }
+
+    function loadProblem(){
+      const p = problems[idx];
+      labelEl.textContent = p.label;
+      qNumEl.textContent = `problem ${idx+1} / ${problems.length}`;
+      qEl.innerHTML = p.q;
+      typesetMath(qEl);
+
+      // Reset state
+      timeLeft = ROUND_SEC;
+      renderTimer();
+      inputEl.value = '';
+      inputEl.classList.remove('locked');
+      inputEl.disabled = false;
+      submitBtn.disabled = false;
+      giveupBtn.disabled = false;
+      inputRow.hidden = false;
+      resultEl.hidden = true;
+      nextBtn.hidden = true;
+
+      // Focus input after a beat so screen-readers behave
+      setTimeout(()=>{ try { inputEl.focus(); } catch(e){} }, 100);
+
+      problemStartTs = performance.now();
+      startTimer();
+    }
+
+    function normalize(s){
+      return String(s||'')
+        .toLowerCase()
+        .replace(/\s+/g,'')
+        .replace(/,/g,'')
+        .replace(/–|—/g,'-')        // dashes
+        .replace(/π/g,'pi')
+        .replace(/−/g,'-');         // unicode minus → ascii
+    }
+
+    function isCorrect(input, p){
+      const n = normalize(input);
+      return p.aAccept.some(a => normalize(a) === n);
+    }
+
+    function submit(forcedTimeout){
+      stopTimer();
+      const p = problems[idx];
+      const elapsedMs = performance.now() - problemStartTs;
+      const elapsedSec = Math.min(ROUND_SEC, elapsedMs / 1000);
+      const userAns = inputEl.value.trim();
+
+      // Determine state
+      let state;
+      if (forcedTimeout && !userAns){ state = 'timeout'; }
+      else if (!userAns){ state = 'empty'; }
+      else { state = isCorrect(userAns, p) ? 'correct' : 'wrong'; }
+
+      const correct = (state === 'correct');
+      const beatAlex = correct && elapsedSec < p.alexSec;
+
+      // Save result
+      results.push({
+        state,
+        correct,
+        beatAlex,
+        time: correct ? elapsedSec : null,
+        alexSec: p.alexSec,
+        you: userAns || null,
       });
+
+      // Lock input
+      inputEl.classList.add('locked');
+      inputEl.disabled = true;
+      submitBtn.disabled = true;
+      giveupBtn.disabled = true;
+
+      // Show result UI
+      showResult(p, state, elapsedSec, userAns, beatAlex);
+
+      // Update progress dot
+      const dot = dots[idx];
+      if (dot){
+        dot.classList.add('seen');
+        if (beatAlex) dot.classList.add('win');
+        else dot.classList.add('loss');
+      }
+    }
+
+    function showResult(p, state, elapsedSec, userAns, beatAlex){
+      // Reset row classes
+      youLine.classList.remove('you-correct','you-wrong','you-skipped');
+
+      // Your answer line
+      if (state === 'correct'){
+        youLabel.textContent = 'you · correct';
+        youValEl.textContent = userAns;
+        youTimeEl.textContent = `${elapsedSec.toFixed(1)}s`;
+        youLine.classList.add('you-correct');
+      } else if (state === 'wrong'){
+        youLabel.textContent = 'you · wrong';
+        youValEl.textContent = userAns;
+        youTimeEl.textContent = `${elapsedSec.toFixed(1)}s`;
+        youLine.classList.add('you-wrong');
+      } else if (state === 'timeout'){
+        youLabel.textContent = 'you · time';
+        youValEl.textContent = '—';
+        youTimeEl.textContent = `${ROUND_SEC}s`;
+        youLine.classList.add('you-skipped');
+      } else { // empty / give up
+        youLabel.textContent = 'you · gave up';
+        youValEl.textContent = '—';
+        youTimeEl.textContent = `${elapsedSec.toFixed(1)}s`;
+        youLine.classList.add('you-skipped');
+      }
+
+      // Correct answer line — render via MathJax in case of LaTeX
+      corrValEl.innerHTML = p.aDisplay;
+      typesetMath(corrValEl);
+      myTimeEl.textContent = `${p.alexSec}s · alex`;
+
+      // Verdict text
+      if (state === 'correct'){
+        if (beatAlex){
+          verdictEl.innerHTML = `<span class="win">you win this one</span> · faster than me by <span class="em">${(p.alexSec - elapsedSec).toFixed(1)}s</span>`;
+        } else {
+          verdictEl.innerHTML = `<span class="loss">slower than me</span> · correct, but I had it in ${p.alexSec}s`;
+        }
+      } else if (state === 'wrong'){
+        verdictEl.innerHTML = `<span class="loss">incorrect</span> · moving on`;
+      } else if (state === 'timeout'){
+        verdictEl.innerHTML = `<span class="loss">time's up</span> · the clock always runs`;
+      } else {
+        verdictEl.innerHTML = `<span class="loss">skipped</span> · no shame, sometimes that's the right call`;
+      }
+
+      // Show the result + next button
+      inputRow.hidden = true;
+      resultEl.hidden = false;
+      nextBtn.hidden = false;
+      nextBtn.textContent = (idx === problems.length - 1) ? 'see results →' : 'next problem →';
+      nextBtn.focus();
+    }
+
+    function advance(){
+      idx += 1;
+      if (idx >= problems.length){
+        showFinal();
+      } else {
+        loadProblem();
+      }
+    }
+
+    function showFinal(){
+      played = true;
+      stopTimer();
+
+      // Build the per-problem summary rows
+      endSumm.innerHTML = '';
+      let wins = 0;
+      results.forEach((r,i)=>{
+        const row = document.createElement('div');
+        row.className = 'ssamo-end-row ' + (r.beatAlex ? 'win' : 'loss');
+        const num = document.createElement('span');
+        num.className = 'ssamo-end-num';
+        num.textContent = `#${i+1}`;
+        const yours = document.createElement('span');
+        if (r.correct){
+          yours.textContent = `you ${r.time.toFixed(1)}s`;
+        } else {
+          yours.textContent = `you — ${r.state}`;
+        }
+        const mine = document.createElement('span');
+        mine.textContent = `alex ${r.alexSec}s`;
+        const verd = document.createElement('span');
+        verd.className = 'ssamo-end-verdict';
+        verd.textContent = r.beatAlex ? 'you beat me' : (r.correct ? 'I was faster' : '—');
+        row.appendChild(num);
+        row.appendChild(yours);
+        row.appendChild(mine);
+        row.appendChild(verd);
+        endSumm.appendChild(row);
+        if (r.beatAlex) wins += 1;
+      });
+
+      // Final line
+      const fin = document.createElement('div');
+      fin.className = 'ssamo-end-final';
+      if (wins === 3){
+        fin.innerHTML = `clean sweep. <span class="gold">${wins} / 3</span>. you can write the next mock.`;
+      } else if (wins === 2){
+        fin.innerHTML = `<span class="gold">${wins} / 3</span>. that's a strong round. better than my freshman year.`;
+      } else if (wins === 1){
+        fin.innerHTML = `<span class="gold">${wins} / 3</span>. one out of three. not bad on a first try.`;
+      } else {
+        fin.innerHTML = `<span class="gold">0 / 3</span>. honestly the third one's almost unfair.`;
+      }
+      endSumm.appendChild(fin);
+
+      // Header
+      endH.innerHTML = wins >= 2
+        ? `round complete. <span class="gold">you won the round.</span>`
+        : `round complete. <span class="gold">I won this time.</span>`;
+
+      // Build the review panel — each problem shown with its correct answer
+      reviewEl.innerHTML = '';
+      problems.forEach((p,i)=>{
+        const r = results[i] || {};
+        const card = document.createElement('div');
+        card.className = 'ssamo-review-card';
+
+        const head = document.createElement('div');
+        head.className = 'head';
+        head.innerHTML = `<span>${p.label}</span><span class="gold">my time · ${p.alexSec}s</span>`;
+
+        const q = document.createElement('div');
+        q.className = 'q';
+        q.innerHTML = p.q;
+
+        const aRow = document.createElement('div');
+        aRow.className = 'a-row';
+        let yourBit = '';
+        if (r.correct){
+          yourBit = `<span>your answer · <span style="color:#4ade80">${r.you} · ${r.time.toFixed(1)}s</span></span>`;
+        } else if (r.state === 'wrong'){
+          yourBit = `<span>your answer · <span style="color:#e63946;text-decoration:line-through">${r.you}</span></span>`;
+        } else if (r.state === 'timeout'){
+          yourBit = `<span>you · <span style="color:var(--paper-mute)">timed out</span></span>`;
+        } else {
+          yourBit = `<span>you · <span style="color:var(--paper-mute)">skipped</span></span>`;
+        }
+        aRow.innerHTML = `<span>answer · <span class="ans">${p.aDisplay}</span></span>${yourBit}`;
+
+        card.appendChild(head);
+        card.appendChild(q);
+        card.appendChild(aRow);
+        reviewEl.appendChild(card);
+      });
+      typesetMath(reviewEl);
+
+      showScreen(endEl);
+    }
+
+    // ─── Event wiring
+    startBtn.addEventListener('click', startRound);
+    submitBtn.addEventListener('click', ()=>submit(false));
+    giveupBtn.addEventListener('click', ()=>submit(false));
+    inputEl.addEventListener('keydown', e=>{
+      if (e.key === 'Enter'){ e.preventDefault(); submit(false); }
     });
-    vis.addEventListener('mouseleave', ()=>{
-      vis.style.transform = '';
-      vis.querySelectorAll('.layer').forEach(l=>l.style.transform='');
+    nextBtn.addEventListener('click', advance);
+  })();
+
+  /* =================================================================
+     ARC — Section lighting + progress as you scroll
+  ================================================================= */
+  (function(){
+    const sections = document.querySelectorAll('.arc-section');
+    if (!sections.length) return;
+    const fill = document.getElementById('arcProgressFill');
+    const pct  = document.getElementById('arcProgressPct');
+
+    // Light up in this order: C (done) → A → NT → G as section enters viewport
+    const order = ['C', 'A', 'NT', 'G'];
+    let lit = 0;
+
+    function update(){
+      const stage = document.querySelector('.arc-stage');
+      if (!stage) return;
+      const r = stage.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // Progress: 0 when stage top hits 90% of viewport, 1 when stage center hits 30%
+      const startPx = vh * 0.85;
+      const endPx   = vh * 0.30;
+      const cur = r.top;
+      let p = (startPx - cur)/(startPx - endPx);
+      p = Math.max(0, Math.min(1, p));
+      // 4 thresholds for 4 sections
+      sections.forEach((s,i)=>{
+        const th = (i+1) / (sections.length+1); // 0.2, 0.4, 0.6, 0.8
+        s.classList.toggle('lit', p >= th);
+      });
+      // progress bar — Combinatorics is done = 25%; other sections add proportionally
+      // We'll express progress as: 25% (done) + 25% * (fraction of sections "lit" beyond the first)
+      const litCount = Array.from(sections).filter(s=>s.classList.contains('lit')).length;
+      // Combinatorics is the first in DOM (data-section="C") and is marked "done"
+      // Lit means "being shown" — for progress bar, just animate based on visible sections
+      const progress = (litCount / sections.length);
+      fill.style.transform = `scaleX(${progress})`;
+      pct.textContent = Math.round(progress * 100) + '%';
+    }
+    update();
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', update);
+  })();
+
+  /* =================================================================
+     FROG MARKOV CHAIN — linear chain (1↔2↔3↔4↔5)
+       Click a pad to block it. Adjacent moves only; if both neighbors
+       are blocked the frog stays put.
+  ================================================================= */
+  (function(){
+    const svg = document.getElementById('frogSvg');
+    if (!svg) return;
+    const frog = document.getElementById('frog');
+    const stepEl = document.getElementById('frogStep');
+    const padLabel = document.getElementById('frogCurrentPad');
+    const btnStep = document.getElementById('frogStepBtn');
+    const btnRun  = document.getElementById('frogRunBtn');
+    const btnReset= document.getElementById('frogResetBtn');
+    const histBars= document.querySelectorAll('#frogHist .bar');
+    const blockG  = document.getElementById('frogBlocks');
+
+    const pads = [];
+    const visitTexts = [];
+    for (let i=1;i<=5;i++){
+      pads.push(document.getElementById('frogPad' + i));
+      visitTexts.push(document.getElementById('frogVisits' + i));
+    }
+    const edges = [
+      document.getElementById('frogEdge12'),
+      document.getElementById('frogEdge23'),
+      document.getElementById('frogEdge34'),
+      document.getElementById('frogEdge45'),
+    ];
+    // Pad centers from the SVG (must stay in sync with markup)
+    const padPos = [
+      {x:50,  y:115},
+      {x:125, y:115},
+      {x:200, y:115},
+      {x:275, y:115},
+      {x:350, y:115},
+    ];
+
+    let cur = 0;            // current pad (0..4)
+    let step = 0;
+    let visits = [1,0,0,0,0];
+    let blocked = [false,false,false,false,false];
+    let runInterval = null;
+
+    function adjacents(i){
+      const out = [];
+      if (i > 0 && !blocked[i-1]) out.push(i-1);
+      if (i < 4 && !blocked[i+1]) out.push(i+1);
+      return out;
+    }
+
+    function moveTo(idx, fromIdx){
+      const p = padPos[idx];
+      frog.setAttribute('x', p.x);
+      frog.setAttribute('y', p.y + 5);
+      pads.forEach((pad,i)=>pad.classList.toggle('active', i===idx));
+      padLabel.textContent = idx + 1;
+      // Flash the edge being traversed
+      if (fromIdx !== undefined && fromIdx !== idx){
+        const lo = Math.min(fromIdx, idx);
+        const edge = edges[lo];
+        if (edge){
+          edge.classList.remove('flash');
+          // force reflow so the animation restarts
+          edge.offsetWidth;
+          edge.classList.add('flash');
+        }
+      }
+    }
+
+    function updateVisits(){
+      // Update both the in-SVG number texts and the bottom histogram
+      visits.forEach((v,i)=>{
+        visitTexts[i].textContent = v;
+      });
+      const max = Math.max(...visits, 1);
+      visits.forEach((v,i)=>{
+        const h = (v / max) * 22 + 2;
+        histBars[i].style.height = h + 'px';
+      });
+    }
+
+    function hop(){
+      const opts = adjacents(cur);
+      if (opts.length === 0){
+        // Frog is stuck. Still counts as a step.
+        step += 1;
+        visits[cur] += 1;
+        stepEl.textContent = step;
+        updateVisits();
+        return;
+      }
+      const next = opts[Math.floor(Math.random() * opts.length)];
+      const from = cur;
+      cur = next;
+      step += 1;
+      visits[cur] += 1;
+      moveTo(cur, from);
+      stepEl.textContent = step;
+      updateVisits();
+    }
+
+    function renderBlocks(){
+      // Re-render the SVG block-x marks for each blocked pad
+      blockG.innerHTML = '';
+      blocked.forEach((b,i)=>{
+        if (!b) return;
+        const p = padPos[i];
+        const x1 = p.x - 8, x2 = p.x + 8;
+        const y1 = p.y - 8, y2 = p.y + 8;
+        const a = document.createElementNS('http://www.w3.org/2000/svg','line');
+        a.setAttribute('class','frog-block-x');
+        a.setAttribute('x1', x1); a.setAttribute('y1', y1);
+        a.setAttribute('x2', x2); a.setAttribute('y2', y2);
+        const b2 = document.createElementNS('http://www.w3.org/2000/svg','line');
+        b2.setAttribute('class','frog-block-x');
+        b2.setAttribute('x1', x2); b2.setAttribute('y1', y1);
+        b2.setAttribute('x2', x1); b2.setAttribute('y2', y2);
+        blockG.appendChild(a); blockG.appendChild(b2);
+      });
+      // Update pad classes
+      pads.forEach((pad,i)=>pad.classList.toggle('blocked', blocked[i]));
+      // Edges leading into a blocked pad become "dead"
+      edges.forEach((edge,i)=>{
+        edge.classList.toggle('dead', blocked[i] || blocked[i+1]);
+      });
+    }
+
+    function toggleBlock(i){
+      if (i === cur) return; // can't block the pad the frog is currently on
+      blocked[i] = !blocked[i];
+      renderBlocks();
+    }
+
+    function reset(){
+      stopRun();
+      cur = 0; step = 0;
+      visits = [1,0,0,0,0];
+      blocked = [false,false,false,false,false];
+      stepEl.textContent = '0';
+      moveTo(cur);
+      renderBlocks();
+      updateVisits();
+    }
+
+    function stopRun(){
+      if (runInterval){ clearInterval(runInterval); runInterval = null; }
+      btnRun.textContent = '▶ run';
+    }
+    function startRun(){
+      runInterval = setInterval(()=>{
+        hop();
+        if (step >= 80){ stopRun(); }
+      }, 550);
+      btnRun.textContent = '❚❚ pause';
+    }
+
+    // Click handlers on pads — toggle block
+    pads.forEach((pad,i)=>{
+      pad.addEventListener('click', ()=>toggleBlock(i));
     });
-  });
+
+    btnStep.addEventListener('click', ()=>{ stopRun(); hop(); });
+    btnRun.addEventListener('click', ()=>{
+      if (runInterval) stopRun(); else startRun();
+    });
+    btnReset.addEventListener('click', reset);
+
+    moveTo(cur);
+    renderBlocks();
+    updateVisits();
+
+    // Auto-start when in view
+    if ('IntersectionObserver' in window && !reduce){
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+          if (e.isIntersecting){
+            setTimeout(startRun, 700);
+            io.disconnect();
+          }
+        });
+      },{threshold:.35});
+      io.observe(svg);
+    }
+  })();
+
+  /* =================================================================
+     PReMA — Tridiagonal matrix + decay curves (Bernoulli vs uniform)
+  ================================================================= */
+  (function(){
+    const matrixEl = document.getElementById('premaMatrix');
+    if (!matrixEl) return;
+    const N = 7;
+
+    // Build the matrix once (cells flicker; structure doesn't change)
+    const cells = [];
+    for (let r=0;r<N;r++){
+      for (let c=0;c<N;c++){
+        const cell = document.createElement('div');
+        cell.className = 'prema-cell';
+        if (r === c){ cell.classList.add('diag'); }
+        else if (Math.abs(r-c) === 1){ cell.classList.add('off'); cell.textContent = '1'; }
+        else { cell.classList.add('zero'); cell.textContent = '0'; }
+        matrixEl.appendChild(cell);
+        cells.push({el:cell, r, c});
+      }
+    }
+
+    // Curves & labels
+    const curveBern = document.getElementById('premaCurveBern');
+    const curveUnif = document.getElementById('premaCurveUnif');
+    const labelBern = document.getElementById('premaLabelBern');
+    const labelUnif = document.getElementById('premaLabelUnif');
+
+    // Build the data: synthetic exponential decay matching the paper's numbers.
+    // x-axis: k from 1 to N_max (let's plot 1..200)
+    // y-axis: log10(E(Q(k))) on the prema-plot's 200x140 viewBox
+    // Bernoulli: E(Q(k)) ≈ 0.80 * exp(-0.019 k) -> log10 ≈ log10(0.80) + (-0.019/ln10) * k
+    // Uniform:   E(Q(k)) ≈ 0.81 * exp(-0.008 k)
+    const ln10 = Math.log(10);
+    const xMin = 20, xMax = 190;
+    const yMin = 10, yMax = 120;
+    // We map log10(E) ∈ [-3.5, 0] to y ∈ [yMin, yMax]; lower log = higher y (further down).
+    function yFor(logE){
+      const lo = -3.5, hi = 0;
+      const t = (logE - lo)/(hi - lo);
+      return yMax - t*(yMax - yMin);
+    }
+    function buildPoints(C, gamma){
+      const pts = [];
+      const kMax = 200;
+      for (let k=1; k<=kMax; k++){
+        const logE = Math.log10(C) - (gamma/ln10) * k;
+        const x = xMin + (k/kMax) * (xMax - xMin);
+        const y = yFor(logE);
+        pts.push(x.toFixed(1) + ',' + y.toFixed(1));
+      }
+      return pts.join(' ');
+    }
+    const pointsBern = buildPoints(0.80, 0.019);
+    const pointsUnif = buildPoints(0.81, 0.008);
+    curveBern.setAttribute('points', pointsBern);
+    curveUnif.setAttribute('points', pointsUnif);
+
+    // Position γ labels at the end of each curve
+    const finalKbern = 200;
+    const finalKunif = 200;
+    const logEBernFinal = Math.log10(0.80) - (0.019/ln10) * finalKbern;
+    const logEUnifFinal = Math.log10(0.81) - (0.008/ln10) * finalKunif;
+    labelBern.setAttribute('x', xMax + 2);
+    labelBern.setAttribute('y', yFor(logEBernFinal) + 2);
+    labelBern.setAttribute('text-anchor', 'end');
+    labelUnif.setAttribute('x', xMax + 2);
+    labelUnif.setAttribute('y', yFor(logEUnifFinal) + 2);
+
+    // Cell flicker — random Bernoulli or uniform values on the diagonal
+    let mode = 'bern'; // 'bern' | 'unif' | 'both'
+
+    // SVG element references for data-point dots and their trails
+    const dotBern  = document.getElementById('premaDotBern');
+    const dotUnif  = document.getElementById('premaDotUnif');
+    const trailB   = document.getElementById('premaTrailBern');
+    const trailU   = document.getElementById('premaTrailUnif');
+    const MAX_TRAIL = 8;
+
+    // Sample γ from a normal centered on the true value, mimicking Monte Carlo
+    // noise. stddev chosen for visual variance — these aren't real numerics.
+    function gaussianNoise(){
+      // Box-Muller transform → standard normal
+      const u = Math.max(1e-12, Math.random());
+      const v = Math.max(1e-12, Math.random());
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    }
+    function sampleGamma(distribution){
+      if (distribution === 'unif'){
+        return 0.008 + gaussianNoise() * 0.0011;
+      } else {
+        return 0.019 + gaussianNoise() * 0.0018;
+      }
+    }
+
+    // Convert (γ, distribution) into a point on the *plotted* curve at a fixed k.
+    // We use k=120 (roughly middle of the x range), with E(Q(k)) ~ C·exp(-γk).
+    const SAMPLE_K = 120;
+    function sampleToXY(gamma, distribution){
+      const C = distribution === 'unif' ? 0.81 : 0.80;
+      const logE = Math.log10(C) - (gamma / ln10) * SAMPLE_K;
+      const x = xMin + (SAMPLE_K / 200) * (xMax - xMin);
+      const y = yFor(logE);
+      return {x, y};
+    }
+
+    function pushTrail(g, x, y, klass){
+      // Add a new trail circle; fade existing ones; cap the count
+      const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      dot.setAttribute('class', 'prema-trail-dot ' + klass);
+      dot.setAttribute('cx', x);
+      dot.setAttribute('cy', y);
+      dot.setAttribute('r', 1.8);
+      dot.setAttribute('opacity', 0.5);
+      g.appendChild(dot);
+      // Fade older
+      const all = g.querySelectorAll('.prema-trail-dot');
+      // Recompute opacities from newest to oldest
+      const arr = Array.from(all);
+      arr.forEach((el, i) => {
+        const age = arr.length - 1 - i;     // 0 = newest
+        const opacity = Math.max(0.05, 0.5 * (1 - age / MAX_TRAIL));
+        el.setAttribute('opacity', opacity);
+      });
+      // Remove the oldest if over cap
+      while (g.childElementCount > MAX_TRAIL){
+        g.removeChild(g.firstChild);
+      }
+    }
+
+    function plotSample(){
+      // Bern dot
+      if (mode === 'bern' || mode === 'both'){
+        const g = sampleGamma('bern');
+        const {x, y} = sampleToXY(g, 'bern');
+        // Trail first (so the new dot stays bright), then snap the active dot
+        pushTrail(trailB, dotBern.getAttribute('cx') || x, dotBern.getAttribute('cy') || y, 'bern');
+        dotBern.setAttribute('cx', x);
+        dotBern.setAttribute('cy', y);
+        dotBern.setAttribute('opacity', 1);
+      } else {
+        dotBern.setAttribute('opacity', 0);
+      }
+      // Unif dot
+      if (mode === 'unif' || mode === 'both'){
+        const g = sampleGamma('unif');
+        const {x, y} = sampleToXY(g, 'unif');
+        pushTrail(trailU, dotUnif.getAttribute('cx') || x, dotUnif.getAttribute('cy') || y, 'unif');
+        dotUnif.setAttribute('cx', x);
+        dotUnif.setAttribute('cy', y);
+        dotUnif.setAttribute('opacity', 1);
+      } else {
+        dotUnif.setAttribute('opacity', 0);
+      }
+    }
+
+    function clearTrails(){
+      trailB.innerHTML = '';
+      trailU.innerHTML = '';
+    }
+
+    function flicker(){
+      cells.forEach(c=>{
+        if (c.r !== c.c) return;
+        let v;
+        if (mode === 'unif'){
+          v = Math.random();
+        } else {
+          v = Math.random() < 0.5 ? 0 : 1;
+        }
+        if (mode === 'unif'){
+          c.el.textContent = v.toFixed(2);
+          c.el.classList.toggle('high', v > 0.5);
+          c.el.classList.toggle('low', v <= 0.5);
+        } else {
+          c.el.textContent = String(v);
+          c.el.classList.toggle('high', v === 1);
+          c.el.classList.toggle('low', v === 0);
+        }
+      });
+      plotSample();
+    }
+
+    const btnB = document.getElementById('premaBern');
+    const btnU = document.getElementById('premaUnif');
+    const btnBoth = document.getElementById('premaBoth');
+    const modeLabel = document.getElementById('premaModeLabel');
+    const statEl = document.getElementById('premaStat');
+
+    function setMode(m){
+      mode = m;
+      clearTrails();
+      [btnB, btnU, btnBoth].forEach(b=>b.classList.remove('active'));
+      if (m === 'bern'){
+        btnB.classList.add('active');
+        curveBern.classList.remove('dim');
+        curveUnif.classList.add('dim');
+        labelBern.setAttribute('opacity', 1);
+        labelUnif.setAttribute('opacity', 0.4);
+        modeLabel.innerHTML = '<span class="gold">Bernoulli</span> · γ ≈ 0.019';
+        statEl.innerHTML = 'N=500 · K=10,000 · <span class="em">γ ≈ 0.01905</span>';
+      } else if (m === 'unif'){
+        btnU.classList.add('active');
+        curveBern.classList.add('dim');
+        curveUnif.classList.remove('dim');
+        labelBern.setAttribute('opacity', 0.4);
+        labelUnif.setAttribute('opacity', 1);
+        modeLabel.innerHTML = '<span class="gold">uniform [0,1]</span> · γ ≈ 0.008';
+        statEl.innerHTML = 'N=500 · K=10,000 · <span class="em">γ ≈ 0.00798</span>';
+      } else {
+        btnBoth.classList.add('active');
+        curveBern.classList.remove('dim');
+        curveUnif.classList.remove('dim');
+        labelBern.setAttribute('opacity', 1);
+        labelUnif.setAttribute('opacity', 1);
+        modeLabel.innerHTML = '<span class="gold">both</span> · variance: 1/4 vs 1/12';
+        statEl.innerHTML = 'N=500 · K=10,000 · <span class="em">ratio ≈ 2.4×</span>';
+      }
+      flicker();
+    }
+
+    btnB.addEventListener('click', ()=>setMode('bern'));
+    btnU.addEventListener('click', ()=>setMode('unif'));
+    btnBoth.addEventListener('click', ()=>setMode('both'));
+
+    flicker();
+
+    // Flicker the diagonal on a slow interval — only when visible
+    let interval;
+    if ('IntersectionObserver' in window && !reduce){
+      const io = new IntersectionObserver(entries=>{
+        entries.forEach(e=>{
+          if (e.isIntersecting){
+            if (!interval) interval = setInterval(flicker, 900);
+          } else {
+            if (interval){ clearInterval(interval); interval = null; }
+          }
+        });
+      },{threshold:.2});
+      io.observe(matrixEl);
+    } else if (!reduce){
+      setInterval(flicker, 900);
+    }
+  })();
+
+  /* =================================================================
+     NESBITT — α slider with live inf(α) plot
+  ================================================================= */
+  (function(){
+    const slider     = document.getElementById('nesbittSlider');
+    if (!slider) return;
+    const alphaTick  = document.getElementById('nesbittAlphaTick');
+    const alphaVal   = document.getElementById('nesbittAlphaVal');
+    const infVal     = document.getElementById('nesbittInfVal');
+    const regimeEl   = document.getElementById('nesbittRegime');
+    const dot        = document.getElementById('nesbittDot');
+    const mainCurve  = document.getElementById('nesbittMain');
+    const symCurve   = document.getElementById('nesbittSym');
+    const bdryCurve  = document.getElementById('nesbittBdry');
+
+    // SVG viewBox: 0..260 x, 0..150 y
+    // x maps α ∈ (0, 1] to [30, 245]   (so x = 30 + α*215)
+    // y maps inf ∈ [1, 3] to [135, 15]  (so y = 135 - (inf-1)*60)
+    //    actually we want 1→135, 1.5→92, 2→46, 3→20... let's set it up properly.
+    // Use a linear scale with inf ∈ [1, 3] → y ∈ [135, 12]
+    const x0 = 30, x1 = 245;
+    const yLo = 135, yHi = 12;
+    const infLo = 1, infHi = 3;
+    function xFor(a){ return x0 + a * (x1 - x0); }
+    function yFor(v){
+      const t = (v - infLo)/(infHi - infLo);
+      return yLo - t*(yLo - yHi);
+    }
+    const ALPHA_STAR = Math.log2(1.5); // ≈ 0.585
+
+    // Build the three curves
+    // From the paper: the symmetric value is 3·2^(-α), not (3/2)^α.
+    //   - At α=1: 3/2 (Nesbitt's classical bound)
+    //   - At α=0.585=log₂(3/2): equals 2 (threshold)
+    //   - At α→0: tends to 3
+    const N = 100;
+    const symPts = [];
+    const bdryPts = [];
+    const mainPts = [];
+    for (let i=0; i<=N; i++){
+      const a = (i/N); // 0..1
+      if (a === 0) continue;
+      const sym = 3 * Math.pow(2, -a);
+      const bdry = 2;
+      const mn = Math.min(sym, bdry);
+      symPts.push(xFor(a).toFixed(1) + ',' + yFor(sym).toFixed(1));
+      bdryPts.push(xFor(a).toFixed(1) + ',' + yFor(bdry).toFixed(1));
+      mainPts.push(xFor(a).toFixed(1) + ',' + yFor(mn).toFixed(1));
+    }
+    symCurve.setAttribute('points', symPts.join(' '));
+    bdryCurve.setAttribute('points', bdryPts.join(' '));
+    mainCurve.setAttribute('points', mainPts.join(' '));
+
+    function update(val){
+      const a = val/100; // slider value 1..100 → α 0.01..1.00
+      alphaTick.textContent = a.toFixed(2);
+      alphaVal.textContent = a.toFixed(3);
+      const sym = 3 * Math.pow(2, -a);
+      const bdry = 2;
+      const inf = Math.min(sym, bdry);
+      infVal.textContent = inf.toFixed(3);
+      // regime
+      if (a < ALPHA_STAR - 0.01){
+        regimeEl.textContent = 'inf = 2  (boundary wins)';
+      } else if (a > ALPHA_STAR + 0.01){
+        regimeEl.textContent = 'inf = 3·2⁻ᵅ  (symmetric)';
+      } else {
+        regimeEl.textContent = 'phase boundary';
+      }
+      // move dot
+      dot.setAttribute('cx', xFor(a));
+      dot.setAttribute('cy', yFor(inf));
+    }
+    slider.addEventListener('input', e=>update(+e.target.value));
+    update(+slider.value);
+  })();
+
+  /* =================================================================
+     CALC 3 — Rotational vector field F = (-y, x) with drifting particles
+  ================================================================= */
+  (function(){
+    const svg = document.getElementById('calcSvg');
+    if (!svg) return;
+    const arrowsG = document.getElementById('calcArrows');
+    const particlesG = document.getElementById('calcParticles');
+
+    const W = 400, H = 240;
+    const cx = W/2, cy = H/2;
+
+    // Build arrow grid
+    const grid = [];
+    const stepX = 50, stepY = 40;
+    for (let x = 50; x <= W - 30; x += stepX){
+      for (let y = 25; y <= H - 25; y += stepY){
+        // Vector at (x,y) for F = (-y, x), but normalized around the center
+        const dx = -(y - cy);
+        const dy = (x - cx);
+        const mag = Math.sqrt(dx*dx + dy*dy) || 1;
+        const len = Math.min(16, mag * 0.18);
+        const ux = (dx/mag) * len;
+        const uy = (dy/mag) * len;
+        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('class','calc-arrow');
+        line.setAttribute('x1', x - ux/2);
+        line.setAttribute('y1', y - uy/2);
+        line.setAttribute('x2', x + ux/2);
+        line.setAttribute('y2', y + uy/2);
+        // Opacity based on distance from center (faded center, brighter edges)
+        const distC = Math.sqrt((x-cx)**2 + (y-cy)**2);
+        line.setAttribute('opacity', Math.min(1, distC / 80) * 0.7 + 0.2);
+        arrowsG.appendChild(line);
+        grid.push({x, y});
+      }
+    }
+
+    // Particles drift along the field (clockwise rotation around center)
+    const PARTICLES = 18;
+    const particles = [];
+    for (let i=0;i<PARTICLES;i++){
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('class','calc-particle');
+      c.setAttribute('r', (1.5 + Math.random()*1.8).toFixed(2));
+      particlesG.appendChild(c);
+      // Initial position: random within ring
+      const r = 30 + Math.random()*80;
+      const theta = Math.random() * Math.PI * 2;
+      particles.push({
+        x: cx + r*Math.cos(theta),
+        y: cy + r*Math.sin(theta),
+        el: c,
+        speed: 0.4 + Math.random()*0.6,
+        life: Math.random(),
+      });
+    }
+
+    let raf;
+    function tick(){
+      particles.forEach(p=>{
+        // F(x,y) = (-y, x) relative to center
+        const dx = -(p.y - cy);
+        const dy = (p.x - cx);
+        // Normalize so speed is consistent
+        const mag = Math.sqrt(dx*dx + dy*dy) || 1;
+        const step = p.speed;
+        p.x += (dx/mag) * step;
+        p.y += (dy/mag) * step;
+        // If far off-screen or distance too large, reset
+        const dist = Math.sqrt((p.x-cx)**2 + (p.y-cy)**2);
+        if (dist > 120 || dist < 8 || p.life > 1){
+          const r = 30 + Math.random()*80;
+          const theta = Math.random() * Math.PI * 2;
+          p.x = cx + r*Math.cos(theta);
+          p.y = cy + r*Math.sin(theta);
+          p.life = 0;
+        }
+        p.life += 0.003;
+        p.el.setAttribute('cx', p.x);
+        p.el.setAttribute('cy', p.y);
+        // Fade in/out
+        const a = Math.sin(p.life * Math.PI);
+        p.el.setAttribute('opacity', Math.max(0.1, a));
+      });
+      raf = requestAnimationFrame(tick);
+    }
+
+    if (!reduce){
+      // Only animate when visible
+      if ('IntersectionObserver' in window){
+        const io = new IntersectionObserver(entries=>{
+          entries.forEach(e=>{
+            if (e.isIntersecting){
+              if (!raf) tick();
+            } else {
+              if (raf){ cancelAnimationFrame(raf); raf = null; }
+            }
+          });
+        },{threshold:.15});
+        io.observe(svg);
+      } else {
+        tick();
+      }
+    } else {
+      // Static frame for reduced motion
+      particles.forEach(p=>{
+        p.el.setAttribute('cx', p.x);
+        p.el.setAttribute('cy', p.y);
+        p.el.setAttribute('opacity', 0.6);
+      });
+    }
+  })();
+
 })();
 </script>
+
 </body>
 </html>

@@ -4,14 +4,54 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Competitions — Alexander B. Chen</title>
-<meta name="description" content="MathLeague Nationals, USAMO, USAMTS, AIME, AMC, swimming States, DECA, piano competitions." />
+<meta name="description" content="A cinematic countdown of 10 competitive moments: USAMO, Ross/SUMaC/PROMYS, MathLeague Nationals, AIME, USAMTS, integration bees, swim States, DECA, and more." />
 <meta name="theme-color" content="#0a1733" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<!-- MathJax (for the one inline math in the intro) -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+  svg: { fontCache: 'global', scale: 1.05 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'], enableMenu: false },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => {
+        document.documentElement.classList.add('mathjax-loaded');
+      });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
-.comps-intro{padding:7rem var(--pad-x) 3rem}
+html:not(.mathjax-loaded) mjx-container { visibility:hidden; }
+mjx-container[jax="SVG"]:not([display="true"]){
+  display:inline-block !important;
+  vertical-align:-0.22em; line-height:normal;
+  margin:0 0.1em; color:inherit; word-spacing:normal;
+}
+mjx-container[jax="SVG"]:not([display="true"]) svg{
+  display:inline-block; vertical-align:baseline; color:inherit; overflow:visible;
+}
+mjx-assistive-mml{
+  position:absolute !important; top:0;left:0;
+  clip:rect(1px,1px,1px,1px);
+  padding:0 !important;border:0 !important;
+  width:1px !important;height:1px !important;overflow:hidden !important;
+}
+</style>
+<style>
+/* ============================================================
+   HERO
+============================================================ */
+.comps-intro{
+  padding:7rem var(--pad-x) 3rem;
+  position:relative;
+}
 .comps-intro h1{
   font-family:var(--serif);font-weight:300;
   font-size:clamp(2.8rem, 7vw, 5.6rem);
@@ -22,117 +62,462 @@
 .comps-intro .lead{
   font-family:var(--serif);font-style:italic;
   font-size:clamp(1.05rem, 1.5vw, 1.3rem);
-  color:var(--paper-dim);max-width:46ch;margin:0;
+  color:var(--paper-dim);max-width:54ch;margin:0 0 1.5rem;line-height:1.55;
+}
+.comps-intro .lead + .lead{
+  font-style:normal;
+  font-size:clamp(1rem, 1.35vw, 1.15rem);
+  color:var(--paper-dim);
+  max-width:60ch;
+}
+.comps-intro .lead em{color:var(--paper);font-style:italic}
+.comps-intro .lead strong{color:var(--paper);font-weight:500}
+.comps-intro .scroll-hint{
+  margin-top:2.5rem;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--paper-mute);
+  display:flex;align-items:center;gap:.8rem;
+}
+.comps-intro .scroll-hint .line{
+  display:inline-block;width:48px;height:1px;
+  background:var(--paper-mute);position:relative;overflow:hidden;
+}
+.comps-intro .scroll-hint .line::after{
+  content:"";position:absolute;inset:0;background:var(--gold);
+  transform:translateX(-100%);
+  animation:scroll-hint 2.4s cubic-bezier(.2,.7,.2,1) infinite;
+}
+@keyframes scroll-hint{
+  0%{transform:translateX(-100%)}
+  50%{transform:translateX(0)}
+  100%{transform:translateX(100%)}
 }
 
 /* ============================================================
-   REEL — horizontal pinned scroll (desktop), vertical (mobile)
-   We use position:sticky + transform driven by scroll progress
-   on the wrapper. The wrapper is taller than viewport; the
-   inner track translates left as we scroll down.
+   COUNTDOWN — pinned, scroll-driven
+   Each moment occupies a 100vh slot inside the wrap. The pin
+   stays at the top while we scroll through total_slots×100vh.
+   JS computes scroll progress and reveals the active moment.
 ============================================================ */
-.reel-wrap{
+.countdown-wrap{
   position:relative;
-  height:600vh; /* total scroll length */
-  border-top:1px solid var(--rule);
+  /* height set dynamically by JS — 14 moments × 100vh */
 }
-.reel-pin{
+.countdown-pin{
   position:sticky;top:0;
   height:100vh;width:100%;
   overflow:hidden;
+  background:var(--ink-1);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
 }
-.reel-track{
-  display:flex;height:100%;align-items:stretch;
-  will-change:transform;
+
+/* Per-tier color variables, applied to .moment with [data-tier=N] */
+.moment[data-tier="gold"]{
+  --tier-1:#f4d266;
+  --tier-2:#d4af37;
+  --tier-3:#8a6a14;
+  --tier-glow:rgba(244,210,102,0.55);
+  --tier-soft:rgba(212,175,55,0.10);
 }
-.reel-card{
-  flex:0 0 auto;
-  width:min(80vw, 620px);height:100%;
-  padding:clamp(2rem, 5vw, 4rem);
-  display:flex;flex-direction:column;justify-content:space-between;
-  border-right:1px solid var(--rule);
+.moment[data-tier="silver"]{
+  --tier-1:#e8e6e3;
+  --tier-2:#b9b6b0;
+  --tier-3:#6b6963;
+  --tier-glow:rgba(232,230,227,0.42);
+  --tier-soft:rgba(185,182,176,0.08);
+}
+.moment[data-tier="bronze"]{
+  --tier-1:#e5a772;
+  --tier-2:#b87333;
+  --tier-3:#6e4319;
+  --tier-glow:rgba(229,167,114,0.42);
+  --tier-soft:rgba(184,115,51,0.08);
+}
+.moment[data-tier="podium"]{
+  --tier-1:#7faaff;
+  --tier-2:#4a76c4;
+  --tier-3:#2b4983;
+  --tier-glow:rgba(127,170,255,0.32);
+  --tier-soft:rgba(127,170,255,0.06);
+}
+.moment[data-tier="record"]{
+  --tier-1:#c2bcab;
+  --tier-2:#8a8472;
+  --tier-3:#5a5648;
+  --tier-glow:rgba(194,188,171,0.22);
+  --tier-soft:rgba(138,132,114,0.05);
+}
+
+.moment{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 clamp(2rem, 6vw, 6rem);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .6s var(--ease);
+  will-change:opacity,transform;
+}
+.moment.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+/* Backdrop wash — radial gradient using tier color */
+.moment .wash{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 30% 50%, var(--tier-soft) 0%, transparent 55%),
+    radial-gradient(circle at 70% 30%, var(--tier-soft) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity .8s var(--ease);
+  pointer-events:none;
+}
+.moment.active .wash{opacity:1}
+
+/* The huge rank number behind everything */
+.moment .rank-bg{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%, -50%) scale(.4);
+  font-family:var(--serif);
+  font-weight:500;font-style:italic;
+  font-size:clamp(28rem, 60vw, 60rem);
+  line-height:.8;letter-spacing:-.05em;
+  color:var(--tier-3);
+  opacity:0;
+  pointer-events:none;
+  user-select:none;
+  z-index:1;
+  /* Mask the number with a vertical gradient so it fades into the bg */
+  background:linear-gradient(180deg, var(--tier-2) 20%, var(--tier-3) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 60px var(--tier-glow));
+}
+.moment .rank-bg-blur{
+  /* second layer behind the main one — extra glow */
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%, -50%) scale(.4);
+  font-family:var(--serif);
+  font-weight:700;font-style:italic;
+  font-size:clamp(28rem, 60vw, 60rem);
+  line-height:.8;letter-spacing:-.05em;
+  color:var(--tier-2);
+  opacity:0;
+  pointer-events:none;user-select:none;
+  z-index:0;
+  filter:blur(60px);
+}
+
+/* Particle burst layer (gold sparks) */
+.moment .particles{
+  position:absolute;inset:0;
+  pointer-events:none;
+  z-index:2;
+}
+.moment .spark{
+  position:absolute;
+  top:50%;left:50%;
+  width:6px;height:6px;
+  background:var(--tier-1);
+  border-radius:50%;
+  box-shadow:0 0 12px var(--tier-glow);
+  transform-origin:center;
+  opacity:0;
+}
+.moment.active .spark{
+  animation:spark-fly 1.4s var(--ease-out) forwards;
+}
+@keyframes spark-fly{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0)}
+  15%{opacity:1;transform:translate(-50%,-50%) scale(1.2)}
+  100%{
+    opacity:0;
+    transform:translate(calc(-50% + var(--dx,0px)), calc(-50% + var(--dy,0px))) scale(.3);
+  }
+}
+
+/* Expanding ring pulse */
+.moment .ring{
+  position:absolute;
+  top:50%;left:50%;
+  width:60px;height:60px;
+  border-radius:50%;
+  border:2px solid var(--tier-1);
+  transform:translate(-50%,-50%) scale(.2);
+  opacity:0;
+  pointer-events:none;
+  z-index:2;
+}
+.moment.active .ring{
+  animation:ring-pulse 1.6s cubic-bezier(.16,1,.3,1) forwards;
+}
+.moment.active .ring.ring-2{animation-delay:.25s}
+.moment.active .ring.ring-3{animation-delay:.5s}
+@keyframes ring-pulse{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}
+  20%{opacity:.7}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(8);border-width:.5px}
+}
+
+/* Content sits above everything — z-index 3 */
+.moment .content{
   position:relative;
+  z-index:3;
+  max-width:60rem;
+  margin:0 auto;
+  text-align:center;
+  pointer-events:auto;
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity .8s var(--ease-out), transform .8s var(--ease-out);
+  transition-delay:.4s;
 }
-.reel-card:first-child{padding-left:var(--pad-x)}
-.reel-card.intro-card{
-  width:min(60vw, 480px);
-  background:var(--ink-2);
-  justify-content:center;
-}
-.reel-num{
+.moment.active .content{opacity:1;transform:none}
+
+.moment .eyebrow{
   font-family:var(--mono);font-size:11px;
+  letter-spacing:.32em;text-transform:uppercase;
+  color:var(--tier-1);
+  margin:0 0 1.2rem;
+  display:inline-flex;align-items:center;gap:1rem;
+}
+.moment .eyebrow::before,
+.moment .eyebrow::after{
+  content:"";display:inline-block;
+  width:32px;height:1px;
+  background:var(--tier-2);
+}
+
+.moment .stat{
+  font-family:var(--serif);font-style:italic;font-weight:500;
+  font-size:clamp(4rem, 11vw, 9rem);
+  line-height:.95;letter-spacing:-.04em;
+  margin:0 0 1.2rem;
+  background:linear-gradient(180deg, var(--tier-1) 0%, var(--tier-2) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 24px var(--tier-glow));
+  transition:transform .9s cubic-bezier(.16,1,.3,1) .35s, opacity .9s var(--ease) .35s;
+  transform:translateY(60px) scale(.9);
+  opacity:0;
+}
+.moment.active .stat{transform:none;opacity:1}
+.moment .stat sup{
+  font-size:.45em;vertical-align:.7em;
+  letter-spacing:0;
+  -webkit-text-fill-color:var(--tier-2);
+}
+.moment .stat .small{
+  font-size:.4em;color:var(--paper-mute);
+  letter-spacing:0;font-style:normal;font-weight:300;
+  -webkit-text-fill-color:var(--paper-mute);
+  margin-left:.1em;opacity:.5;
+}
+
+.moment .title{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.4rem, 2.5vw, 2.1rem);
+  line-height:1.2;letter-spacing:-.01em;
+  color:var(--paper);
+  margin:0 auto 1rem;
+  max-width:24ch;
+}
+.moment .title .em{color:var(--tier-1);font-style:italic;font-weight:500}
+
+.moment .body{
+  font-family:var(--serif);font-weight:300;font-style:italic;
+  font-size:clamp(1rem, 1.5vw, 1.2rem);
+  line-height:1.55;
+  color:var(--paper-dim);
+  max-width:46ch;
+  margin:0 auto 1.5rem;
+}
+.moment .body strong{color:var(--paper);font-weight:500;font-style:normal}
+.moment .body em{color:var(--tier-1);font-style:italic}
+
+.moment .foot{
+  font-family:var(--mono);font-size:10.5px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  display:inline-flex;align-items:center;gap:1rem;
+}
+.moment .foot .sep{color:var(--tier-2)}
+
+/* Rank chip in the upper-left of the pin (visible only when a moment is active) */
+.countdown-chrome{
+  position:absolute;
+  top:1.5rem;left:0;right:0;
+  z-index:10;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 clamp(2rem, 6vw, 6rem);
+  pointer-events:none;
+  font-family:var(--mono);font-size:10px;
   letter-spacing:.3em;text-transform:uppercase;
-  color:var(--gold);
-}
-.reel-stat{
-  font-family:var(--serif);font-weight:300;
-  font-size:clamp(3.5rem, 10vw, 8rem);
-  line-height:.9;letter-spacing:-.04em;
-  margin:1rem 0;
-}
-.reel-stat .italic{font-style:italic;color:var(--gold);font-weight:500}
-.reel-stat sup{font-size:.45em;vertical-align:.5em;letter-spacing:0;color:var(--gold)}
-.reel-headline{
-  font-family:var(--serif);font-size:clamp(1.05rem, 1.6vw, 1.4rem);
-  font-weight:400;line-height:1.25;margin:0;max-width:22ch;
-}
-.reel-foot{
-  font-family:var(--mono);font-size:11px;
-  letter-spacing:.18em;text-transform:uppercase;
   color:var(--paper-mute);
 }
-.reel-intro-h{
-  font-family:var(--serif);font-weight:400;
-  font-size:clamp(2rem, 4vw, 3.4rem);
-  line-height:1.05;margin:1.5rem 0;
-  letter-spacing:-.02em;
+.countdown-chrome .left{color:var(--gold)}
+.countdown-chrome .right{display:flex;align-items:center;gap:.6rem}
+.countdown-chrome .ticker{
+  font-family:var(--serif);font-style:italic;font-size:1.3rem;
+  font-weight:500;color:var(--paper);letter-spacing:-.01em;
+  text-transform:none;
 }
-.reel-intro-h .italic{font-style:italic;color:var(--gold)}
-.reel-intro-p{
-  font-family:var(--serif);font-style:italic;
-  color:var(--paper-dim);max-width:30ch;
-}
-.reel-progress{
-  position:absolute;bottom:2rem;left:var(--pad-x);right:var(--pad-x);
-  height:1px;background:var(--rule);
-  z-index:3;
-}
-.reel-progress .fill{
-  height:100%;background:var(--gold);width:0%;
-  transition:width .1s linear;
-}
-.reel-counter{
-  position:absolute;bottom:3rem;right:var(--pad-x);
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:.25em;color:var(--paper-mute);
-  text-transform:uppercase;
-}
-.reel-counter .cur{color:var(--gold);font-size:1.4em}
+.countdown-chrome .ticker .gold{color:var(--gold)}
 
-/* Mobile fallback */
-@media (max-width:880px){
-  .reel-wrap{height:auto}
-  .reel-pin{position:relative;height:auto;overflow:visible}
-  .reel-track{flex-direction:column;height:auto}
-  .reel-card,.reel-card.intro-card{
-    width:100%;height:auto;min-height:50vh;
-    border-right:none;border-bottom:1px solid var(--rule);
-    padding-left:var(--pad-x);padding-right:var(--pad-x);
+/* Bottom progress bar */
+.countdown-progress{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:2px;background:var(--rule);
+  z-index:10;pointer-events:none;
+}
+.countdown-progress .fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--gold), var(--paper));
+  width:0;
+  transition:width .15s linear;
+  box-shadow:0 0 12px rgba(212,175,55,0.6);
+}
+
+/* Per-segment ticks on the progress bar */
+.countdown-progress .ticks{
+  position:absolute;inset:0;
+  display:flex;
+}
+.countdown-progress .ticks .tick{
+  flex:1;
+  border-right:1px solid var(--ink-1);
+}
+.countdown-progress .ticks .tick:last-child{border-right:none}
+
+/* Reduced motion fallback — show moments stacked */
+@media (prefers-reduced-motion: reduce){
+  .countdown-wrap{height:auto !important;}
+  .countdown-pin{
+    position:relative;height:auto;
+    display:flex;flex-direction:column;
   }
-  .reel-progress,.reel-counter{display:none}
+  .moment{
+    position:relative;inset:auto;
+    opacity:1;
+    padding:5rem clamp(2rem, 6vw, 6rem);
+    border-bottom:1px solid var(--rule);
+    min-height:auto;
+  }
+  .moment .rank-bg,.moment .rank-bg-blur,.moment .particles,.moment .ring{display:none}
+  .moment .content{opacity:1;transform:none}
+  .moment .stat{transform:none;opacity:1;filter:none}
+}
+
+/* Mobile: still pinned but smaller stats and tighter padding */
+@media (max-width:780px){
+  .moment{padding:0 1.5rem}
+  .moment .rank-bg, .moment .rank-bg-blur{
+    font-size:24rem;
+  }
 }
 
 /* ============================================================
-   FULL TABLE BELOW
+   TABLE BELOW — supplementary detail
 ============================================================ */
-.comps-table-wrap{padding:var(--pad-y) var(--pad-x);border-top:1px solid var(--rule)}
+.comps-table-wrap{
+  padding:var(--pad-y) var(--pad-x);
+  border-top:1px solid var(--rule);
+}
+
+/* ============================================================
+   THANKS — credits-style acknowledgment between countdown & table
+============================================================ */
+.thanks-wrap{
+  padding:clamp(4rem, 8vw, 6rem) var(--pad-x);
+  border-top:1px solid var(--rule);
+  background:linear-gradient(180deg, rgba(212,175,55,0.02), transparent);
+}
+.thanks-wrap .thanks-head{
+  font-family:var(--mono);font-size:11px;
+  letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);
+  display:flex;align-items:center;gap:1rem;
+  margin:0 0 2rem;
+}
+.thanks-wrap .thanks-head::before{
+  content:"";display:inline-block;
+  width:40px;height:1px;background:var(--gold);
+}
+.thanks-wrap h2{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(2rem, 4vw, 3.2rem);
+  line-height:1.05;letter-spacing:-.02em;
+  margin:0 0 1.6rem;max-width:22ch;
+}
+.thanks-wrap h2 .italic{font-style:italic;color:var(--gold);font-weight:500}
+.thanks-wrap .thanks-intro{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(1rem, 1.4vw, 1.18rem);
+  color:var(--paper-dim);
+  max-width:54ch;line-height:1.55;
+  margin:0 0 2.5rem;
+}
+.thanks-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+  gap:1.5rem 2.5rem;
+  max-width:1000px;
+}
+.thanks-item{
+  border-left:1px solid var(--rule);
+  padding:.4rem 0 .4rem 1.2rem;
+  transition:border-color .3s var(--ease);
+}
+.thanks-item.named{
+  border-left-color:var(--gold);
+}
+.thanks-item .name{
+  font-family:var(--serif);font-weight:500;
+  font-size:1.2rem;color:var(--paper);
+  letter-spacing:-.005em;
+  margin-bottom:.25rem;
+}
+.thanks-item.named .name{
+  color:var(--gold);
+}
+.thanks-item .role{
+  font-family:var(--mono);font-size:9.5px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:var(--paper-mute);
+  margin-bottom:.6rem;
+}
+.thanks-item .for{
+  font-family:var(--serif);font-style:italic;
+  font-size:1rem;line-height:1.55;
+  color:var(--paper-dim);
+}
+.thanks-item .for em{color:var(--paper);font-style:italic}
+.thanks-coda{
+  margin-top:3rem;
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);
+  font-size:1.05rem;line-height:1.55;
+  max-width:48ch;
+}
+.thanks-coda strong{color:var(--paper);font-weight:500;font-style:normal}
+
 .comps-table-wrap h2{
   font-family:var(--serif);font-weight:400;
   font-size:clamp(2rem, 4vw, 3rem);
-  line-height:1.05;margin:0 0 3rem;max-width:20ch;
+  line-height:1.05;margin:0 0 1.5rem;max-width:22ch;
 }
 .comps-table-wrap h2 .italic{font-style:italic;color:var(--gold)}
-.comps-table{width:100%;max-width:980px;font-family:var(--serif)}
+.comps-table-wrap .table-lead{
+  font-family:var(--serif);font-style:italic;
+  color:var(--paper-dim);max-width:50ch;
+  margin:0 0 3rem;line-height:1.55;
+}
+.comps-table{width:100%;max-width:1000px;font-family:var(--serif)}
 .comp-row{
   display:grid;
   grid-template-columns:9ch 1fr auto;
@@ -145,7 +530,7 @@
   font-family:var(--mono);font-size:12px;
   letter-spacing:.18em;color:var(--gold);
 }
-.comp-name{font-size:1.15rem;font-weight:400}
+.comp-name{font-size:1.1rem;font-weight:400}
 .comp-name .em{font-style:italic;color:var(--paper-dim);margin-left:.4em}
 .comp-result{
   font-family:var(--mono);font-size:11.5px;
@@ -185,133 +570,284 @@
 </header>
 
 <main>
+
+<!-- ============ HERO ============ -->
 <section class="comps-intro">
   <p class="page-eyebrow">§ 04 · Competitions</p>
-  <h1>The <span class="italic">reel</span>.</h1>
-  <p class="lead">Scroll down. The biggest results first, then everything else. The full table follows below.</p>
-</section>
-
-<section class="reel-wrap" id="reelWrap">
-  <div class="reel-pin">
-    <div class="reel-track" id="reelTrack">
-      <article class="reel-card intro-card">
-        <div class="reel-num">§ start</div>
-        <h2 class="reel-intro-h">A <span class="italic">selected</span> reel.</h2>
-        <p class="reel-intro-p">Most-to-least important. The year is the smallest part of each card — every one has a longer story behind it.</p>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">01 · 2026</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">5</span><span style="opacity:.4;font-size:.5em;letter-spacing:0;margin-left:.1em;color:var(--paper-mute)">/42</span></h3>
-          <p class="reel-headline">USAMO qualifier. Scored 5, one point under median — first qualifier in school history.</p>
-        </div>
-        <div class="reel-foot">USAMO · top ~250 in US</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">02 · 2026</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">1<sup>st</sup></span></h3>
-          <p class="reel-headline">MathLeague Nationals — National Champion. Countdown Round semifinalist.</p>
-        </div>
-        <div class="reel-foot">MathLeague · national</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">03 · 2025</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">2<sup>nd</sup></span></h3>
-          <p class="reel-headline">MathLeague Internationals. Took 2nd at the international round in Indonesia.</p>
-        </div>
-        <div class="reel-foot">MathLeague · international</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">04 · 2026</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">12</span></h3>
-          <p class="reel-headline">AIME I. School record. Largest single-year jump I've ever made.</p>
-        </div>
-        <div class="reel-foot">AIME · top ~6000</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">05 · 2025</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">74</span></h3>
-          <p class="reel-headline">USAMTS Gold. 25 / 24 / 25 across three rounds.</p>
-        </div>
-        <div class="reel-foot">USA Mathematical Talent Search</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">06 · 2026</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">∫</span></h3>
-          <p class="reel-headline">Pitt Integration Bee — Champion. Improved on 2nd place from 2025.</p>
-        </div>
-        <div class="reel-foot">University of Pittsburgh</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">07 · summer 2026</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">Ross</span></h3>
-          <p class="reel-headline">Ross Mathematics Program — incoming. Six weeks of number theory. Also accepted to SUMaC and PROMYS.</p>
-        </div>
-        <div class="reel-foot">Otterbein · summer '26</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">08 · 2025</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">M</span></h3>
-          <p class="reel-headline">HiMCM Meritorious (2025) and Honorable Mention (2024). High school math modeling.</p>
-        </div>
-        <div class="reel-foot">HiMCM · modeling</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">09 · 2025</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">22.2</span></h3>
-          <p class="reel-headline">WPIAL (200 free, 100 back) States qualifier in swimming (200/400 free relay). Closed a relay split with a 1.8-second drop on the 50 free, 50.5 100 free leadoff.</p>
-        </div>
-        <div class="reel-foot">PIAA AAA · swimming</div>
-      </article>
-
-      <article class="reel-card" data-cursor="hover">
-        <div class="reel-num">10 · piano</div>
-        <div>
-          <h3 class="reel-stat"><span class="italic">GP</span></h3>
-          <p class="reel-headline">Carmel Klavier Grand Prize ('19), 2nd ('21). Pittsburgh International — 1st &amp; multiple Grand Prix. Steinway Society of W. PA audition winner.</p>
-        </div>
-        <div class="reel-foot">solo piano · multiple</div>
-      </article>
-    </div>
-    <div class="reel-progress" aria-hidden="true"><div class="fill" id="reelFill"></div></div>
-    <div class="reel-counter"><span class="cur" id="reelCur">01</span> / <span id="reelMax">10</span></div>
+  <h1>The <span class="italic">countdown</span>.</h1>
+  <p class="lead">Top ten moments, ranked by what they meant. Not what they looked like on paper. <em>Scroll to count down from 10.</em></p>
+  <p class="lead">The table at the bottom of this page is the resume — every contest, every score, dates, percentiles. Skim it if that's what you came for. The countdown above it is the part I actually care about. Ten moments I'd tell you about over coffee, in the order I'd tell them.</p>
+  <p class="lead">A 5 out of 42 is at #1 instead of a 1st place because that's actually how it shook out. I got a 5 on the USAMO this year. The median was 6. I crashed out for a week. Then, weirdly, I noticed I was happier — the constant <em>am I going to make USAMO</em> in the back of my head had gone quiet, and I hadn't realized how loud it'd been. The 1st place at MathLeague Nationals (that's #3) is the bigger win by any reasonable measure. It didn't change how I think. The 5 did.</p>
+  <p class="lead">A quick map of how long this took. Sixth grade AMC 8: 12 out of 25. I didn't know what \(\binom{n}{k}\) meant. Eighth grade, a teacher pulled me aside and told me to stop dreaming, that AIME wasn't going to happen, that I should focus on academics. Six years between that conversation and the USAMO invite (I'm still a little smug about that one, lmao). The countdown below is most of those six years. Most of it doesn't show up on the cards — late nights in the math room with <span class="name-ryan">Ryan Gong</span>, scores I'm still mad about, conversations I keep replaying. Cards are the visible part.</p>
+  <div class="scroll-hint">
+    <span>begin from #10</span>
+    <span class="line" aria-hidden="true"></span>
   </div>
 </section>
 
+<!-- ============ COUNTDOWN ============ -->
+<section class="countdown-wrap" id="countdownWrap">
+  <div class="countdown-pin">
+
+    <div class="countdown-chrome">
+      <span class="left">§ countdown · 10 → 1</span>
+      <span class="right">
+        <span>now</span>
+        <span class="ticker"><span class="gold" id="cdCur">10</span></span>
+      </span>
+    </div>
+
+    <!-- ────────────────────────────────────────────────────────────
+         14 MOMENTS — in countdown order (highest # = lowest priority).
+         As you scroll down, the index in the markup matches the
+         current rank (14 first, then 13, …, ending at 1).
+    ──────────────────────────────────────────────────────────── -->
+
+    <!-- #10 — PIAA States 4x100 free relay -->
+    <article class="moment" data-rank="10" data-tier="record">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">10</div>
+      <div class="rank-bg" aria-hidden="true">10</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. ten · PIAA states · swim</div>
+        <div class="stat">6<sup>th</sup></div>
+        <h2 class="title">PIAA States 2025 — <span class="em">4×100 free relay</span></h2>
+        <p class="body">Sixth in the state. <strong>4×100 free relay.</strong> Four guys, four legs, one collective time on a board with eighty-some schools. <em>Best math doesn't come home with me; the swim doesn't either.</em> That's exactly why I do it.</p>
+        <div class="foot"><span>PIAA AA · 2025</span><span class="sep">·</span><span>4×100 free relay · 6th</span></div>
+      </div>
+    </article>
+
+    <!-- #9 — Pitt Integration Bee Champion -->
+    <article class="moment" data-rank="9" data-tier="record">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">09</div>
+      <div class="rank-bg" aria-hidden="true">09</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. nine · integration bee</div>
+        <div class="stat">∫</div>
+        <h2 class="title">Pitt Integration Bee — <span class="em">Champion</span></h2>
+        <p class="body">Took 2nd in 2025, came back and won in 2026. The only competition I've entered where the room is just <em>integrals</em> on a chalkboard and a clock. Twenty seconds to spot the substitution before someone else does. Pure trig-sub adrenaline.</p>
+        <div class="foot"><span>University of Pittsburgh</span><span class="sep">·</span><span>2026 · 2nd in 2025</span></div>
+      </div>
+    </article>
+
+    <!-- #8 — AMC 12B 127.5 -->
+    <article class="moment" data-rank="8" data-tier="record">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">08</div>
+      <div class="rank-bg" aria-hidden="true">08</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. eight · AMC 12B · 2025</div>
+        <div class="stat">127.5</div>
+        <h2 class="title">AMC 12B — <span class="em">top 5%</span></h2>
+        <p class="body">On most years this would have been top 2.5%. This year, with cheating scandals pushing cutoffs through the roof, top 5%. <strong>The math wasn't subtle:</strong> to qualify for USAMO via the AMC route, I'd have needed a 13 or 14 on the AIME. I'd never broken 8. <em>So I made a decision that sounds insane — I stopped studying for the AIME.</em></p>
+        <div class="foot"><span>AMC 12B · 2025</span><span class="sep">·</span><span>also 117 / 94.5</span></div>
+      </div>
+    </article>
+
+    <!-- #7 — DECA ICDC ×2 -->
+    <article class="moment" data-rank="7" data-tier="record">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">07</div>
+      <div class="rank-bg" aria-hidden="true">07</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. seven · DECA · business case</div>
+        <div class="stat">×2</div>
+        <h2 class="title">DECA — <span class="em">ICDC qualifier</span>, twice</h2>
+        <p class="body">Business case competitions. Twice qualified for the International Career Development Conference — the international round, against teams from every state and several countries. <em>Math is not the only place I get to think,</em> and DECA is the most honest reminder of that I've found. The format is closer to a real job than any test I take.</p>
+        <div class="foot"><span>DECA · ICDC</span><span class="sep">·</span><span>×2 · international</span></div>
+      </div>
+    </article>
+
+    <!-- #6 — MathLeague Internationals 2nd -->
+    <article class="moment" data-rank="6" data-tier="record">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">06</div>
+      <div class="rank-bg" aria-hidden="true">06</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. six · mathleague · internationals</div>
+        <div class="stat">2<sup>nd</sup></div>
+        <h2 class="title">MathLeague Internationals — <span class="em">2nd</span></h2>
+        <p class="body">In Indonesia. Second place at the international round of MathLeague. <strong>The trip itself</strong> — flying twenty hours, doing problems in a hotel room with X — was half of it. The medal was the easier half.</p>
+        <div class="foot"><span>MathLeague Internationals</span><span class="sep">·</span><span>Indonesia · 2025</span></div>
+      </div>
+    </article>
+
+    <!-- #5 — USAMTS Gold 74 -->
+    <article class="moment" data-rank="5" data-tier="podium">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">05</div>
+      <div class="rank-bg" aria-hidden="true">05</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. five · usamts</div>
+        <div class="stat">74</div>
+        <h2 class="title">USAMTS Gold — <span class="em">25 / 24 / 25</span></h2>
+        <p class="body">USA Mathematical Talent Search. Three rounds, a month per round, written proofs you can polish five times before submitting. <strong>This is the score that got me into the USAMO.</strong> When my AMC route closed off, USAMTS was the door that stayed open. I won't pretend I didn't need it.</p>
+        <div class="foot"><span>USAMTS · 2024-25</span><span class="sep">·</span><span>gold · 74 / 75</span></div>
+      </div>
+    </article>
+
+    <!-- #4 — AIME I 12 (school record) -->
+    <article class="moment" data-rank="4" data-tier="podium">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">04</div>
+      <div class="rank-bg" aria-hidden="true">04</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. four · aime i · 2026</div>
+        <div class="stat">12</div>
+        <h2 class="title">AIME I — <span class="em">school record</span></h2>
+        <p class="body">Going into junior year my best AIME was an 8. I decided — counterintuitively — to <em>stop studying</em> for the AIME and instead spend my time on the summer-camp applications. Six weeks before the test, I was barely doing mock AIMEs. <strong>Walked in cold, walked out with a 12.</strong> Biggest single-year jump I've ever made on a math contest. Schoolwide record.</p>
+        <div class="foot"><span>AIME I · 2026</span><span class="sep">·</span><span>2025: 8 · 2024: 5</span></div>
+      </div>
+    </article>
+
+    <!-- #3 — MathLeague Nationals Champion (bronze) -->
+    <article class="moment" data-rank="3" data-tier="bronze">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">03</div>
+      <div class="rank-bg" aria-hidden="true">03</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. three · mathleague · 2026 · bronze</div>
+        <div class="stat">1<sup>st</sup></div>
+        <h2 class="title">MathLeague Nationals — <span class="em">National Champion</span></h2>
+        <p class="body">National Champion. <strong>1st in the country.</strong> Countdown round semifinalist. Came back twelve months after slipping into Internationals on three hours of sleep, and won the whole thing. Of every competitive result on this page, this is the one I'd hand to past-me — the version of me who, in eighth grade, was told to stop dreaming.</p>
+        <div class="foot"><span>MathLeague Nationals · 2026</span><span class="sep">·</span><span>1st · CR semifinalist</span></div>
+      </div>
+    </article>
+
+    <!-- #2 — Ross / SUMaC / PROMYS (silver) -->
+    <article class="moment" data-rank="2" data-tier="silver">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">02</div>
+      <div class="rank-bg" aria-hidden="true">02</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. two · the three camps · silver</div>
+        <div class="stat">Ross</div>
+        <h2 class="title">Ross · SUMaC · <span class="em">PROMYS</span></h2>
+        <p class="body">All three of the big serious-math summer camps for high schoolers — accepted. Picked Ross. Six weeks of pure number theory at Otterbein, this summer. <em>The applications themselves</em> — long essays, deep problem sets — taught me more in six weeks than my entire previous year of AIME prep. They are the reason the 12 happened.</p>
+        <div class="foot"><span>Ross · summer '26</span><span class="sep">·</span><span>also SUMaC · PROMYS</span></div>
+      </div>
+    </article>
+
+    <!-- #1 — USAMO (gold) -->
+    <article class="moment" data-rank="1" data-tier="gold">
+      <div class="wash"></div>
+      <div class="rank-bg-blur" aria-hidden="true">01</div>
+      <div class="rank-bg" aria-hidden="true">01</div>
+      <div class="particles"></div>
+      <div class="ring"></div><div class="ring ring-2"></div><div class="ring ring-3"></div>
+      <div class="content">
+        <div class="eyebrow">no. one · usamo · gold</div>
+        <div class="stat">5<span class="small">/42</span></div>
+        <h2 class="title">USAMO qualifier — <span class="em">first in school history</span></h2>
+        <p class="body">Scored a 5 on the USAMO. Median was 6. Walking out I thought my distribution was 7-2-0-7-5-0 — turned out to be 2-0-0-1-2-0. <strong>I crashed out for a week.</strong> Then I noticed something weird: I was happier. The constant background pressure of <em>am I going to make USAMO</em> had gone quiet, and I hadn't realized how loud it had been. The 5 is at #1 not because it's the best score on this page — it isn't. It's because it taught me the most: <em>that the score isn't the point, and the year still meant something even when the number didn't.</em></p>
+        <div class="foot"><span>USAMO · 2026</span><span class="sep">·</span><span>median 6 · first qualifier in school history</span></div>
+      </div>
+    </article>
+
+
+  </div>
+
+  <div class="countdown-progress" aria-hidden="true">
+    <div class="ticks" id="cdTicks"></div>
+    <div class="fill" id="cdFill"></div>
+  </div>
+
+</section>
+
+<!-- ============ THANKS ============ -->
+<section class="thanks-wrap">
+  <p class="thanks-head">§ with thanks</p>
+  <h2>Nothing on this page <span class="italic">happened alone</span>.</h2>
+  <p class="thanks-intro">Three names belong on this page in writing. The rest belong here too — I'm just not going to put a list of people on the internet without asking each of them first. So consider this an honest under-count.</p>
+
+  <div class="thanks-list">
+
+    <div class="thanks-item named">
+      <div class="name">Dr. Shi</div>
+      <div class="role">olympiad teacher</div>
+      <p class="for">For the hours after class spent on problems that weren't going to be on any test. <em>The reason the math on this page feels like mine.</em></p>
+    </div>
+
+    <div class="thanks-item named">
+      <div class="name">Mrs. Boyer</div>
+      <div class="role">math teacher</div>
+      <p class="for">For letting a sophomore run the classroom when she was out and three subs gave up. <em>First time I taught math instead of just doing it.</em></p>
+    </div>
+
+    <div class="thanks-item named">
+      <div class="name">Ryan Gong</div>
+      <div class="role">co-everything</div>
+      <p class="for">SSAMO. ARC. Nationals 2025, Nationals 2026. <em>The biggest jump I made wasn't from any book.</em></p>
+    </div>
+
+    <div class="thanks-item">
+      <div class="name">My parents</div>
+      <div class="role">the long haul</div>
+      <p class="for">Every drive, every recital, every test morning. They were there for all of it.</p>
+    </div>
+
+    <div class="thanks-item">
+      <div class="name">My math team at SSA</div>
+      <div class="role">the room</div>
+      <p class="for">Everyone who showed up to meetings, stayed late, asked the dumb questions out loud so I didn't have to. The team is the reason I have stories to tell instead of just scores.</p>
+    </div>
+
+    <div class="thanks-item">
+      <div class="name">My coaches and teachers</div>
+      <div class="role">swim · piano · classroom</div>
+      <p class="for">Too many to name without leaving people out. You know who you are.</p>
+    </div>
+
+  </div>
+
+  <p class="thanks-coda">
+    <strong>The honest version.</strong> Every competition on this page belongs partly to people who weren't in the room when it happened. I'm bad at saying it out loud, so I'm writing it here, where I can edit it until it's true.
+  </p>
+</section>
+
+<!-- ============ TABLE ============ -->
 <section class="comps-table-wrap">
   <h2>The <span class="italic">whole table</span>.</h2>
+  <p class="table-lead">The countdown above is the highlight reel. The table below is the unedited list — every result, including the ones that didn't make the cut.</p>
   <div class="comps-table">
     <div class="comp-row">
       <div class="comp-year">2026</div>
-      <div class="comp-name">USAMO <span class="em">qualifier · school first</span></div>
+      <div class="comp-name">USAMO <span class="em">qualifier · first in school history</span></div>
       <div class="comp-result"><strong>5</strong> · median 6</div>
     </div>
     <div class="comp-row">
       <div class="comp-year">2026</div>
-      <div class="comp-name">MathLeague Nationals <span class="em">National Champion</span></div>
-      <div class="comp-result"><strong>1st</strong> · countdown semifinalist</div>
+      <div class="comp-name">MathLeague Nationals <span class="em">National Champion · countdown semifinalist</span></div>
+      <div class="comp-result"><strong>1st</strong> · national</div>
     </div>
     <div class="comp-row">
       <div class="comp-year">2025</div>
-      <div class="comp-name">MathLeague Internationals</div>
+      <div class="comp-name">MathLeague Internationals <span class="em">Indonesia</span></div>
       <div class="comp-result"><strong>2nd</strong></div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2025</div>
+      <div class="comp-name">MathLeague Nationals</div>
+      <div class="comp-result"><strong>10th</strong></div>
     </div>
     <div class="comp-row">
       <div class="comp-year">2025</div>
@@ -335,7 +871,7 @@
     </div>
     <div class="comp-row">
       <div class="comp-year">summer '26</div>
-      <div class="comp-name">Ross Mathematics Program <span class="em">also SUMaC, PROMYS</span></div>
+      <div class="comp-name">Ross Mathematics Program <span class="em">also accepted SUMaC, PROMYS</span></div>
       <div class="comp-result"><strong>incoming</strong></div>
     </div>
     <div class="comp-row">
@@ -350,18 +886,23 @@
     </div>
     <div class="comp-row">
       <div class="comp-year">2025</div>
-      <div class="comp-name">MathLeague <span class="em">Nationals</span></div>
-      <div class="comp-result"><strong>10th</strong></div>
+      <div class="comp-name">HiMCM <span class="em">high school math modeling</span></div>
+      <div class="comp-result"><strong>Meritorious</strong></div>
     </div>
     <div class="comp-row">
-      <div class="comp-year">HiMCM</div>
-      <div class="comp-name">2025 · 2024 <span class="em">high school math modeling</span></div>
-      <div class="comp-result"><strong>Meritorious</strong> · Honorable Mention</div>
+      <div class="comp-year">2024</div>
+      <div class="comp-name">HiMCM <span class="em">high school math modeling</span></div>
+      <div class="comp-result">Honorable Mention</div>
+    </div>
+    <div class="comp-row">
+      <div class="comp-year">2025</div>
+      <div class="comp-name">PIAA States <span class="em">4×100 free relay</span></div>
+      <div class="comp-result"><strong>6th</strong> · in state</div>
     </div>
     <div class="comp-row">
       <div class="comp-year">Swim</div>
-      <div class="comp-name">WPIAL States <span class="em">qualifier · 50/100 free</span></div>
-      <div class="comp-result"><strong>22.2</strong> · 50 free split</div>
+      <div class="comp-name">WPIAL · States qualifier <span class="em">50/100 free</span></div>
+      <div class="comp-result"><strong>22.2</strong> · 50 split · 50.5 leadoff</div>
     </div>
     <div class="comp-row">
       <div class="comp-year">Piano</div>
@@ -375,61 +916,189 @@
     </div>
     <div class="comp-row">
       <div class="comp-year">DECA</div>
-      <div class="comp-name">ICDC qualifier <span class="em">×2</span></div>
+      <div class="comp-name">ICDC qualifier <span class="em">×2 · business case</span></div>
       <div class="comp-result">international</div>
     </div>
     <div class="comp-row">
       <div class="comp-year">Design</div>
       <div class="comp-name">Biomimicry Youth Design Challenge</div>
+      <div class="comp-result">qualifier</div>
     </div>
   </div>
 </section>
+
 </main>
 
 <footer>
   <div>Alexander B. Chen · 2026</div>
-  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy</div>
+  <div class="colophon">Pittsburgh, Pennsylvania · Shady Side Academy · the 5 still counts</div>
   <div><a href="reach.html" data-cursor="hover">Reach &rarr;</a></div>
 </footer>
 
 <script defer src="site.js"></script>
 <script>
 /* ============================================================
-   HORIZONTAL SCROLL REEL
-   We pin .reel-pin via sticky, and translate .reel-track
-   based on scroll progress through the parent .reel-wrap.
+   COUNTDOWN — scroll-driven, pinned full-screen moments
+   Each moment occupies a 100vh "slot" inside the wrap.
+   Scroll progress p ∈ [0, momentCount] tells us which moment is
+   active (Math.floor(p)) and how far we are into it (fractional).
 ============================================================ */
 (function(){
   'use strict';
-  if (window.matchMedia('(max-width:880px)').matches) return;
-  const wrap = document.getElementById('reelWrap');
-  const track = document.getElementById('reelTrack');
-  const fill = document.getElementById('reelFill');
-  const curEl = document.getElementById('reelCur');
-  if (!wrap || !track) return;
-  const cards = track.querySelectorAll('.reel-card');
-  if (curEl){
-    document.getElementById('reelMax').textContent =
-      String(cards.length - 1).padStart(2,'0');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  const wrap = document.getElementById('countdownWrap');
+  if (!wrap) return;
+  const moments = Array.from(wrap.querySelectorAll('.moment'));
+  const fill    = document.getElementById('cdFill');
+  const ticks   = document.getElementById('cdTicks');
+  const curEl   = document.getElementById('cdCur');
+  const N = moments.length;
+
+  // Set wrap height: each moment takes 1.4 × viewport (more dwell time per moment)
+  const PER_MOMENT_VH = 1.4;
+  wrap.style.height = (N * PER_MOMENT_VH * 100) + 'vh';
+
+  // Build progress-bar ticks (one per moment, minus the last separator)
+  for (let i=0;i<N;i++){
+    const t = document.createElement('div');
+    t.className = 'tick';
+    ticks.appendChild(t);
   }
+
+  // Generate sparks for each moment (random angles, distances)
+  moments.forEach(m=>{
+    const particles = m.querySelector('.particles');
+    const COUNT = 22;
+    for (let i=0;i<COUNT;i++){
+      const s = document.createElement('span');
+      s.className = 'spark';
+      const angle = (i / COUNT) * Math.PI * 2 + (Math.random() - 0.5) * 0.4;
+      const dist = 180 + Math.random() * 220;
+      const dx = Math.cos(angle) * dist;
+      const dy = Math.sin(angle) * dist;
+      s.style.setProperty('--dx', dx + 'px');
+      s.style.setProperty('--dy', dy + 'px');
+      // Stagger size / start
+      s.style.width = (3 + Math.random()*5) + 'px';
+      s.style.height = s.style.width;
+      s.style.animationDelay = (Math.random() * 0.3) + 's';
+      particles.appendChild(s);
+    }
+  });
+
+  let activeIdx = -1;
+  let raf;
+
   function update(){
     const rect = wrap.getBoundingClientRect();
     const total = wrap.offsetHeight - window.innerHeight;
     const sc = Math.max(0, Math.min(total, -rect.top));
-    const p = total > 0 ? sc / total : 0;
-    const distance = track.scrollWidth - window.innerWidth;
-    if (distance > 0){
-      track.style.transform = `translate3d(${-p * distance}px, 0, 0)`;
+    const p = total > 0 ? sc / total : 0; // 0..1 over the whole countdown
+    // Which moment index is currently centered
+    const idxFloat = p * N;
+    const idx = Math.min(N - 1, Math.max(0, Math.floor(idxFloat)));
+    const within = idxFloat - idx;
+
+    // Active swap
+    if (idx !== activeIdx){
+      moments.forEach((m,i)=>{
+        m.classList.toggle('active', i === idx);
+      });
+      activeIdx = idx;
+      // Update ticker (the moment's data-rank)
+      const rank = moments[idx]?.dataset.rank;
+      if (curEl && rank){
+        curEl.textContent = String(rank).padStart(2,'0');
+      }
     }
-    if (fill) fill.style.width = (p*100) + '%';
-    if (curEl){
-      const idx = Math.min(cards.length - 1, Math.floor(p * cards.length));
-      const display = Math.max(1, idx); // skip intro
-      curEl.textContent = String(display).padStart(2,'0');
+
+    // Within-moment scroll feel — translate the active moment slightly
+    // for a parallax bloom effect. The big rank number scales/rotates with progress.
+    const active = moments[idx];
+    if (active){
+      const rankBg = active.querySelector('.rank-bg');
+      const rankBlur = active.querySelector('.rank-bg-blur');
+      const content = active.querySelector('.content');
+      // Bloom curve: scale from 0.4 → 1.0 in first 30%, hold, then drift to 1.05
+      let scale, opacity;
+      if (within < 0.30){
+        const t = within / 0.30;
+        scale = 0.4 + t * 0.6;
+        opacity = t;
+      } else if (within < 0.75){
+        scale = 1.0;
+        opacity = 1;
+      } else {
+        const t = (within - 0.75) / 0.25;
+        scale = 1.0 + t * 0.05;
+        opacity = 1 - t * 0.4; // fade slightly as we exit
+      }
+      const rot = (within - 0.5) * 6; // gentle rotational settle
+      if (rankBg){
+        rankBg.style.opacity = opacity * 0.85;
+        rankBg.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${rot}deg)`;
+      }
+      if (rankBlur){
+        rankBlur.style.opacity = opacity * 0.55;
+        rankBlur.style.transform = `translate(-50%, -50%) scale(${scale * 1.05}) rotate(${rot * .7}deg)`;
+      }
+      // Content parallax — drift down slightly as we move past
+      if (content){
+        const drift = (within - 0.4) * 30;
+        content.style.transform = `translateY(${drift}px)`;
+      }
+      // Also ensure surrounding moments are invisible
+      moments.forEach((m,i)=>{
+        if (i === idx) return;
+        const r1 = m.querySelector('.rank-bg');
+        const r2 = m.querySelector('.rank-bg-blur');
+        if (r1) r1.style.opacity = 0;
+        if (r2) r2.style.opacity = 0;
+        const c = m.querySelector('.content');
+        if (c) c.style.transform = '';
+      });
     }
+
+    // Progress bar
+    if (fill) fill.style.width = (p * 100) + '%';
   }
+
+  function tick(){
+    update();
+    raf = requestAnimationFrame(tick);
+  }
+
+  // Paint the initial frame so something is visible immediately,
+  // even if the user has scroll-restored mid-page or above the section.
   update();
-  window.addEventListener('scroll', update, {passive:true});
+  // If the wrap is above the fold and update() set activeIdx=-1 (rect.top > 0,
+  // so sc=0 → idx=0 → moment #14 active), nothing more is needed. But if
+  // activeIdx is still -1 (no .active class set anywhere), force the first.
+  if (!wrap.querySelector('.moment.active')){
+    moments[0].classList.add('active');
+    activeIdx = 0;
+    if (curEl) curEl.textContent = String(moments[0].dataset.rank).padStart(2,'0');
+  }
+
+  // Use rAF loop only while wrap is in viewport (saves CPU)
+  let inView = false;
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){
+        if (!inView){
+          inView = true;
+          tick();
+        }
+      } else {
+        inView = false;
+        if (raf) cancelAnimationFrame(raf);
+      }
+    });
+  },{threshold:0});
+  io.observe(wrap);
+
   window.addEventListener('resize', update);
 })();
 </script>
