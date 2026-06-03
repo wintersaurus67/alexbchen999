@@ -866,6 +866,52 @@
     Six etudes, in order. Click any number to jump. <span class="em">Campanella</span> is the famous one — third up.
   </p>
 </div>
+<!-- DON JUAN — intro + full-viewport sticky module -->
+<section class="deep" id="donjuan-intro" style="border-top:none;padding-top:clamp(2rem, 4vw, 3rem)">
+  <div class="deep-grid">
+    <aside class="deep-aside">
+      <div class="deep-num">†</div>
+      <div class="label">17 minutes.<br/><span class="gold">one of my favorites to listen to.</span></div>
+    </aside>
+    <div class="deep-body" data-reveal>
+      <h2>Liszt · <span class="italic">Réminiscences de Don Juan</span>.</h2>
+      <p>Mozart's <em>Don Giovanni</em> compressed into seventeen minutes of solo piano. Liszt takes the Commendatore's death-knell, the seduction duet "Là ci darem la mano," and the Champagne Aria, and welds them into a single fantasia. The Commendatore opens with chords from beyond the grave. Don Juan flirts. Don Juan drinks. The statue comes for him. It ends in fire.</p>
+      <p>The next part is the whole piece. Scroll into it and click to start. <em>Try to make it through to the end.</em></p>
+    </div>
+  </div>
+</section>
+<!-- DON JUAN MODULE — full viewport sticky -->
+<div class="dj-outer" id="donjuanModule">
+  <div class="dj-sticky">
+    <div class="dj-bg" aria-hidden="true"></div>
+    <div class="dj-header">
+      <div class="dj-title">Liszt · <span class="dj-piece">Réminiscences de Don Juan, S. 418</span></div>
+      <div class="dj-section-label">Grave</div>
+      <div class="dj-status">scroll into view, then click the title</div>
+    </div>
+    <div class="dj-notation-wrap">
+      <canvas class="dj-notation"></canvas>
+    </div>
+    <div class="dj-falling-wrap">
+      <canvas class="dj-falling"></canvas>
+      <canvas class="dj-particles"></canvas>
+    </div>
+    <div class="dj-keyboard-wrap">
+      <div class="dj-keyboard"></div>
+    </div>
+    <div class="dj-footer">
+      <div class="dj-progress"><div class="dj-progress-fill"></div></div>
+      <div class="dj-times"><span class="dj-time-now">0:00</span> · <span class="dj-time-total">0:00</span></div>
+    </div>
+    <div class="dj-start-overlay">
+      <button class="dj-start-btn">
+        <span class="dj-start-icon">▶</span>
+        <span class="dj-start-text">Press to begin</span>
+        <span class="dj-start-sub">17 minutes · plays once · scroll past to exit</span>
+      </button>
+    </div>
+  </div>
+</div>
 <!-- SKI section unchanged -->
 <section class="deep" id="ski">
   <div class="deep-grid">
@@ -965,6 +1011,7 @@
 </footer>
 <script defer src="site.js"></script>
 <script src="piano.js"></script>
+<script src="donjuan.js"></script>
 <script>
 (function(){
   'use strict';
@@ -1168,6 +1215,208 @@
 /* play button loading state — works with piano.js */
 .piano-scrub-times .play:disabled{ opacity: .55; cursor: wait; }
 .piano-scrub-times .play:disabled svg{ animation: none; }
+
+/* ============================================================
+   DON JUAN module — full-viewport sticky player
+============================================================ */
+.dj-outer{
+  position:relative;
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+  /* tall container so sticky-child has scroll distance to "lock" through */
+  height:240vh;
+  background:#040b1a;
+}
+.dj-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  width:100%;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows: auto 1fr 1.1fr 22vh auto;
+  background:linear-gradient(180deg, #061229 0%, #0a1733 30%, #0a1733 65%, #050d1d 100%);
+}
+.dj-bg{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 20% 25%, rgba(94, 142, 232, 0.10), transparent 55%),
+    radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.05), transparent 60%);
+  pointer-events:none;
+  z-index:0;
+}
+.dj-header{
+  position:relative; z-index:2;
+  padding:1.2rem clamp(1rem, 3vw, 2.5rem) 0.4rem;
+  display:flex; flex-direction:column; gap:.25rem;
+}
+.dj-title{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(.95rem, 1.4vw, 1.15rem);
+  color:rgba(245,241,232,0.9);
+}
+.dj-piece{ color:var(--gold); }
+.dj-section-label{
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:clamp(1.6rem, 3.5vw, 2.4rem);
+  color:rgba(255,255,255,0.92);
+  letter-spacing:-.01em;
+  text-shadow:0 0 30px rgba(94,142,232,0.4);
+  line-height:1;
+  transition:color .8s ease;
+}
+.dj-section-label.flash{ animation: djFlash 1.2s ease-out; }
+@keyframes djFlash{
+  0%   { transform:translateY(8px); opacity:0; color: rgba(232,197,74,1); }
+  20%  { transform:translateY(0);   opacity:1; color: rgba(232,197,74,1); }
+  100% { transform:translateY(0);   opacity:1; color: rgba(255,255,255,0.92); }
+}
+.dj-status{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:.25em;text-transform:uppercase;
+  color:rgba(245,241,232,0.45);
+}
+
+/* NOTATION (top layer) */
+.dj-notation-wrap{
+  position:relative; z-index:1;
+  padding:0 0 0.4rem;
+  overflow:hidden;
+  background:linear-gradient(180deg, rgba(15,32,68,0.6), rgba(10,23,51,0.2));
+}
+.dj-notation{
+  display:block; width:100%; height:100%;
+}
+
+/* FALLING BARS (middle layer) */
+.dj-falling-wrap{
+  position:relative; z-index:1;
+  overflow:hidden;
+}
+.dj-falling, .dj-particles{
+  position:absolute; inset:0;
+  display:block; width:100%; height:100%;
+}
+.dj-particles{ pointer-events:none; }
+
+/* KEYBOARD (bottom layer) */
+.dj-keyboard-wrap{
+  position:relative; z-index:2;
+  padding: 0;
+}
+.dj-keyboard{
+  position:relative;
+  height:100%;
+  display:grid;
+  user-select:none;
+}
+.dj-key{
+  background:linear-gradient(180deg, #f5f1e8 0%, #e0d8c2 100%);
+  border-left:1px solid #050d1d;
+  border-right:1px solid #050d1d;
+  border-bottom:1px solid #050d1d;
+  border-radius:0 0 5px 5px;
+  position:relative;
+  transition:background .12s ease-out, box-shadow .12s ease-out;
+  --hit-intensity: 0.7;
+}
+.dj-key-black{
+  position:absolute;
+  height:62%;
+  background:linear-gradient(180deg, #1c2f5a 0%, #050d1d 100%);
+  border:1px solid #000;
+  border-radius:0 0 4px 4px;
+  z-index:3;
+  box-shadow:inset 0 -3px 0 rgba(255,255,255,0.06), 0 3px 5px rgba(0,0,0,0.5);
+}
+.dj-key.hit{
+  background:linear-gradient(180deg,
+    rgba(255, 232, 130, calc(0.4 + var(--hit-intensity)*0.6)) 0%,
+    rgba(212, 175, 55, calc(0.6 + var(--hit-intensity)*0.4)) 100%);
+  box-shadow:
+    inset 0 -2px 0 rgba(0,0,0,0.25),
+    0 0 calc(12px + var(--hit-intensity)*30px) rgba(232, 197, 74, calc(0.4 + var(--hit-intensity)*0.5));
+}
+.dj-key-black.hit{
+  background:linear-gradient(180deg,
+    rgba(255, 232, 130, calc(0.5 + var(--hit-intensity)*0.5)) 0%,
+    rgba(180, 145, 40, calc(0.7 + var(--hit-intensity)*0.3)) 100%);
+}
+
+/* FOOTER */
+.dj-footer{
+  position:relative; z-index:2;
+  padding:0.6rem clamp(1rem, 3vw, 2.5rem) 1rem;
+  display:flex; flex-direction:column; gap:.4rem;
+}
+.dj-progress{
+  height:2px;
+  background:rgba(245,241,232,0.08);
+  border-radius:1px;
+  overflow:hidden;
+}
+.dj-progress-fill{
+  height:100%; width:0%;
+  background:linear-gradient(90deg, #d4af37 0%, #e8c54a 100%);
+  box-shadow:0 0 6px rgba(232,197,74,0.5);
+  transition:width .15s linear;
+}
+.dj-times{
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:.2em;
+  color:rgba(245,241,232,0.55);
+  font-variant-numeric:tabular-nums;
+}
+
+/* START OVERLAY */
+.dj-start-overlay{
+  position:absolute; inset:0;
+  z-index:10;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(6, 14, 29, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition:opacity .5s ease, visibility .5s ease;
+}
+.dj-start-overlay.hidden{
+  opacity:0; visibility:hidden; pointer-events:none;
+}
+.dj-start-btn{
+  background:none; border:1px solid rgba(232,197,74,0.5);
+  color:#f5f1e8;
+  padding:1.6rem 2.4rem;
+  border-radius:4px;
+  cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  font-family:var(--serif);
+  transition: all .3s ease;
+}
+.dj-start-btn:hover{
+  border-color:rgba(232,197,74,1);
+  box-shadow:0 0 30px rgba(232,197,74,0.3);
+  transform:translateY(-1px);
+}
+.dj-start-icon{
+  font-size:1.6rem;
+  color:var(--gold);
+}
+.dj-start-text{
+  font-style:italic;
+  font-size:clamp(1.1rem, 1.6vw, 1.3rem);
+  letter-spacing:.01em;
+}
+.dj-start-sub{
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:.25em; text-transform:uppercase;
+  color:rgba(245,241,232,0.55);
+}
+
+@media (max-width:780px){
+  .dj-sticky{ grid-template-rows: auto 0.9fr 1fr 16vh auto; }
+  .dj-section-label{ font-size:1.4rem; }
+}
 </style>
 </body>
 </html>
