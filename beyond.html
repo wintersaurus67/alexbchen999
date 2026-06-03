@@ -883,14 +883,10 @@
 <!-- DON JUAN MODULE — full viewport sticky -->
 <div class="dj-outer" id="donjuanModule">
   <div class="dj-sticky">
-    <div class="dj-bg" aria-hidden="true"></div>
+    <canvas class="dj-bg" aria-hidden="true"></canvas>
     <div class="dj-header">
       <div class="dj-title">Liszt · <span class="dj-piece">Réminiscences de Don Juan, S. 418</span></div>
-      <div class="dj-section-label">Grave</div>
-      <div class="dj-status">scroll into view, then click the title</div>
-    </div>
-    <div class="dj-notation-wrap">
-      <canvas class="dj-notation"></canvas>
+      <div class="dj-status">press play to begin</div>
     </div>
     <div class="dj-falling-wrap">
       <canvas class="dj-falling"></canvas>
@@ -900,14 +896,30 @@
       <div class="dj-keyboard"></div>
     </div>
     <div class="dj-footer">
-      <div class="dj-progress"><div class="dj-progress-fill"></div></div>
-      <div class="dj-times"><span class="dj-time-now">0:00</span> · <span class="dj-time-total">0:00</span></div>
+      <div class="dj-transport">
+        <button class="dj-play" disabled aria-label="Play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="dj-stop" disabled aria-label="Stop">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1.5"/></svg>
+        </button>
+        <span class="dj-time dj-time-now">0:00</span>
+        <div class="dj-scrub disabled" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="track">
+            <div class="hover-fill"></div>
+            <div class="played"></div>
+          </div>
+          <div class="handle"></div>
+          <div class="tooltip">0:00</div>
+        </div>
+        <span class="dj-time dj-time-total">0:00</span>
+      </div>
     </div>
     <div class="dj-start-overlay">
       <button class="dj-start-btn">
         <span class="dj-start-icon">▶</span>
         <span class="dj-start-text">Press to begin</span>
-        <span class="dj-start-sub">17 minutes · plays once · scroll past to exit</span>
+        <span class="dj-start-sub">Liszt · 17 minutes · S. 418</span>
       </button>
     </div>
   </div>
@@ -1235,14 +1247,13 @@
   width:100%;
   overflow:hidden;
   display:grid;
-  grid-template-rows: auto 1fr 1.1fr 22vh auto;
-  background:linear-gradient(180deg, #061229 0%, #0a1733 30%, #0a1733 65%, #050d1d 100%);
+  grid-template-rows: auto 1fr 24vh auto;
+  background:#02060f;
 }
 .dj-bg{
   position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse at 20% 25%, rgba(94, 142, 232, 0.10), transparent 55%),
-    radial-gradient(ellipse at 80% 70%, rgba(212, 175, 55, 0.05), transparent 60%);
+  display:block;
+  width:100%; height:100%;
   pointer-events:none;
   z-index:0;
 }
@@ -1345,30 +1356,101 @@
     rgba(180, 145, 40, calc(0.7 + var(--hit-intensity)*0.3)) 100%);
 }
 
-/* FOOTER */
+/* FOOTER + TRANSPORT */
 .dj-footer{
   position:relative; z-index:2;
-  padding:0.6rem clamp(1rem, 3vw, 2.5rem) 1rem;
-  display:flex; flex-direction:column; gap:.4rem;
+  padding:0.7rem clamp(1rem, 3vw, 2.5rem) 1.1rem;
+  display:flex; align-items:center;
+  background:linear-gradient(0deg, rgba(2,6,15,0.6), transparent);
 }
-.dj-progress{
-  height:2px;
-  background:rgba(245,241,232,0.08);
-  border-radius:1px;
-  overflow:hidden;
+.dj-transport{
+  display:flex; align-items:center; gap:.9rem;
+  width:100%;
 }
-.dj-progress-fill{
-  height:100%; width:0%;
+.dj-transport button{
+  flex:0 0 auto;
+  border:1px solid var(--rule, rgba(245,241,232,0.18));
+  background:transparent;
+  color:var(--paper, #f5f1e8);
+  width:38px; height:38px; border-radius:50%;
+  cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition:all .2s var(--ease, ease);
+}
+.dj-transport button:hover:not(:disabled){
+  border-color:var(--gold); color:var(--gold);
+  box-shadow:0 0 16px rgba(212,175,55,0.25);
+}
+.dj-transport button:disabled{ opacity:.35; cursor:default; }
+.dj-transport button svg{ width:16px; height:16px; fill:currentColor; }
+.dj-time{
+  flex:0 0 auto;
+  font-family:var(--mono); font-size:10px;
+  letter-spacing:.15em;
+  color:var(--paper-mute, rgba(245,241,232,0.55));
+  font-variant-numeric:tabular-nums;
+  min-width:36px;
+}
+.dj-time-now{ color:var(--gold); text-align:right; }
+.dj-scrub{
+  position:relative;
+  flex:1 1 auto;
+  height:24px;
+  cursor:pointer;
+  touch-action:none;
+}
+.dj-scrub.disabled{ pointer-events:none; opacity:.5; }
+.dj-scrub .track{
+  position:absolute; left:0; right:0; top:50%;
+  transform:translateY(-50%);
+  height:4px;
+  background:var(--rule, rgba(245,241,232,0.18));
+  border-radius:2px;
+}
+.dj-scrub .track .hover-fill{
+  position:absolute; left:0; top:0; bottom:0;
+  width:0%;
+  background:rgba(212,175,55,0.18);
+  border-radius:2px;
+  pointer-events:none;
+}
+.dj-scrub .track .played{
+  position:absolute; left:0; top:0; bottom:0;
+  width:0%;
   background:linear-gradient(90deg, #d4af37 0%, #e8c54a 100%);
-  box-shadow:0 0 6px rgba(232,197,74,0.5);
-  transition:width .15s linear;
+  border-radius:2px;
+  box-shadow:0 0 8px rgba(212,175,55,0.5);
 }
-.dj-times{
-  font-family:var(--mono);font-size:10px;
-  letter-spacing:.2em;
-  color:rgba(245,241,232,0.55);
+.dj-scrub .handle{
+  position:absolute; top:50%; left:0%;
+  transform:translate(-50%, -50%) scale(.55);
+  width:16px; height:16px; border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 10px rgba(212,175,55,0.6), 0 2px 4px rgba(0,0,0,0.4);
+  transition:transform .15s var(--ease, ease);
+  pointer-events:none;
+}
+.dj-scrub:hover .handle, .dj-scrub.dragging .handle{
+  transform:translate(-50%, -50%) scale(1);
+}
+.dj-scrub .tooltip{
+  position:absolute;
+  top:-24px; left:0%;
+  transform:translateX(-50%);
+  font-family:var(--mono); font-size:9px;
+  letter-spacing:.1em;
+  padding:2px 6px;
+  background:var(--ink-1, #0a1733);
+  border:1px solid var(--rule, rgba(245,241,232,0.18));
+  color:var(--paper, #f5f1e8);
+  border-radius:3px;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .15s var(--ease, ease);
   font-variant-numeric:tabular-nums;
 }
+.dj-scrub:hover .tooltip, .dj-scrub.dragging .tooltip{ opacity:1; }
 
 /* START OVERLAY */
 .dj-start-overlay{
@@ -1414,8 +1496,7 @@
 }
 
 @media (max-width:780px){
-  .dj-sticky{ grid-template-rows: auto 0.9fr 1fr 16vh auto; }
-  .dj-section-label{ font-size:1.4rem; }
+  .dj-sticky{ grid-template-rows: auto 1fr 18vh auto; }
 }
 </style>
 </body>
